@@ -1,7 +1,7 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { loadToken, saveToken, clearToken } from './tokenStorage';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { loadToken, saveToken, clearToken } from "./tokenStorage";
 
-export type AuthStatus = 'idle' | 'polling' | 'authed' | 'error';
+export type AuthStatus = "idle" | "polling" | "authed" | "error";
 
 export interface AuthUser {
   login: string;
@@ -22,7 +22,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-  status: loadToken() ? 'authed' : 'idle',
+  status: loadToken() ? "authed" : "idle",
   token: loadToken(),
   user: null,
   deviceCode: null,
@@ -34,7 +34,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     deviceCodeReceived(
@@ -47,7 +47,7 @@ const authSlice = createSlice({
         interval: number;
       }>,
     ) {
-      state.status = 'polling';
+      state.status = "polling";
       state.deviceCode = action.payload.deviceCode;
       state.userCode = action.payload.userCode;
       state.verificationUri = action.payload.verificationUri;
@@ -56,7 +56,7 @@ const authSlice = createSlice({
       state.error = null;
     },
     tokenReceived(state, action: PayloadAction<string>) {
-      state.status = 'authed';
+      state.status = "authed";
       state.token = action.payload;
       state.deviceCode = null;
       state.userCode = null;
@@ -68,7 +68,7 @@ const authSlice = createSlice({
       state.user = action.payload;
     },
     logOut(state) {
-      state.status = 'idle';
+      state.status = "idle";
       state.token = null;
       state.user = null;
       state.deviceCode = null;
@@ -79,12 +79,12 @@ const authSlice = createSlice({
       clearToken();
     },
     setError(state, action: PayloadAction<string>) {
-      state.status = 'error';
+      state.status = "error";
       state.error = action.payload;
     },
     clearError(state) {
       state.error = null;
-      state.status = 'idle';
+      state.status = "idle";
     },
   },
 });

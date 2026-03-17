@@ -1,14 +1,14 @@
-import { describe, it, expect } from 'vitest';
-import { mkId } from './index';
+import { describe, it, expect } from "vitest";
+import { mkId } from "./index";
 
-describe('mkId', () => {
-  it('returns a non-empty string', () => {
+describe("mkId", () => {
+  it("returns a non-empty string", () => {
     const id = mkId();
-    expect(typeof id).toBe('string');
+    expect(typeof id).toBe("string");
     expect(id.length).toBeGreaterThan(0);
   });
 
-  it('produces no duplicates across many calls', () => {
+  it("produces no duplicates across many calls", () => {
     const ids = Array.from({ length: 50 }, () => mkId());
     const unique = new Set(ids);
     expect(unique.size).toBe(50);

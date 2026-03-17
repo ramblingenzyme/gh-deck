@@ -1,20 +1,20 @@
-import { useEffect, useState } from 'react';
-import type { ColumnType } from '@/types';
+import { useEffect, useState } from "react";
+import type { ColumnType } from "@/types";
 import {
   useGetLayoutQuery,
   useAddColumnMutation,
   useRemoveColumnMutation,
   useMoveLeftMutation,
   useMoveRightMutation,
-} from '@/store/configApi';
-import { useAppDispatch, useAppSelector } from '@/store';
-import { logOut, userLoaded } from '@/store/authSlice';
-import { useGetUserQuery } from '@/store/githubApi';
-import { isDemoMode } from '@/env';
-import { Topbar } from './Topbar';
-import { Board } from './Board';
-import { AddColumnModal } from './AddColumnModal';
-import { AuthModal } from './AuthModal';
+} from "@/store/configApi";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { logOut, userLoaded } from "@/store/authSlice";
+import { useGetUserQuery } from "@/store/githubApi";
+import { isDemoMode } from "@/env";
+import { Topbar } from "./Topbar";
+import { Board } from "./Board";
+import { AddColumnModal } from "./AddColumnModal";
+import { AuthModal } from "./AuthModal";
 
 export const App = () => {
   const { data: columns = [] } = useGetLayoutQuery();
@@ -26,9 +26,7 @@ export const App = () => {
 
   const dispatch = useAppDispatch();
   const auth = useAppSelector((s) => s.auth);
-  const [showAuthModal, setShowAuthModal] = useState(
-    !isDemoMode && auth.status === 'idle',
-  );
+  const [showAuthModal, setShowAuthModal] = useState(!isDemoMode && auth.status === "idle");
 
   // Fetch user profile when token is available
   const { data: userData } = useGetUserQuery(undefined, {
@@ -41,7 +39,7 @@ export const App = () => {
 
   // Close auth modal when authed
   useEffect(() => {
-    if (auth.status === 'authed') setShowAuthModal(false);
+    if (auth.status === "authed") setShowAuthModal(false);
   }, [auth.status]);
 
   const handleAddColumn = (type: ColumnType, title: string, query?: string) => {
@@ -68,9 +66,7 @@ export const App = () => {
         onMoveLeft={(id) => moveLeft(id)}
         onMoveRight={(id) => moveRight(id)}
       />
-      {showModal && (
-        <AddColumnModal onAdd={handleAddColumn} onClose={() => setShowModal(false)} />
-      )}
+      {showModal && <AddColumnModal onAdd={handleAddColumn} onClose={() => setShowModal(false)} />}
       {showAuthModal && (
         <AuthModal
           onDemoMode={() => setShowAuthModal(false)}

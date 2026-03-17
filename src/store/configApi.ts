@@ -21,13 +21,20 @@ export const configApi = createApi({
     }),
     addColumn: build.mutation<ColumnConfig[], { type: ColumnType; title: string; query?: string }>({
       queryFn: ({ type, title, query }) => ({
-        data: mutateLayout((d) => { d.push({ id: mkId(), type, title, ...(query ? { query } : {}) }); }),
+        data: mutateLayout((d) => {
+          d.push({ id: mkId(), type, title, ...(query ? { query } : {}) });
+        }),
       }),
       invalidatesTags: ["Layout"],
     }),
     removeColumn: build.mutation<ColumnConfig[], string>({
       queryFn: (id) => ({
-        data: mutateLayout((d) => { d.splice(d.findIndex((c) => c.id === id), 1); }),
+        data: mutateLayout((d) => {
+          d.splice(
+            d.findIndex((c) => c.id === id),
+            1,
+          );
+        }),
       }),
       invalidatesTags: ["Layout"],
     }),

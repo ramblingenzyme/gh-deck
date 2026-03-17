@@ -14,7 +14,9 @@ export const Board = ({ columns, onAddColumn, onRemove, onMoveLeft, onMoveRight 
   if (columns.length === 0) {
     return (
       <main className={styles.boardEmpty} tabIndex={-1}>
-        <div className={styles.boardEmptyIcon} aria-hidden="true">▪</div>
+        <div className={styles.boardEmptyIcon} aria-hidden="true">
+          ▪
+        </div>
         <p className={styles.boardEmptyText}>No columns yet</p>
         <button className={styles.boardEmptyBtn} onClick={onAddColumn}>
           + Add your first column

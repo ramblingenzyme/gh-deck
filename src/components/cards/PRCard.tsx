@@ -24,18 +24,26 @@ export const PRCard = ({ item }: PRCardProps) => {
         <div className={cardStyles.cardStats}>
           {item.draft && <span className={styles.draftBadge}>DRAFT</span>}
           <span
-            className={item.reviews.approved > 0 ? cardStyles.cardStatApproved : cardStyles.cardStat}
+            className={
+              item.reviews.approved > 0 ? cardStyles.cardStatApproved : cardStyles.cardStat
+            }
             aria-label={`${item.reviews.approved} approvals`}
           >
-            <Icon>✓</Icon>{item.reviews.approved}
+            <Icon>✓</Icon>
+            {item.reviews.approved}
           </span>
           {item.reviews.requested > 0 && (
-            <span className={cardStyles.cardStatPending} aria-label={`${item.reviews.requested} reviews requested`}>
-              <Icon>⟳</Icon>{item.reviews.requested}
+            <span
+              className={cardStyles.cardStatPending}
+              aria-label={`${item.reviews.requested} reviews requested`}
+            >
+              <Icon>⟳</Icon>
+              {item.reviews.requested}
             </span>
           )}
           <span className={cardStyles.cardStat} aria-label={`${item.comments} comments`}>
-            <CommentIcon />{item.comments}
+            <CommentIcon />
+            {item.comments}
           </span>
         </div>
       </footer>

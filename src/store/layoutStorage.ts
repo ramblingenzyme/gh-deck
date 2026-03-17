@@ -11,7 +11,7 @@ export function loadLayout(): ColumnConfig[] {
     // Migrate old repos field to a query string
     return cols.map(({ repos, ...col }) => {
       if (repos?.length && !col.query) {
-        return { ...col, query: repos.map((r) => `repo:${r}`).join(' ') };
+        return { ...col, query: repos.map((r) => `repo:${r}`).join(" ") };
       }
       return col;
     });

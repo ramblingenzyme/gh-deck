@@ -73,7 +73,9 @@
   cursor: pointer;
   border: 1px solid var(--border-mid);
   color: var(--text-muted);
-  transition: border-color 0.15s, color 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
 }
 
 .btnModal:hover {

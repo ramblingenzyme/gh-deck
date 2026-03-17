@@ -1,4 +1,4 @@
-import styles from './CommentIcon.module.css';
+import styles from "./CommentIcon.module.css";
 
 export const CommentIcon = () => (
   <svg

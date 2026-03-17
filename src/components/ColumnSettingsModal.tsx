@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react';
-import type { ColumnConfig } from '@/types';
-import { useUpdateColumnQueryMutation } from '@/store/configApi';
-import { useEscapeKey } from '@/hooks/useEscapeKey';
-import styles from './AddColumnModal.module.css';
+import { useCallback, useState } from "react";
+import type { ColumnConfig } from "@/types";
+import { useUpdateColumnQueryMutation } from "@/store/configApi";
+import { useEscapeKey } from "@/hooks/useEscapeKey";
+import styles from "./AddColumnModal.module.css";
 
 interface ColumnSettingsModalProps {
   col: ColumnConfig;
@@ -10,7 +10,7 @@ interface ColumnSettingsModalProps {
 }
 
 export const ColumnSettingsModal = ({ col, onClose }: ColumnSettingsModalProps) => {
-  const [query, setQuery] = useState(col.query ?? '');
+  const [query, setQuery] = useState(col.query ?? "");
   const [confirmingClear, setConfirmingClear] = useState(false);
   const [updateQuery] = useUpdateColumnQueryMutation();
 
@@ -20,14 +20,16 @@ export const ColumnSettingsModal = ({ col, onClose }: ColumnSettingsModalProps) 
   };
 
   const handleClear = () => {
-    setQuery('');
+    setQuery("");
     setConfirmingClear(false);
   };
 
-  useEscapeKey(useCallback(() => {
-    if (confirmingClear) setConfirmingClear(false);
-    else onClose();
-  }, [confirmingClear, onClose]));
+  useEscapeKey(
+    useCallback(() => {
+      if (confirmingClear) setConfirmingClear(false);
+      else onClose();
+    }, [confirmingClear, onClose]),
+  );
 
   return (
     <div
@@ -53,7 +55,10 @@ export const ColumnSettingsModal = ({ col, onClose }: ColumnSettingsModalProps) 
               className={styles.fieldInput}
               type="text"
               value={query}
-              onChange={(e) => { setQuery(e.target.value); setConfirmingClear(false); }}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setConfirmingClear(false);
+              }}
               placeholder="repo:owner/repo label:bug is:open"
               autoFocus
             />

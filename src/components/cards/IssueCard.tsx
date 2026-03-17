@@ -18,9 +18,12 @@ export const IssueCard = ({ item }: IssueCardProps) => {
         </a>
       </p>
       <footer className={cardStyles.cardMeta}>
-        <span className={cardStyles.cardAuthor}>{item.assignee ? `→ ${item.assignee}` : "unassigned"}</span>
+        <span className={cardStyles.cardAuthor}>
+          {item.assignee ? `→ ${item.assignee}` : "unassigned"}
+        </span>
         <span className={cardStyles.cardStat} aria-label={`${item.comments} comments`}>
-          <CommentIcon />{item.comments}
+          <CommentIcon />
+          {item.comments}
         </span>
       </footer>
       <LabelList labels={item.labels} />

@@ -1,6 +1,6 @@
-import { Icon } from '../Icon';
-import { CommentIcon } from './CommentIcon';
-import styles from './Card.module.css';
+import { Icon } from "../Icon";
+import { CommentIcon } from "./CommentIcon";
+import styles from "./Card.module.css";
 
 interface CardTopProps {
   repo: string;
@@ -20,4 +20,4 @@ interface CardTypeIconProps {
 }
 
 export const CardTypeIcon = ({ type, icon }: CardTypeIconProps) =>
-  type === 'comment' ? <CommentIcon /> : <Icon className={styles.cardIcon}>{icon}</Icon>;
+  type === "comment" ? <CommentIcon /> : <Icon className={styles.cardIcon}>{icon}</Icon>;

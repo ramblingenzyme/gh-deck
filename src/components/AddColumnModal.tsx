@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import type { ColumnType } from '@/types';
-import { COLUMN_TYPES } from '@/constants';
-import { useEscapeKey } from '@/hooks/useEscapeKey';
-import colStyles from './Column.module.css';
-import { Icon } from './Icon';
-import styles from './AddColumnModal.module.css';
+import { useState } from "react";
+import type { ColumnType } from "@/types";
+import { COLUMN_TYPES } from "@/constants";
+import { useEscapeKey } from "@/hooks/useEscapeKey";
+import colStyles from "./Column.module.css";
+import { Icon } from "./Icon";
+import styles from "./AddColumnModal.module.css";
 
 interface AddColumnModalProps {
   onAdd: (type: ColumnType, title: string, query?: string) => void;
@@ -12,9 +12,9 @@ interface AddColumnModalProps {
 }
 
 export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
-  const [selectedType, setSelectedType] = useState<ColumnType>('prs');
+  const [selectedType, setSelectedType] = useState<ColumnType>("prs");
   const [title, setTitle] = useState(COLUMN_TYPES[selectedType].label);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const handleTypeChange = (type: ColumnType) => {
     setSelectedType(type);
@@ -39,7 +39,9 @@ export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
     >
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 id="add-column-modal-title" className={styles.modalTitle}>Add Column</h2>
+          <h2 id="add-column-modal-title" className={styles.modalTitle}>
+            Add Column
+          </h2>
         </div>
         <form onSubmit={handleSubmit}>
           <div className={styles.modalBody}>
@@ -50,7 +52,7 @@ export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
                   <button
                     key={type}
                     type="button"
-                    className={`${styles.typeBtn} ${colStyles[type]} ${selectedType === type ? styles.active : ''}`}
+                    className={`${styles.typeBtn} ${colStyles[type]} ${selectedType === type ? styles.active : ""}`}
                     onClick={() => handleTypeChange(type)}
                     aria-pressed={selectedType === type}
                   >
@@ -61,7 +63,9 @@ export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
               })}
             </div>
             <div className={styles.modalField}>
-              <label htmlFor="column-title-input" className={styles.modalFieldLabel}>Column Title</label>
+              <label htmlFor="column-title-input" className={styles.modalFieldLabel}>
+                Column Title
+              </label>
               <input
                 id="column-title-input"
                 className={styles.fieldInput}

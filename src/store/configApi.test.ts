@@ -6,7 +6,9 @@ import type { ColumnConfig } from "@/types";
 
 let stored: ColumnConfig[] = [];
 const loadLayout = () => stored;
-const saveLayout = (c: ColumnConfig[]) => { stored = c; };
+const saveLayout = (c: ColumnConfig[]) => {
+  stored = c;
+};
 
 function mutateLayout(fn: (draft: ColumnConfig[]) => void): ColumnConfig[] {
   const next = produce(loadLayout(), fn);
@@ -15,11 +17,18 @@ function mutateLayout(fn: (draft: ColumnConfig[]) => void): ColumnConfig[] {
 }
 
 function addColumn(id: string, type: ColumnConfig["type"], title: string) {
-  return mutateLayout((d) => { d.push({ id, type, title }); });
+  return mutateLayout((d) => {
+    d.push({ id, type, title });
+  });
 }
 
 function removeColumn(id: string) {
-  return mutateLayout((d) => { d.splice(d.findIndex((c) => c.id === id), 1); });
+  return mutateLayout((d) => {
+    d.splice(
+      d.findIndex((c) => c.id === id),
+      1,
+    );
+  });
 }
 
 function moveLeft(id: string) {

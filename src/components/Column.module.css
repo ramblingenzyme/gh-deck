@@ -1,8 +1,18 @@
-.prs           { --color-accent: #818cf8; }
-.issues        { --color-accent: #f87171; }
-.ci            { --color-accent: #fbbf24; }
-.notifications { --color-accent: #4ade80; }
-.activity      { --color-accent: #c4b5fd; }
+.prs {
+  --color-accent: #818cf8;
+}
+.issues {
+  --color-accent: #f87171;
+}
+.ci {
+  --color-accent: #fbbf24;
+}
+.notifications {
+  --color-accent: #4ade80;
+}
+.activity {
+  --color-accent: #c4b5fd;
+}
 
 .column {
   width: 300px;
@@ -99,7 +109,9 @@
   padding: 3px 5px;
   border-radius: var(--radius-sm);
   line-height: 1;
-  transition: color 0.15s, background 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s;
 }
 
 .btnIcon:hover {
@@ -154,7 +166,9 @@
   padding: 3px 8px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-mid);
-  transition: border-color 0.15s, color 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
 }
 
 .btnConfirmCancel:hover {
@@ -169,7 +183,9 @@
   padding: 3px 8px;
   border-radius: var(--radius-sm);
   border: 1px solid color-mix(in srgb, var(--ci-failure) 30%, transparent);
-  transition: border-color 0.15s, background 0.15s;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
 }
 
 .btnConfirmDanger:hover {
@@ -191,8 +207,13 @@
 }
 
 @keyframes skeleton-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
 .errorState {

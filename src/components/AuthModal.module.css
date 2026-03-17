@@ -112,7 +112,9 @@
   padding: 6px 16px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-mid);
-  transition: border-color 0.15s, color 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
 }
 
 .btnCancel:hover {
@@ -133,7 +135,9 @@
   padding: 6px 14px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-mid);
-  transition: border-color 0.15s, color 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
 }
 
 .btnModal:hover {

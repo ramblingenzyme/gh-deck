@@ -21,7 +21,9 @@ export const CICard = ({ item }: CICardProps) => {
         </a>
       </p>
       <footer className={cardStyles.cardMeta}>
-        <span className={cardStyles.cardAuthor}>{item.branch} · {item.duration}</span>
+        <span className={cardStyles.cardAuthor}>
+          {item.branch} · {item.duration}
+        </span>
         <span className={styles.ciBadge}>
           <Icon>{status.icon}</Icon> {status.label}
         </span>

@@ -1,9 +1,9 @@
-import { useEffect, useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store';
-import { deviceCodeReceived, tokenReceived, setError } from '@/store/authSlice';
-import { githubApi } from '@/store/githubApi';
-import { GITHUB_CLIENT_ID } from '@/env';
-import { requestDeviceCode, pollForToken } from './deviceFlow';
+import { useEffect, useCallback } from "react";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { deviceCodeReceived, tokenReceived, setError } from "@/store/authSlice";
+import { githubApi } from "@/store/githubApi";
+import { GITHUB_CLIENT_ID } from "@/env";
+import { requestDeviceCode, pollForToken } from "./deviceFlow";
 
 export function useDeviceFlow() {
   const dispatch = useAppDispatch();
@@ -12,7 +12,7 @@ export function useDeviceFlow() {
 
   const start = useCallback(async () => {
     if (!GITHUB_CLIENT_ID) {
-      dispatch(setError('VITE_GITHUB_CLIENT_ID is not set. Check your .env.local file.'));
+      dispatch(setError("VITE_GITHUB_CLIENT_ID is not set. Check your .env.local file."));
       return;
     }
     try {
@@ -27,12 +27,12 @@ export function useDeviceFlow() {
         }),
       );
     } catch (e) {
-      dispatch(setError(e instanceof Error ? e.message : 'Failed to start auth flow'));
+      dispatch(setError(e instanceof Error ? e.message : "Failed to start auth flow"));
     }
   }, [dispatch]);
 
   useEffect(() => {
-    if (status !== 'polling' || !deviceCode || !GITHUB_CLIENT_ID) return;
+    if (status !== "polling" || !deviceCode || !GITHUB_CLIENT_ID) return;
 
     const controller = new AbortController();
 
@@ -42,8 +42,8 @@ export function useDeviceFlow() {
         dispatch(githubApi.endpoints.getUser.initiate());
       })
       .catch((e: unknown) => {
-        if (e instanceof DOMException && e.name === 'AbortError') return;
-        dispatch(setError(e instanceof Error ? e.message : 'Auth failed'));
+        if (e instanceof DOMException && e.name === "AbortError") return;
+        dispatch(setError(e instanceof Error ? e.message : "Auth failed"));
       });
 
     return () => controller.abort();

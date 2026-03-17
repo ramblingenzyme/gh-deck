@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'gh-deck:token';
+const STORAGE_KEY = "gh-deck:token";
 
 export function loadToken(): string | null {
   try {

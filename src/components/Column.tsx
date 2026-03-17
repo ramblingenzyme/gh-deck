@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import type { ColumnConfig, PRItem, IssueItem, CIItem, NotifItem, ActivityItem } from '@/types';
-import { COLUMN_TYPES } from '@/constants';
-import { useColumnData } from '@/hooks/useColumnData';
-import styles from './Column.module.css';
-import { Icon } from './Icon';
-import { PRCard } from './cards/PRCard';
-import { IssueCard } from './cards/IssueCard';
-import { CICard } from './cards/CICard';
-import { NotifCard } from './cards/NotifCard';
-import { ActivityCard } from './cards/ActivityCard';
-import { ColumnSettingsModal } from './ColumnSettingsModal';
+import { useState } from "react";
+import type { ColumnConfig, PRItem, IssueItem, CIItem, NotifItem, ActivityItem } from "@/types";
+import { COLUMN_TYPES } from "@/constants";
+import { useColumnData } from "@/hooks/useColumnData";
+import styles from "./Column.module.css";
+import { Icon } from "./Icon";
+import { PRCard } from "./cards/PRCard";
+import { IssueCard } from "./cards/IssueCard";
+import { CICard } from "./cards/CICard";
+import { NotifCard } from "./cards/NotifCard";
+import { ActivityCard } from "./cards/ActivityCard";
+import { ColumnSettingsModal } from "./ColumnSettingsModal";
 
 interface ColumnProps {
   col: ColumnConfig;
@@ -20,7 +20,14 @@ interface ColumnProps {
   isLast: boolean;
 }
 
-export const Column = ({ col, onRemove, onMoveLeft, onMoveRight, isFirst, isLast }: ColumnProps) => {
+export const Column = ({
+  col,
+  onRemove,
+  onMoveLeft,
+  onMoveRight,
+  isFirst,
+  isLast,
+}: ColumnProps) => {
   const [confirming, setConfirming] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const cfg = COLUMN_TYPES[col.type];
@@ -28,15 +35,15 @@ export const Column = ({ col, onRemove, onMoveLeft, onMoveRight, isFirst, isLast
 
   const renderCard = (item: PRItem | IssueItem | CIItem | NotifItem | ActivityItem) => {
     switch (col.type) {
-      case 'prs':
+      case "prs":
         return <PRCard key={item.id} item={item as PRItem} />;
-      case 'issues':
+      case "issues":
         return <IssueCard key={item.id} item={item as IssueItem} />;
-      case 'ci':
+      case "ci":
         return <CICard key={item.id} item={item as CIItem} />;
-      case 'notifications':
+      case "notifications":
         return <NotifCard key={item.id} item={item as NotifItem} />;
-      case 'activity':
+      case "activity":
         return <ActivityCard key={item.id} item={item as ActivityItem} />;
     }
   };
@@ -47,11 +54,13 @@ export const Column = ({ col, onRemove, onMoveLeft, onMoveRight, isFirst, isLast
         <div className={styles.colHeaderLeft}>
           <Icon className={styles.colIcon}>{cfg.icon}</Icon>
           <h2 className={styles.colTitle}>{col.title}</h2>
-          <div className={styles.colBadge} aria-label={`${data.length} items`}>{data.length}</div>
+          <div className={styles.colBadge} aria-label={`${data.length} items`}>
+            {data.length}
+          </div>
         </div>
         <div className={styles.colControls}>
           <button
-            className={`${styles.btnIcon} ${col.query ? styles.btnIconActive : ''}`}
+            className={`${styles.btnIcon} ${col.query ? styles.btnIconActive : ""}`}
             onClick={() => setShowSettings(true)}
             aria-label="Column filters"
             title="Column filters"
@@ -74,7 +83,11 @@ export const Column = ({ col, onRemove, onMoveLeft, onMoveRight, isFirst, isLast
           >
             <Icon>→</Icon>
           </button>
-          <button className={styles.btnIcon} onClick={() => setConfirming(true)} aria-label="Remove column">
+          <button
+            className={styles.btnIcon}
+            onClick={() => setConfirming(true)}
+            aria-label="Remove column"
+          >
             <Icon>✕</Icon>
           </button>
         </div>
@@ -120,7 +133,11 @@ export const Column = ({ col, onRemove, onMoveLeft, onMoveRight, isFirst, isLast
             {error}
           </div>
         )}
-        {!isLoading && !error && data.map((item) => renderCard(item as PRItem & IssueItem & CIItem & NotifItem & ActivityItem))}
+        {!isLoading &&
+          !error &&
+          data.map((item) =>
+            renderCard(item as PRItem & IssueItem & CIItem & NotifItem & ActivityItem),
+          )}
       </div>
 
       {showSettings && <ColumnSettingsModal col={col} onClose={() => setShowSettings(false)} />}

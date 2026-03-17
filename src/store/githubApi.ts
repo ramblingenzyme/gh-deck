@@ -1,32 +1,39 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { RootState } from './index';
-import type { PRItem, IssueItem, NotifItem, CIItem, ActivityItem } from '@/types';
-import type { GHUser, GHSearchResult, GHNotification, GHRepo, GHWorkflowRunsResult, GHEvent } from '@/types/github';
-import type { AuthUser } from './authSlice';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { RootState } from "./index";
+import type { PRItem, IssueItem, NotifItem, CIItem, ActivityItem } from "@/types";
+import type {
+  GHUser,
+  GHSearchResult,
+  GHNotification,
+  GHRepo,
+  GHWorkflowRunsResult,
+  GHEvent,
+} from "@/types/github";
+import type { AuthUser } from "./authSlice";
 import {
   mapSearchItemToPR,
   mapSearchItemToIssue,
   mapNotification,
   mapWorkflowRun,
   mapEvent,
-} from './githubMappers';
+} from "./githubMappers";
 
 export const githubApi = createApi({
-  reducerPath: 'githubApi',
+  reducerPath: "githubApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://api.github.com',
+    baseUrl: "https://api.github.com",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
-        headers.set('Accept', 'application/vnd.github+json');
+        headers.set("Authorization", `Bearer ${token}`);
+        headers.set("Accept", "application/vnd.github+json");
       }
       return headers;
     },
   }),
   endpoints: (build) => ({
     getUser: build.query<AuthUser, void>({
-      query: () => '/user',
+      query: () => "/user",
       transformResponse: (raw: GHUser) => ({
         login: raw.login,
         avatarUrl: raw.avatar_url,
@@ -34,8 +41,7 @@ export const githubApi = createApi({
       }),
     }),
     getPRs: build.query<PRItem[], string>({
-      query: (login) =>
-        `/search/issues?q=is:pr+is:open+involves:${login}&sort=updated&per_page=30`,
+      query: (login) => `/search/issues?q=is:pr+is:open+involves:${login}&sort=updated&per_page=30`,
       transformResponse: (raw: GHSearchResult) => raw.items.map(mapSearchItemToPR),
     }),
     getIssues: build.query<IssueItem[], string>({
@@ -44,7 +50,7 @@ export const githubApi = createApi({
       transformResponse: (raw: GHSearchResult) => raw.items.map(mapSearchItemToIssue),
     }),
     getNotifications: build.query<NotifItem[], void>({
-      query: () => '/notifications?all=false&per_page=30',
+      query: () => "/notifications?all=false&per_page=30",
       transformResponse: (raw: GHNotification[]) => raw.map(mapNotification),
     }),
     getCIRuns: build.query<CIItem[], string[]>({
@@ -63,7 +69,7 @@ export const githubApi = createApi({
       },
     }),
     getRepos: build.query<GHRepo[], void>({
-      query: () => '/user/repos?sort=pushed&per_page=10',
+      query: () => "/user/repos?sort=pushed&per_page=10",
     }),
     getActivity: build.query<ActivityItem[], string>({
       query: (login) => `/users/${login}/events?per_page=30`,

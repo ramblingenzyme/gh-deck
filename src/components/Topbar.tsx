@@ -1,6 +1,6 @@
-import { useAppSelector } from '@/store';
-import { isDemoMode } from '@/env';
-import styles from './Topbar.module.css';
+import { useAppSelector } from "@/store";
+import { isDemoMode } from "@/env";
+import styles from "./Topbar.module.css";
 
 interface TopbarProps {
   onAddColumn: () => void;
@@ -10,7 +10,7 @@ interface TopbarProps {
 
 export const Topbar = ({ onAddColumn, onSignIn, onSignOut }: TopbarProps) => {
   const auth = useAppSelector((s) => s.auth);
-  const authed = auth.status === 'authed' && auth.user;
+  const authed = auth.status === "authed" && auth.user;
 
   return (
     <header className={styles.topbar}>

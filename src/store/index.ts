@@ -1,8 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch, useSelector } from 'react-redux';
-import { configApi } from './configApi';
-import { githubApi } from './githubApi';
-import authReducer from './authSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import { configApi } from "./configApi";
+import { githubApi } from "./githubApi";
+import authReducer from "./authSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,8 +10,7 @@ export const store = configureStore({
     [githubApi.reducerPath]: githubApi.reducer,
     auth: authReducer,
   },
-  middleware: (getDefault) =>
-    getDefault().concat(configApi.middleware, githubApi.middleware),
+  middleware: (getDefault) => getDefault().concat(configApi.middleware, githubApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
