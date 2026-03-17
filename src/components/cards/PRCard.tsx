@@ -20,7 +20,7 @@ export const PRCard = ({ item }: PRCardProps) => {
       <div className={cardStyles.cardMeta}>
         <span className={cardStyles.cardAuthor}>@{item.author}</span>
         <div className={cardStyles.cardStats}>
-          <span className={item.reviews.approved > 0 ? cardStyles.cardStatApproved : cardStyles.cardStatNeutral}>
+          <span className={item.reviews.approved > 0 ? cardStyles.cardStatApproved : cardStyles.cardStat}>
             ✓{item.reviews.approved}
           </span>
           {item.reviews.requested > 0 && (
@@ -28,15 +28,15 @@ export const PRCard = ({ item }: PRCardProps) => {
               ⟳{item.reviews.requested}
             </span>
           )}
-          <span className={cardStyles.cardStatNeutral}>
+          <span className={cardStyles.cardStat}>
             💬{item.comments}
           </span>
         </div>
       </div>
       {item.labels.length > 0 && (
-        <div className={styles.labelList}>
+        <div className={labelStyles.labelList}>
           {item.labels.map((l) => (
-            <span key={l} className={`${styles.label} ${labelStyles[l] ?? labelStyles.fallback}`}>{l}</span>
+            <span key={l} className={`${labelStyles.label} ${labelStyles[l] ?? labelStyles.fallback}`}>{l}</span>
           ))}
         </div>
       )}

@@ -42,7 +42,6 @@
   all: unset;
   box-sizing: border-box;
   cursor: pointer;
-  font-family: var(--font-mono);
 }
 
 .btn:disabled {

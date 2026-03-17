@@ -71,7 +71,6 @@
   padding: 6px 12px;
   border-radius: var(--radius-md);
   font-size: 11px;
-  font-family: var(--font-mono);
   cursor: pointer;
   border: 1px solid var(--border-card);
   transition: border-color 0.15s;
@@ -105,7 +104,6 @@
   cursor: pointer;
   color: var(--text-muted);
   font-size: 11px;
-  font-family: var(--font-mono);
   transition:
     border-color 0.15s,
     background 0.15s;
@@ -136,7 +134,6 @@
   padding: 8px 10px;
   color: var(--text-primary);
   font-size: 12px;
-  font-family: var(--font-mono);
 }
 
 .fieldInput:focus {

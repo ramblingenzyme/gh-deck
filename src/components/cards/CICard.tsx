@@ -19,7 +19,7 @@ export const CICard = ({ item }: CICardProps) => {
       <div className={cardStyles.cardTitle}>{item.name}</div>
       <div className={cardStyles.cardMeta}>
         <span className={cardStyles.cardAuthor}>{item.branch}</span>
-        <span className={cardStyles.cardStatNeutral}>
+        <span className={cardStyles.cardStat}>
           {item.duration}
         </span>
       </div>

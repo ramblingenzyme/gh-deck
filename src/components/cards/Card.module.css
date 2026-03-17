@@ -57,10 +57,6 @@
   color: var(--ci-success);
 }
 
-.cardStatNeutral {
-  color: var(--text-muted);
-}
-
 .cardStatPending {
   color: var(--ci-running);
 }
