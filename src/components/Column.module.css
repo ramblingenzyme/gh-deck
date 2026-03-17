@@ -1,0 +1,5 @@
+.prs           { --color-accent: #818cf8; }
+.issues        { --color-accent: #f87171; }
+.ci            { --color-accent: #fbbf24; }
+.notifications { --color-accent: #4ade80; }
+.activity      { --color-accent: #c4b5fd; }

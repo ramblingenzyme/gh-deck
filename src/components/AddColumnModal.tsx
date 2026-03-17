@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ColumnType } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
+import styles from "./Column.module.css";
 
 interface AddColumnModalProps {
   onAdd: (type: ColumnType, title: string) => void;
@@ -34,10 +35,10 @@ export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
               return (
                 <button
                   key={type}
-                  className={`type-btn ${selectedType === type ? "active" : ""}`}
+                  className={`type-btn ${styles[type]} ${selectedType === type ? "active" : ""}`}
                   onClick={() => handleTypeChange(type)}
                 >
-                  <span style={{ fontSize: "14px", color: cfg.color }}>{cfg.icon}</span>
+                  <span className="col-icon">{cfg.icon}</span>
                   <span>{cfg.label}</span>
                 </button>
               );

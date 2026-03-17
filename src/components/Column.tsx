@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ColumnConfig } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
+import styles from "./Column.module.css";
 import { MOCK_PRS, MOCK_ISSUES, MOCK_CI, MOCK_NOTIFS, MOCK_ACTIVITY } from "@/data/mock";
 import { PRCard } from "./cards/PRCard";
 import { IssueCard } from "./cards/IssueCard";
@@ -55,10 +56,10 @@ export const Column = ({
   const data = DATA_MAP[col.type];
 
   return (
-    <div className="column" style={{ "--color-accent": cfg.color } as React.CSSProperties}>
+    <div className={`column ${styles[col.type]}`}>
       <div className="col-header">
         <div className="col-header-left">
-          <span style={{ fontSize: "14px", color: cfg.color }}>{cfg.icon}</span>
+          <span className="col-icon">{cfg.icon}</span>
           <h2 className="col-title">{col.title}</h2>
           <div className="col-badge">{data.length}</div>
         </div>

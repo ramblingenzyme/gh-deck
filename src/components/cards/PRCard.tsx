@@ -1,5 +1,5 @@
 import type { PRItem } from "@/types";
-import { LABEL_COLORS, LABEL_FALLBACK } from "@/constants";
+import labelStyles from "./Label.module.css";
 
 interface PRCardProps {
   item: PRItem;
@@ -38,14 +38,9 @@ export const PRCard = ({ item }: PRCardProps) => {
       </div>
       {item.labels.length > 0 && (
         <div className="label-list">
-          {item.labels.map((l) => {
-            const colors = LABEL_COLORS[l] ?? LABEL_FALLBACK;
-            return (
-              <span key={l} className="label" style={{ background: colors.bg, color: colors.text }}>
-                {l}
-              </span>
-            );
-          })}
+          {item.labels.map((l) => (
+            <span key={l} className={`label ${labelStyles[l] ?? labelStyles.fallback}`}>{l}</span>
+          ))}
         </div>
       )}
     </div>

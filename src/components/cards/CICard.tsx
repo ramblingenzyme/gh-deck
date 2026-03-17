@@ -1,5 +1,6 @@
 import type { CIItem } from "@/types";
 import { CI_STATUS } from "@/constants";
+import styles from "./CICard.module.css";
 
 interface CICardProps {
   item: CIItem;
@@ -9,7 +10,7 @@ export const CICard = ({ item }: CICardProps) => {
   const status = CI_STATUS[item.status];
 
   return (
-    <div className="card ci-card" style={{ "--ci-color": status.color } as React.CSSProperties}>
+    <div className={`card ci-card ${styles[item.status]}`}>
       <div className="card-top">
         <span className="card-repo">{item.repo}</span>
         <span className="card-age">{item.age}</span>
@@ -22,7 +23,7 @@ export const CICard = ({ item }: CICardProps) => {
         </span>
       </div>
       <div style={{ marginTop: "6px" }}>
-        <span className="ci-badge" style={{ background: status.bg, color: status.color }}>
+        <span className="ci-badge">
           {status.icon} {status.label}
         </span>
       </div>

@@ -1,0 +1,11 @@
+.fallback      { background: #1a1a1a; color: #9ca3af; }
+.bug           { background: #3d1414; color: #f87171; }
+.critical,
+.urgent        { background: #4a1515; color: #fca5a5; }
+.enhancement   { background: #0f2d1f; color: #4ade80; }
+.refactor      { background: #1a1a2e; color: #818cf8; }
+.documentation { background: #1e2a1e; color: #86efac; }
+.dependencies  { background: #1a1a1a; color: #9ca3af; }
+.perf          { background: #1a2a1a; color: #6ee7b7; }
+.platform      { background: #1a1a2e; color: #a5b4fc; }
+.observability { background: #2a1a2e; color: #c4b5fd; }
