@@ -52,3 +52,15 @@
 .cardStat {
   color: var(--text-muted);
 }
+
+.cardStatApproved {
+  color: var(--ci-success);
+}
+
+.cardStatNeutral {
+  color: var(--text-muted);
+}
+
+.cardStatPending {
+  color: var(--ci-running);
+}

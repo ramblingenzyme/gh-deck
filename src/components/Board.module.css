@@ -29,3 +29,21 @@
   opacity: 0.25;
   cursor: not-allowed;
 }
+
+.boardEmptyInner {
+  text-align: center;
+}
+
+.boardEmptyIcon {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.boardEmptyText {
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.boardEmptyBtn {
+  font-size: 11px;
+}

@@ -19,7 +19,7 @@ export const IssueCard = ({ item }: IssueCardProps) => {
       </div>
       <div className={cardStyles.cardMeta}>
         <span className={cardStyles.cardAuthor}>{item.assignee ? `→ ${item.assignee}` : "unassigned"}</span>
-        <span className={cardStyles.cardStat} style={{ color: "#6b7280" }}>
+        <span className={cardStyles.cardStatNeutral}>
           💬{item.comments}
         </span>
       </div>

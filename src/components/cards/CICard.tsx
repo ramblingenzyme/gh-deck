@@ -19,11 +19,11 @@ export const CICard = ({ item }: CICardProps) => {
       <div className={cardStyles.cardTitle}>{item.name}</div>
       <div className={cardStyles.cardMeta}>
         <span className={cardStyles.cardAuthor}>{item.branch}</span>
-        <span className={cardStyles.cardStat} style={{ color: "#6b7280" }}>
+        <span className={cardStyles.cardStatNeutral}>
           {item.duration}
         </span>
       </div>
-      <div style={{ marginTop: "6px" }}>
+      <div className={styles.ciBadgeWrapper}>
         <span className={styles.ciBadge}>
           {status.icon} {status.label}
         </span>

@@ -14,10 +14,10 @@ export const Board = ({ columns, onAddColumn, onRemove, onMoveLeft, onMoveRight 
   if (columns.length === 0) {
     return (
       <div className={styles.boardEmpty}>
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: "36px", marginBottom: "12px" }}>▪</div>
-          <div style={{ fontSize: "12px", marginBottom: "16px" }}>No columns yet</div>
-          <button className={styles.btn} onClick={onAddColumn} style={{ fontSize: "11px" }}>
+        <div className={styles.boardEmptyInner}>
+          <div className={styles.boardEmptyIcon}>▪</div>
+          <div className={styles.boardEmptyText}>No columns yet</div>
+          <button className={`${styles.btn} ${styles.boardEmptyBtn}`} onClick={onAddColumn}>
             + Add your first column
           </button>
         </div>

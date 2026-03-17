@@ -20,20 +20,15 @@ export const PRCard = ({ item }: PRCardProps) => {
       <div className={cardStyles.cardMeta}>
         <span className={cardStyles.cardAuthor}>@{item.author}</span>
         <div className={cardStyles.cardStats}>
-          <span
-            className={cardStyles.cardStat}
-            style={{
-              color: item.reviews.approved > 0 ? "#4ade80" : "#6b7280",
-            }}
-          >
+          <span className={item.reviews.approved > 0 ? cardStyles.cardStatApproved : cardStyles.cardStatNeutral}>
             ✓{item.reviews.approved}
           </span>
           {item.reviews.requested > 0 && (
-            <span className={cardStyles.cardStat} style={{ color: "#fbbf24" }}>
+            <span className={cardStyles.cardStatPending}>
               ⟳{item.reviews.requested}
             </span>
           )}
-          <span className={cardStyles.cardStat} style={{ color: "#6b7280" }}>
+          <span className={cardStyles.cardStatNeutral}>
             💬{item.comments}
           </span>
         </div>

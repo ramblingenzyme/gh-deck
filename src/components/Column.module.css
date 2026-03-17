@@ -124,3 +124,15 @@
   opacity: 0.25;
   cursor: not-allowed;
 }
+
+.btnConfirmCancel {
+  font-size: 10px;
+  color: var(--text-muted);
+  padding: 2px 6px;
+}
+
+.btnConfirmDanger {
+  font-size: 10px;
+  color: var(--ci-failure);
+  padding: 2px 6px;
+}

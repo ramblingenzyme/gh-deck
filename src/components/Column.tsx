@@ -91,25 +91,15 @@ export const Column = ({
           <span className={styles.colConfirmationText}>Remove "{col.title}"?</span>
           <div className={styles.colConfirmationButtons}>
             <button
-              className={styles.btn}
+              className={styles.btnConfirmCancel}
               onClick={() => setConfirming(false)}
-              style={{
-                fontSize: "10px",
-                color: "#6b7280",
-                padding: "2px 6px",
-              }}
             >
               No
             </button>
             <button
-              className={styles.btn}
+              className={styles.btnConfirmDanger}
               onClick={() => {
                 onRemove(col.id);
-              }}
-              style={{
-                fontSize: "10px",
-                color: "#f87171",
-                padding: "2px 6px",
               }}
             >
               Yes, remove

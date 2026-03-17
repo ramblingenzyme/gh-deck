@@ -63,3 +63,53 @@ Only `:root` CSS custom properties, CSS reset, and scrollbar styles.
 | `src/components/cards/CICard.tsx` | Import `Card.module.css`; use new `.ciCard`/`.ciBadge` classes |
 | `src/components/cards/NotifCard.tsx` | Import `Card.module.css` + `NotifCard.module.css` |
 | `src/components/cards/ActivityCard.tsx` | Import `Card.module.css` + `ActivityCard.module.css` |
+
+---
+
+# Plan: Refactor Inline Styles into CSS Classes
+
+**Status: Complete (2026-03-17)**
+
+## Context
+After the full CSS modules migration above, 14 inline `style={{}}` props remained across 5 files. Migrated to named CSS classes for traceability, autocomplete, and consistency.
+
+## Inline styles migrated
+
+### `Board.tsx` — empty state container
+| New class | Properties |
+|---|---|
+| `.boardEmptyInner` | `text-align: center` |
+| `.boardEmptyIcon` | `font-size: 36px; margin-bottom: 12px` |
+| `.boardEmptyText` | `font-size: 12px; margin-bottom: 16px` |
+| `.boardEmptyBtn` | `font-size: 11px` (composed with `.btn`) |
+
+### `Topbar.tsx` — add column button
+`.btnAdd { font-size: 12px }` added to `Topbar.module.css`.
+
+### `Column.tsx` — confirmation buttons
+| New class | Properties |
+|---|---|
+| `.btnConfirmCancel` | `font-size: 10px; color: var(--text-muted); padding: 2px 6px` |
+| `.btnConfirmDanger` | `font-size: 10px; color: var(--ci-failure); padding: 2px 6px` |
+
+### `PRCard.tsx` — review stat colors
+- Approved/neutral conditional → `cardStatApproved` / `cardStatNeutral` ternary
+- Pending → `.cardStatPending`
+- Comment count → `.cardStatNeutral`
+
+### `IssueCard.tsx` — comment stat color
+`style={{ color: "#6b7280" }}` → `.cardStatNeutral` from `Card.module.css`
+
+### `CICard.tsx` — duration stat + badge wrapper
+- Duration span → `.cardStatNeutral`
+- Badge wrapper `marginTop: 6px` → `.ciBadgeWrapper` in `CICard.module.css`
+
+## CSS variable aliases
+- `#4ade80` = `var(--ci-success)`
+- `#f87171` = `var(--ci-failure)`
+- `#fbbf24` = `var(--ci-running)`
+- `#6b7280` = `var(--text-muted)`
+
+## Verification
+- `npm run build` — passed
+- `grep style={{` in `src/**/*.tsx` — zero results

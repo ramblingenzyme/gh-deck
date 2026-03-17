@@ -49,3 +49,7 @@
   opacity: 0.25;
   cursor: not-allowed;
 }
+
+.btnAdd {
+  font-size: 12px;
+}
