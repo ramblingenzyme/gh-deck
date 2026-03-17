@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react()],
   test: {
-    environment: 'node',
+    environment: 'happy-dom',
     alias: { '@': new URL('./src', import.meta.url).pathname },
   },
   resolve: {
