@@ -10,9 +10,9 @@
 
   --text-primary: #e5e7eb;
   --text-secondary: #d1d5db;
-  --text-muted: #6b7280;
-  --text-faint: #4b5563;
-  --text-ghost: #374151;
+  --text-muted: #8a95a5;
+  --text-faint: #748291;
+  --text-ghost: #6e7f90;
 
   --accent-notifications: #4ade80;
   --accent-prs: #818cf8;
@@ -51,10 +51,25 @@ button:disabled {
   cursor: not-allowed;
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent-prs);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 html,
 body {
   width: 100%;
   height: 100%;
+}
+
+#root {
+  background: var(--bg-root);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
 }
 
 /* ── Scrollbar ────────────────────────────────────────────────────────────── */

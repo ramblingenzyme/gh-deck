@@ -14,12 +14,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
   color: var(--text-ghost);
   padding-top: 80px;
-}
-
-.boardEmptyInner {
-  text-align: center;
 }
 
 .boardEmptyIcon {

@@ -3,6 +3,7 @@ import type { ColumnConfig } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
 import styles from "./Column.module.css";
 import { MOCK_PRS, MOCK_ISSUES, MOCK_CI, MOCK_NOTIFS, MOCK_ACTIVITY } from "@/data/mock";
+import { Icon } from "./Icon";
 import { PRCard } from "./cards/PRCard";
 import { IssueCard } from "./cards/IssueCard";
 import { CICard } from "./cards/CICard";
@@ -56,38 +57,38 @@ export const Column = ({
   const data = DATA_MAP[col.type];
 
   return (
-    <div className={`${styles.column} ${styles[col.type]}`}>
-      <div className={styles.colHeader}>
+    <section className={`${styles.column} ${styles[col.type]}`} aria-label={col.title}>
+      <header className={styles.colHeader}>
         <div className={styles.colHeaderLeft}>
-          <span className={styles.colIcon}>{cfg.icon}</span>
+          <Icon className={styles.colIcon}>{cfg.icon}</Icon>
           <h2 className={styles.colTitle}>{col.title}</h2>
-          <div className={styles.colBadge}>{data.length}</div>
+          <div className={styles.colBadge} aria-label={`${data.length} items`}>{data.length}</div>
         </div>
         <div className={styles.colControls}>
           <button
             className={styles.btnIcon}
             onClick={() => onMoveLeft(col.id)}
             disabled={isFirst}
-            title="Move left"
+            aria-label="Move left"
           >
-            ←
+            <Icon>←</Icon>
           </button>
           <button
             className={styles.btnIcon}
             onClick={() => onMoveRight(col.id)}
             disabled={isLast}
-            title="Move right"
+            aria-label="Move right"
           >
-            →
+            <Icon>→</Icon>
           </button>
-          <button className={styles.btnIcon} onClick={() => setConfirming(true)} title="Remove column">
-            ✕
+          <button className={styles.btnIcon} onClick={() => setConfirming(true)} aria-label="Remove column">
+            <Icon>✕</Icon>
           </button>
         </div>
-      </div>
+      </header>
 
       {confirming && (
-        <div className={styles.colConfirmation}>
+        <div className={styles.colConfirmation} role="alert">
           <span className={styles.colConfirmationText}>Remove "{col.title}"?</span>
           <div className={styles.colConfirmationButtons}>
             <button
@@ -109,6 +110,6 @@ export const Column = ({
       )}
 
       <div className={styles.colBody}>{data.map((item) => renderCard(item))}</div>
-    </div>
+    </section>
   );
 };

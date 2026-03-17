@@ -13,20 +13,18 @@ interface BoardProps {
 export const Board = ({ columns, onAddColumn, onRemove, onMoveLeft, onMoveRight }: BoardProps) => {
   if (columns.length === 0) {
     return (
-      <div className={styles.boardEmpty}>
-        <div className={styles.boardEmptyInner}>
-          <div className={styles.boardEmptyIcon}>▪</div>
-          <div className={styles.boardEmptyText}>No columns yet</div>
-          <button className={styles.boardEmptyBtn} onClick={onAddColumn}>
-            + Add your first column
-          </button>
-        </div>
-      </div>
+      <main className={styles.boardEmpty} tabIndex={-1}>
+        <div className={styles.boardEmptyIcon} aria-hidden="true">▪</div>
+        <p className={styles.boardEmptyText}>No columns yet</p>
+        <button className={styles.boardEmptyBtn} onClick={onAddColumn}>
+          + Add your first column
+        </button>
+      </main>
     );
   }
 
   return (
-    <div className={styles.board}>
+    <main className={styles.board} tabIndex={-1}>
       {columns.map((col, idx) => (
         <Column
           key={col.id}
@@ -38,6 +36,6 @@ export const Board = ({ columns, onAddColumn, onRemove, onMoveLeft, onMoveRight 
           isLast={idx === columns.length - 1}
         />
       ))}
-    </div>
+    </main>
   );
 };

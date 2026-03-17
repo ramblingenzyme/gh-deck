@@ -1,6 +1,7 @@
 import type { PRItem } from "@/types";
 import cardStyles from "./Card.module.css";
 import { CardTop } from "./CardParts";
+import { Icon } from "../Icon";
 import { LabelList } from "./LabelList";
 import styles from "./PRCard.module.css";
 
@@ -10,28 +11,31 @@ interface PRCardProps {
 
 export const PRCard = ({ item }: PRCardProps) => {
   return (
-    <div className={cardStyles.card}>
+    <article className={cardStyles.card}>
       <CardTop repo={item.repo} age={item.age} />
-      <div className={cardStyles.cardTitle}>
+      <p className={cardStyles.cardTitle}>
         {item.draft && <span className={styles.draftBadge}>DRAFT</span>}#{item.number} {item.title}
-      </div>
-      <div className={cardStyles.cardMeta}>
+      </p>
+      <footer className={cardStyles.cardMeta}>
         <span className={cardStyles.cardAuthor}>@{item.author}</span>
         <div className={cardStyles.cardStats}>
-          <span className={item.reviews.approved > 0 ? cardStyles.cardStatApproved : cardStyles.cardStat}>
-            ✓{item.reviews.approved}
+          <span
+            className={item.reviews.approved > 0 ? cardStyles.cardStatApproved : cardStyles.cardStat}
+            aria-label={`${item.reviews.approved} approvals`}
+          >
+            <Icon>✓</Icon>{item.reviews.approved}
           </span>
           {item.reviews.requested > 0 && (
-            <span className={cardStyles.cardStatPending}>
-              ⟳{item.reviews.requested}
+            <span className={cardStyles.cardStatPending} aria-label={`${item.reviews.requested} reviews requested`}>
+              <Icon>⟳</Icon>{item.reviews.requested}
             </span>
           )}
-          <span className={cardStyles.cardStat}>
-            💬{item.comments}
+          <span className={cardStyles.cardStat} aria-label={`${item.comments} comments`}>
+            <Icon>💬</Icon>{item.comments}
           </span>
         </div>
-      </div>
+      </footer>
       <LabelList labels={item.labels} />
-    </div>
+    </article>
   );
 };

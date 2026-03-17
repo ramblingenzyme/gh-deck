@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ColumnType } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
 import colStyles from "./Column.module.css";
+import { Icon } from "./Icon";
 import styles from "./AddColumnModal.module.css";
 
 interface AddColumnModalProps {
@@ -18,52 +19,72 @@ export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
     setTitle(COLUMN_TYPES[type].label);
   };
 
-  const handleAdd = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     onAdd(selectedType, title);
     onClose();
   };
 
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
+
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div
+      className={styles.modalOverlay}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-column-modal-title"
+    >
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>Add Column</h2>
+          <h2 id="add-column-modal-title" className={styles.modalTitle}>Add Column</h2>
         </div>
-        <div className={styles.modalBody}>
-          <div className={styles.modalTypes}>
-            {(Object.keys(COLUMN_TYPES) as ColumnType[]).map((type) => {
-              const cfg = COLUMN_TYPES[type];
-              return (
-                <button
-                  key={type}
-                  className={`${styles.typeBtn} ${colStyles[type]} ${selectedType === type ? styles.active : ""}`}
-                  onClick={() => handleTypeChange(type)}
-                >
-                  <span className={styles.colIcon}>{cfg.icon}</span>
-                  <span>{cfg.label}</span>
-                </button>
-              );
-            })}
+        <form onSubmit={handleSubmit}>
+          <div className={styles.modalBody}>
+            <div className={styles.modalTypes}>
+              {(Object.keys(COLUMN_TYPES) as ColumnType[]).map((type) => {
+                const cfg = COLUMN_TYPES[type];
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    className={`${styles.typeBtn} ${colStyles[type]} ${selectedType === type ? styles.active : ""}`}
+                    onClick={() => handleTypeChange(type)}
+                    aria-pressed={selectedType === type}
+                  >
+                    <Icon className={styles.colIcon}>{cfg.icon}</Icon>
+                    <span>{cfg.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className={styles.modalField}>
+              <label htmlFor="column-title-input" className={styles.modalFieldLabel}>Column Title</label>
+              <input
+                id="column-title-input"
+                className={styles.fieldInput}
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter title..."
+              />
+            </div>
           </div>
-          <div className={styles.modalField}>
-            <label className={styles.modalFieldLabel}>Column Title</label>
-            <input
-              className={styles.fieldInput}
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter title..."
-            />
+          <div className={styles.modalFooter}>
+            <button type="button" className={styles.btnModal} onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className={`${styles.btnModal} ${styles.btnModalPrimary}`}>
+              Add Column
+            </button>
           </div>
-        </div>
-        <div className={styles.modalFooter}>
-          <button className={styles.btnModal} onClick={onClose}>
-            Cancel
-          </button>
-          <button className={`${styles.btnModal} ${styles.btnModalPrimary}`} onClick={handleAdd}>
-            Add Column
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   );

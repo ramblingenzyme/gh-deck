@@ -1,6 +1,7 @@
 import type { IssueItem } from "@/types";
 import cardStyles from "./Card.module.css";
 import { CardTop } from "./CardParts";
+import { Icon } from "../Icon";
 import { LabelList } from "./LabelList";
 
 interface IssueCardProps {
@@ -9,18 +10,18 @@ interface IssueCardProps {
 
 export const IssueCard = ({ item }: IssueCardProps) => {
   return (
-    <div className={cardStyles.card}>
+    <article className={cardStyles.card}>
       <CardTop repo={item.repo} age={item.age} />
-      <div className={cardStyles.cardTitle}>
+      <p className={cardStyles.cardTitle}>
         #{item.number} {item.title}
-      </div>
-      <div className={cardStyles.cardMeta}>
+      </p>
+      <footer className={cardStyles.cardMeta}>
         <span className={cardStyles.cardAuthor}>{item.assignee ? `→ ${item.assignee}` : "unassigned"}</span>
-        <span className={cardStyles.cardStat}>
-          💬{item.comments}
+        <span className={cardStyles.cardStat} aria-label={`${item.comments} comments`}>
+          <Icon>💬</Icon>{item.comments}
         </span>
-      </div>
+      </footer>
       <LabelList labels={item.labels} />
-    </div>
+    </article>
   );
 };
