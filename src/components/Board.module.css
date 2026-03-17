@@ -18,17 +18,6 @@
   padding-top: 80px;
 }
 
-.btn {
-  all: unset;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-.btn:disabled {
-  opacity: 0.25;
-  cursor: not-allowed;
-}
-
 .boardEmptyInner {
   text-align: center;
 }

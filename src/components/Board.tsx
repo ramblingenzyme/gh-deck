@@ -17,7 +17,7 @@ export const Board = ({ columns, onAddColumn, onRemove, onMoveLeft, onMoveRight 
         <div className={styles.boardEmptyInner}>
           <div className={styles.boardEmptyIcon}>▪</div>
           <div className={styles.boardEmptyText}>No columns yet</div>
-          <button className={`${styles.btn} ${styles.boardEmptyBtn}`} onClick={onAddColumn}>
+          <button className={styles.boardEmptyBtn} onClick={onAddColumn}>
             + Add your first column
           </button>
         </div>

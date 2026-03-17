@@ -53,6 +53,11 @@
   color: var(--text-muted);
 }
 
+.cardIcon {
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+
 .cardStatApproved {
   color: var(--ci-success);
 }

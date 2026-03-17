@@ -17,7 +17,7 @@ export const ActivityCard = ({ item }: ActivityCardProps) => {
         <span className={cardStyles.cardAge}>{item.age}</span>
       </div>
       <div className={cardStyles.cardTitle}>
-        <span className={styles.activityIcon}>{icon}</span>
+        <span className={cardStyles.cardIcon}>{icon}</span>
         {item.text}
       </div>
       {item.sha && <span className={styles.activitySha}>{item.sha}</span>}

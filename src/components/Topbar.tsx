@@ -14,7 +14,7 @@ export const Topbar = ({ onAddColumn }: TopbarProps) => {
           <span>connected · mock data</span>
         </div>
       </div>
-      <button className={`${styles.btn} ${styles.btnAdd}`} onClick={onAddColumn}>
+      <button className={styles.btnAdd} onClick={onAddColumn}>
         + Add Column
       </button>
     </div>

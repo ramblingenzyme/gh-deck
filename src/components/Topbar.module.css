@@ -34,19 +34,8 @@
 .statusDot {
   width: 6px;
   height: 6px;
-  background: #4ade80;
+  background: var(--ci-success);
   border-radius: 50%;
-}
-
-.btn {
-  all: unset;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-.btn:disabled {
-  opacity: 0.25;
-  cursor: not-allowed;
 }
 
 .btnAdd {

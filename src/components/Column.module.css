@@ -94,34 +94,15 @@
 }
 
 .btnIcon {
-  all: unset;
-  box-sizing: border-box;
   color: var(--text-ghost);
   font-size: 11px;
   padding: 3px 5px;
   border-radius: var(--radius-sm);
   line-height: 1;
-  cursor: pointer;
 }
 
 .btnIcon:hover {
   color: var(--text-muted);
-}
-
-.btnIcon:disabled {
-  opacity: 0.25;
-  cursor: not-allowed;
-}
-
-.btn {
-  all: unset;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-.btn:disabled {
-  opacity: 0.25;
-  cursor: not-allowed;
 }
 
 .btnConfirmCancel {

@@ -17,7 +17,7 @@ export const NotifCard = ({ item }: NotifCardProps) => {
         <span className={cardStyles.cardAge}>{item.age}</span>
       </div>
       <div className={cardStyles.cardTitle}>
-        <span className={styles.notifIcon}>{icon}</span>
+        <span className={cardStyles.cardIcon}>{icon}</span>
         {item.text}
       </div>
       <span className={styles.notifRef}>{item.ref}</span>
