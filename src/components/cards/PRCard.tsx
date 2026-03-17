@@ -1,7 +1,8 @@
 import type { PRItem } from "@/types";
 import cardStyles from "./Card.module.css";
+import { CardTop } from "./CardParts";
+import { LabelList } from "./LabelList";
 import styles from "./PRCard.module.css";
-import labelStyles from "./Label.module.css";
 
 interface PRCardProps {
   item: PRItem;
@@ -10,10 +11,7 @@ interface PRCardProps {
 export const PRCard = ({ item }: PRCardProps) => {
   return (
     <div className={cardStyles.card}>
-      <div className={cardStyles.cardTop}>
-        <span className={cardStyles.cardRepo}>{item.repo}</span>
-        <span className={cardStyles.cardAge}>{item.age}</span>
-      </div>
+      <CardTop repo={item.repo} age={item.age} />
       <div className={cardStyles.cardTitle}>
         {item.draft && <span className={styles.draftBadge}>DRAFT</span>}#{item.number} {item.title}
       </div>
@@ -33,13 +31,7 @@ export const PRCard = ({ item }: PRCardProps) => {
           </span>
         </div>
       </div>
-      {item.labels.length > 0 && (
-        <div className={labelStyles.labelList}>
-          {item.labels.map((l) => (
-            <span key={l} className={`${labelStyles.label} ${labelStyles[l] ?? labelStyles.fallback}`}>{l}</span>
-          ))}
-        </div>
-      )}
+      <LabelList labels={item.labels} />
     </div>
   );
 };

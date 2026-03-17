@@ -1,6 +1,7 @@
 import type { IssueItem } from "@/types";
 import cardStyles from "./Card.module.css";
-import labelStyles from "./Label.module.css";
+import { CardTop } from "./CardParts";
+import { LabelList } from "./LabelList";
 
 interface IssueCardProps {
   item: IssueItem;
@@ -9,10 +10,7 @@ interface IssueCardProps {
 export const IssueCard = ({ item }: IssueCardProps) => {
   return (
     <div className={cardStyles.card}>
-      <div className={cardStyles.cardTop}>
-        <span className={cardStyles.cardRepo}>{item.repo}</span>
-        <span className={cardStyles.cardAge}>{item.age}</span>
-      </div>
+      <CardTop repo={item.repo} age={item.age} />
       <div className={cardStyles.cardTitle}>
         #{item.number} {item.title}
       </div>
@@ -22,13 +20,7 @@ export const IssueCard = ({ item }: IssueCardProps) => {
           💬{item.comments}
         </span>
       </div>
-      {item.labels.length > 0 && (
-        <div className={labelStyles.labelList}>
-          {item.labels.map((l) => (
-            <span key={l} className={`${labelStyles.label} ${labelStyles[l] ?? labelStyles.fallback}`}>{l}</span>
-          ))}
-        </div>
-      )}
+      <LabelList labels={item.labels} />
     </div>
   );
 };

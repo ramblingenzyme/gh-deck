@@ -1,6 +1,7 @@
 import type { CIItem } from "@/types";
 import { CI_STATUS } from "@/constants";
 import cardStyles from "./Card.module.css";
+import { CardTop } from "./CardParts";
 import styles from "./CICard.module.css";
 
 interface CICardProps {
@@ -12,10 +13,7 @@ export const CICard = ({ item }: CICardProps) => {
 
   return (
     <div className={`${cardStyles.card} ${styles.ciCard} ${styles[item.status]}`}>
-      <div className={cardStyles.cardTop}>
-        <span className={cardStyles.cardRepo}>{item.repo}</span>
-        <span className={cardStyles.cardAge}>{item.age}</span>
-      </div>
+      <CardTop repo={item.repo} age={item.age} />
       <div className={cardStyles.cardTitle}>{item.name}</div>
       <div className={cardStyles.cardMeta}>
         <span className={cardStyles.cardAuthor}>{item.branch}</span>

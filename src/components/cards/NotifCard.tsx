@@ -1,6 +1,7 @@
 import type { NotifItem } from "@/types";
 import { NOTIF_ICONS } from "@/constants";
 import cardStyles from "./Card.module.css";
+import { CardTop } from "./CardParts";
 import styles from "./NotifCard.module.css";
 
 interface NotifCardProps {
@@ -12,10 +13,7 @@ export const NotifCard = ({ item }: NotifCardProps) => {
 
   return (
     <div className={cardStyles.card}>
-      <div className={cardStyles.cardTop}>
-        <span className={cardStyles.cardRepo}>{item.repo}</span>
-        <span className={cardStyles.cardAge}>{item.age}</span>
-      </div>
+      <CardTop repo={item.repo} age={item.age} />
       <div className={cardStyles.cardTitle}>
         <span className={cardStyles.cardIcon}>{icon}</span>
         {item.text}

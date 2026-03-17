@@ -1,6 +1,7 @@
 import type { ActivityItem } from "@/types";
 import { ACTIVITY_ICONS } from "@/constants";
 import cardStyles from "./Card.module.css";
+import { CardTop } from "./CardParts";
 import styles from "./ActivityCard.module.css";
 
 interface ActivityCardProps {
@@ -12,10 +13,7 @@ export const ActivityCard = ({ item }: ActivityCardProps) => {
 
   return (
     <div className={cardStyles.card}>
-      <div className={cardStyles.cardTop}>
-        <span className={cardStyles.cardRepo}>{item.repo}</span>
-        <span className={cardStyles.cardAge}>{item.age}</span>
-      </div>
+      <CardTop repo={item.repo} age={item.age} />
       <div className={cardStyles.cardTitle}>
         <span className={cardStyles.cardIcon}>{icon}</span>
         {item.text}
