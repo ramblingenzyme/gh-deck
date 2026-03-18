@@ -52,61 +52,61 @@ export const AuthModal = ({ onDemoMode, onClose }: AuthModalProps) => {
       aria-labelledby="auth-modal-title"
     >
       <div className={styles.modal}>
-      <div className={styles.modalHeader}>
-        <h2 id="auth-modal-title" className={styles.modalTitle}>
-          Sign In
-        </h2>
-      </div>
+        <div className={styles.modalHeader}>
+          <h2 id="auth-modal-title" className={styles.modalTitle}>
+            Sign In
+          </h2>
+        </div>
 
-      <div className={styles.modalBody}>
-        {(status === "idle" || status === "error") && (
-          <>
-            {status === "error" && error && <p className={styles.errorText}>{error}</p>}
-            <p className={styles.description}>
-              Connect to GitHub to load your real pull requests, issues, notifications, and
-              activity.
-            </p>
-            <button
-              className={styles.btnGitHub}
-              onClick={
-                status === "error"
-                  ? () => {
-                      dispatch(clearError());
-                      void start();
-                    }
-                  : () => void start()
-              }
-            >
-              Sign in with GitHub
-            </button>
-            <button className={styles.demoLink} onClick={onDemoMode}>
-              Continue in Demo Mode
-            </button>
-          </>
-        )}
-
-        {status === "polling" && userCode && (
-          <>
-            <p className={styles.description}>
-              Visit{" "}
-              <a
-                href={verificationUri ?? "https://github.com/login/device"}
-                target="_blank"
-                rel="noreferrer"
-                className={styles.verifyLink}
+        <div className={styles.modalBody}>
+          {(status === "idle" || status === "error") && (
+            <>
+              {status === "error" && error && <p className={styles.errorText}>{error}</p>}
+              <p className={styles.description}>
+                Connect to GitHub to load your real pull requests, issues, notifications, and
+                activity.
+              </p>
+              <button
+                className={styles.btnGitHub}
+                onClick={
+                  status === "error"
+                    ? () => {
+                        dispatch(clearError());
+                        void start();
+                      }
+                    : () => void start()
+                }
               >
-                github.com/login/device
-              </a>{" "}
-              and enter this code:
-            </p>
-            <div className={styles.userCodeBox}>{userCode}</div>
-            {secondsLeft > 0 && <p className={styles.countdown}>Expires in {secondsLeft}s</p>}
-            <button className={styles.btnCancel} onClick={handleCancel}>
-              Cancel
-            </button>
-          </>
-        )}
-      </div>
+                Sign in with GitHub
+              </button>
+              <button className={styles.demoLink} onClick={onDemoMode}>
+                Continue in Demo Mode
+              </button>
+            </>
+          )}
+
+          {status === "polling" && userCode && (
+            <>
+              <p className={styles.description}>
+                Visit{" "}
+                <a
+                  href={verificationUri ?? "https://github.com/login/device"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.verifyLink}
+                >
+                  github.com/login/device
+                </a>{" "}
+                and enter this code:
+              </p>
+              <div className={styles.userCodeBox}>{userCode}</div>
+              {secondsLeft > 0 && <p className={styles.countdown}>Expires in {secondsLeft}s</p>}
+              <button className={styles.btnCancel} onClick={handleCancel}>
+                Cancel
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </dialog>
   );

@@ -133,9 +133,7 @@ export const Column = ({
             {error}
           </div>
         )}
-        {!isLoading &&
-          !error &&
-          data.map((item) => renderCard(item))}
+        {!isLoading && !error && data.map((item) => renderCard(item))}
       </div>
 
       {showSettings && <ColumnSettingsModal col={col} onClose={() => setShowSettings(false)} />}

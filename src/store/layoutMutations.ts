@@ -1,4 +1,4 @@
-import type { ColumnConfig, ColumnType } from '@/types';
+import type { ColumnConfig, ColumnType } from "@/types";
 
 export function applyAdd(
   d: ColumnConfig[],
