@@ -27,6 +27,7 @@
 }
 
 .colHeader {
+  user-select: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,11 +43,13 @@
   align-items: baseline;
   gap: 8px;
   flex: 1;
+  min-width: 0;
 }
 
 .colIcon {
   font-size: var(--text-lg);
   color: var(--color-accent);
+  cursor: default;
 }
 
 .colTitle {
@@ -56,6 +59,11 @@
   /* letter-spacing: 0.04em; */
   text-transform: uppercase;
   color: var(--color-accent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  cursor: default;
 }
 
 .colBadge {
@@ -66,12 +74,22 @@
   border-radius: var(--radius-sm);
   min-width: 20px;
   text-align: center;
+  cursor: default;
 }
 
 .colControls {
   display: flex;
+  align-items: center;
   gap: 4px;
   margin-left: 8px;
+}
+
+.lastUpdated {
+  font-size: var(--text-xs, 11px);
+  color: var(--text-ghost);
+  white-space: nowrap;
+  padding-right: 2px;
+  cursor: default;
 }
 
 .colBody {
@@ -121,6 +139,22 @@
 
 .btnIconActive {
   color: var(--color-accent);
+}
+
+.btnIconSpinning,
+.btnIconSpinning:hover {
+  color: var(--color-accent);
+}
+
+.btnIconSpinning > * {
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
 }
 
 .colQuery {

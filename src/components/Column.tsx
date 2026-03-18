@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ColumnConfig, PRItem, IssueItem, CIItem, NotifItem, ActivityItem } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
 import { useColumnData } from "@/hooks/useColumnData";
 import styles from "./Column.module.css";
 import { Icon } from './ui/Icon';
+import { Tooltip } from './ui/Tooltip';
 import { PRCard } from "./cards/PRCard";
 import { IssueCard } from "./cards/IssueCard";
 import { CICard } from "./cards/CICard";
@@ -29,9 +30,39 @@ export const Column = ({
   isLast,
 }: ColumnProps) => {
   const [confirming, setConfirming] = useState(false);
+  const [spinning, setSpinning] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [, setTick] = useState(0);
   const cfg = COLUMN_TYPES[col.type];
-  const { data, isLoading, error } = useColumnData(col);
+  const { data, isLoading, isFetching, error, refetch } = useColumnData(col);
+  const prevFetching = useRef(false);
+
+  useEffect(() => {
+    if (prevFetching.current && !isFetching) {
+      setLastUpdated(new Date());
+    }
+    prevFetching.current = isFetching;
+  }, [isFetching]);
+
+  // Re-render every minute so the relative time stays accurate.
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => t + 1), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const handleRefresh = () => {
+    refetch();
+    setSpinning(true);
+    setTimeout(() => setSpinning(false), 800);
+  };
+
+  const formatAge = (date: Date) => {
+    const mins = Math.floor((Date.now() - date.getTime()) / 60_000);
+    if (mins < 1) return 'just now';
+    if (mins === 1) return '1m ago';
+    return `${mins}m ago`;
+  };
 
   const renderCard = (item: PRItem | IssueItem | CIItem | NotifItem | ActivityItem) => {
     switch (col.type) {
@@ -53,43 +84,68 @@ export const Column = ({
       <header className={styles.colHeader}>
         <div className={styles.colHeaderLeft}>
           <Icon className={styles.colIcon}>{cfg.icon}</Icon>
-          <h2 className={styles.colTitle}>{col.title}</h2>
-          <output className={styles.colBadge} aria-label={`${data.length} items`}>
-            {data.length}
-          </output>
+          <Tooltip text={col.title} position="below">
+            <h2 className={styles.colTitle}>{col.title}</h2>
+          </Tooltip>
+          <Tooltip text={`${data.length} ${data.length === 1 ? cfg.itemLabel : `${cfg.itemLabel}s`}`} position="below">
+            <output className={styles.colBadge} aria-label={`${data.length} ${data.length === 1 ? cfg.itemLabel : `${cfg.itemLabel}s`}`}>
+              {data.length}
+            </output>
+          </Tooltip>
         </div>
         <div className={styles.colControls}>
-          <button
-            className={`${styles.btnIcon} ${col.query ? styles.btnIconActive : ""}`}
-            onClick={() => setShowSettings(true)}
-            aria-label="Column filters"
-            title="Column filters"
-          >
-            <Icon>⚙</Icon>
-          </button>
-          <button
-            className={styles.btnIcon}
-            onClick={() => onMoveLeft(col.id)}
-            disabled={isFirst}
-            aria-label="Move left"
-          >
-            <Icon>←</Icon>
-          </button>
-          <button
-            className={styles.btnIcon}
-            onClick={() => onMoveRight(col.id)}
-            disabled={isLast}
-            aria-label="Move right"
-          >
-            <Icon>→</Icon>
-          </button>
-          <button
-            className={styles.btnIcon}
-            onClick={() => setConfirming(true)}
-            aria-label="Remove column"
-          >
-            <Icon>✕</Icon>
-          </button>
+          {lastUpdated && (
+            <Tooltip text={lastUpdated.toLocaleTimeString()} position="below">
+              <span className={styles.lastUpdated}>{formatAge(lastUpdated)}</span>
+            </Tooltip>
+          )}
+          <Tooltip text="Refresh" position="below">
+            <button
+              className={`${styles.btnIcon} ${spinning || isFetching ? styles.btnIconSpinning : ""}`}
+              onClick={handleRefresh}
+              aria-label="Refresh"
+            >
+              <Icon>↻</Icon>
+            </button>
+          </Tooltip>
+          <Tooltip text="Column filters" position="below">
+            <button
+              className={`${styles.btnIcon} ${col.query ? styles.btnIconActive : ""}`}
+              onClick={() => setShowSettings(true)}
+              aria-label="Column filters"
+            >
+              <Icon>⚙</Icon>
+            </button>
+          </Tooltip>
+          <Tooltip text="Move left" position="below">
+            <button
+              className={styles.btnIcon}
+              onClick={() => onMoveLeft(col.id)}
+              disabled={isFirst}
+              aria-label="Move left"
+            >
+              <Icon>←</Icon>
+            </button>
+          </Tooltip>
+          <Tooltip text="Move right" position="below">
+            <button
+              className={styles.btnIcon}
+              onClick={() => onMoveRight(col.id)}
+              disabled={isLast}
+              aria-label="Move right"
+            >
+              <Icon>→</Icon>
+            </button>
+          </Tooltip>
+          <Tooltip text="Remove column" position="below">
+            <button
+              className={styles.btnIcon}
+              onClick={() => setConfirming(true)}
+              aria-label="Remove column"
+            >
+              <Icon>✕</Icon>
+            </button>
+          </Tooltip>
         </div>
       </header>
 

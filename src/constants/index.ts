@@ -22,13 +22,14 @@ export const ACTIVITY_ICONS: Record<ActivityType, string> = {
   issue_closed: "✗",
 };
 
-export const COLUMN_TYPES: Record<ColumnType, { label: string; icon: string }> = {
-  prs: { label: "Pull Requests", icon: "⟳" },
-  issues: { label: "Issues", icon: "◎" },
-  ci: { label: "CI / CD", icon: "◉" },
-  notifications: { label: "Notifications", icon: "@" },
-  activity: { label: "My Activity", icon: "●" },
-};
+export const COLUMN_TYPES: Record<ColumnType, { label: string; icon: string; itemLabel: string }> =
+  {
+    prs: { label: "Pull Requests", icon: "⟳", itemLabel: "PR" },
+    issues: { label: "Issues", icon: "◎", itemLabel: "issue" },
+    ci: { label: "CI / CD", icon: "◉", itemLabel: "run" },
+    notifications: { label: "Notifications", icon: "@", itemLabel: "notification" },
+    activity: { label: "My Activity", icon: "●", itemLabel: "event" },
+  };
 
 export const mkId = (): string => crypto.randomUUID();
 

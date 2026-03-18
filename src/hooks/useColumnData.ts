@@ -18,7 +18,9 @@ type ColumnData = AnyItem[];
 interface UseColumnDataResult {
   data: ColumnData;
   isLoading: boolean;
+  isFetching: boolean;
   error: string | null;
+  refetch: () => void;
 }
 
 /** Parse a GitHub-style query string into key:value tokens and bare terms. */
@@ -89,21 +91,26 @@ export function useColumnData(col: ColumnConfig): UseColumnDataResult {
   const tokens = useMemo(() => parseQuery(col.query ?? ""), [col.query]);
   const repos = useMemo(() => tokens.filter((t) => t.key === "repo").map((t) => t.value), [tokens]);
 
-  const prsResult = useGetPRsQuery(login, { skip: demo || col.type !== "prs" || !login });
-  const issuesResult = useGetIssuesQuery(login, { skip: demo || col.type !== "issues" || !login });
+  const pollOpts = { pollingInterval: 5 * 60 * 1000 };
+  const prsResult = useGetPRsQuery(login, { skip: demo || col.type !== "prs" || !login, ...pollOpts });
+  const issuesResult = useGetIssuesQuery(login, { skip: demo || col.type !== "issues" || !login, ...pollOpts });
   const notifsResult = useGetNotificationsQuery(undefined, {
     skip: demo || col.type !== "notifications",
+    ...pollOpts,
   });
-  const ciResult = useGetCIRunsQuery(repos, { skip: demo || col.type !== "ci" });
+  const ciResult = useGetCIRunsQuery(repos, { skip: demo || col.type !== "ci", ...pollOpts });
   const activityResult = useGetActivityQuery(login, {
     skip: demo || col.type !== "activity" || !login,
+    ...pollOpts,
   });
 
   const filter = (items: ColumnData) =>
     tokens.length ? items.filter((item) => matchesTokens(item, tokens)) : items;
 
+  const noop = () => {};
+
   if (demo) {
-    return { data: filter(DEMO_DATA_MAP[col.type]), isLoading: false, error: null };
+    return { data: filter(DEMO_DATA_MAP[col.type]), isLoading: false, isFetching: false, error: null, refetch: noop };
   }
 
   switch (col.type) {
@@ -111,31 +118,41 @@ export function useColumnData(col: ColumnConfig): UseColumnDataResult {
       return {
         data: filter(prsResult.data ?? []),
         isLoading: prsResult.isLoading,
+        isFetching: prsResult.isFetching,
         error: prsResult.isError ? "Failed to load PRs" : null,
+        refetch: prsResult.refetch,
       };
     case "issues":
       return {
         data: filter(issuesResult.data ?? []),
         isLoading: issuesResult.isLoading,
+        isFetching: issuesResult.isFetching,
         error: issuesResult.isError ? "Failed to load issues" : null,
+        refetch: issuesResult.refetch,
       };
     case "notifications":
       return {
         data: filter(notifsResult.data ?? []),
         isLoading: notifsResult.isLoading,
+        isFetching: notifsResult.isFetching,
         error: notifsResult.isError ? "Failed to load notifications" : null,
+        refetch: notifsResult.refetch,
       };
     case "ci":
       return {
         data: filter(ciResult.data ?? []),
         isLoading: ciResult.isLoading,
+        isFetching: ciResult.isFetching,
         error: ciResult.isError ? "Failed to load CI runs" : null,
+        refetch: ciResult.refetch,
       };
     case "activity":
       return {
         data: filter(activityResult.data ?? []),
         isLoading: activityResult.isLoading,
+        isFetching: activityResult.isFetching,
         error: activityResult.isError ? "Failed to load activity" : null,
+        refetch: activityResult.refetch,
       };
   }
 }
