@@ -25,7 +25,9 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [, setTick] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [dropEdge, setDropEdge] = useState<'left' | 'right' | null>(null);
   const ref = useRef<HTMLElement>(null);
+  const handleRef = useRef<HTMLSpanElement>(null);
   const cfg = COLUMN_TYPES[col.type];
   const { data, isLoading, isFetching, error, refetch } = useColumnData(col);
   const prevFetching = useRef(false);
@@ -48,6 +50,7 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
     if (!el) return;
     const cleanupDraggable = draggable({
       element: el,
+      dragHandle: handleRef.current ?? undefined,
       getInitialData: () => ({ columnId: col.id }),
       onDragStart: () => setIsDragging(true),
       onDrop: () => setIsDragging(false),
@@ -55,6 +58,19 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
     const cleanupDropTarget = dropTargetForElements({
       element: el,
       getData: () => ({ columnId: col.id }),
+      canDrop: ({ source }) => source.data.columnId !== col.id,
+      onDragEnter: ({ location }) => {
+        const rect = el.getBoundingClientRect();
+        const mid = rect.left + rect.width / 2;
+        setDropEdge(location.current.input.clientX < mid ? 'left' : 'right');
+      },
+      onDrag: ({ location }) => {
+        const rect = el.getBoundingClientRect();
+        const mid = rect.left + rect.width / 2;
+        setDropEdge(location.current.input.clientX < mid ? 'left' : 'right');
+      },
+      onDragLeave: () => setDropEdge(null),
+      onDrop: () => setDropEdge(null),
     });
     return () => {
       cleanupDraggable();
@@ -93,11 +109,11 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
   return (
     <section
       ref={ref}
-      className={`${styles.column} ${styles[col.type]}`}
+      className={`${styles.column} ${styles[col.type]}${isDragging ? ` ${styles.columnDragging}` : ''}${dropEdge === 'left' ? ` ${styles.dropLeft}` : ''}${dropEdge === 'right' ? ` ${styles.dropRight}` : ''}`}
       aria-label={col.title}
-      style={isDragging ? { opacity: 0.5 } : undefined}
     >
       <header className={styles.colHeader}>
+        <span ref={handleRef} className={styles.dragHandle} aria-hidden="true">⠿</span>
         <div className={styles.colHeaderLeft}>
           <Icon className={styles.colIcon}>{cfg.icon}</Icon>
           <Tooltip text={col.title} position="below">

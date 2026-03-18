@@ -13,7 +13,6 @@ interface BoardProps {
 
 export const Board = ({ columns, onAddColumn, onRemove }: BoardProps) => {
   const [reorder] = useReorderMutation();
-  const columnIds = columns.map((c) => c.id);
 
   useEffect(() => {
     return monitorForElements({
@@ -23,12 +22,12 @@ export const Board = ({ columns, onAddColumn, onRemove }: BoardProps) => {
         const fromId = source.data.columnId as string;
         const toId = target.data.columnId as string;
         if (fromId === toId) return;
-        const from = columnIds.indexOf(fromId);
-        const to = columnIds.indexOf(toId);
+        const from = columns.findIndex((c) => c.id === fromId);
+        const to = columns.findIndex((c) => c.id === toId);
         if (from !== -1 && to !== -1) reorder({ from, to });
       },
     });
-  }, [columnIds, reorder]);
+  }, [columns, reorder]);
 
   if (columns.length === 0) {
     return (

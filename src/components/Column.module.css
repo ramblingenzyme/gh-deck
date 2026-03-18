@@ -24,10 +24,14 @@
   flex-direction: column;
   max-height: calc(100vh - 96px);
   flex-shrink: 0;
+  position: relative;
+}
+
+.columnDragging {
+  opacity: 0.5;
 }
 
 .colHeader {
-  cursor: grab;
   user-select: none;
   display: flex;
   justify-content: space-between;
@@ -260,3 +264,32 @@
   border: 1px solid color-mix(in srgb, var(--ci-failure) 20%, transparent);
   text-align: center;
 }
+
+.dragHandle {
+  cursor: grab;
+  color: var(--text-ghost);
+  opacity: 0;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  transition: opacity 0.15s, color 0.15s;
+  margin-right: 2px;
+}
+.colHeader:hover .dragHandle { opacity: 0.5; }
+.dragHandle:hover { opacity: 1 !important; color: var(--text-secondary); background: var(--border-mid); }
+
+.dropLeft::before,
+.dropRight::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--color-accent);
+  pointer-events: none;
+  z-index: 10;
+}
+.dropLeft::before { left: -8px; }
+.dropRight::after { right: -8px; }
