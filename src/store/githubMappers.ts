@@ -11,6 +11,12 @@ import type {
 import type { GHSearchItem, GHNotification, GHWorkflowRun, GHEvent } from "@/types/github";
 import { formatAge } from "@/utils/relativeTime";
 
+function stableId(s: string): number {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = (Math.imul(h, 33) ^ s.charCodeAt(i)) >>> 0;
+  return h;
+}
+
 function repoFromUrl(url: string): string {
   // https://api.github.com/repos/owner/repo  OR  owner/repo
   const match = url.match(/repos\/(.+)$/);
@@ -67,7 +73,7 @@ function apiUrlToHtmlUrl(apiUrl: string): string {
 export function mapNotification(n: GHNotification): NotifItem {
   const type: NotifType = REASON_TO_NOTIF[n.reason] ?? "comment";
   return {
-    id: parseInt(n.id, 10) || Math.random() * 1e9,
+    id: parseInt(n.id, 10) || stableId(n.id),
     type,
     text: n.subject.title,
     repo: n.repository.full_name,
@@ -130,7 +136,7 @@ export function mapEvent(event: GHEvent): ActivityItem | null {
           : "unknown";
       const sha = event.payload.commits?.[0]?.sha.slice(0, 7);
       return {
-        id: parseInt(event.id, 10) || Math.random() * 1e9,
+        id: parseInt(event.id, 10) || stableId(event.id),
         type: "commit" as ActivityType,
         text: `Pushed ${count} commit${count !== 1 ? "s" : ""} to ${branch}`,
         repo,
@@ -142,7 +148,7 @@ export function mapEvent(event: GHEvent): ActivityItem | null {
     case "PullRequestEvent":
       if (event.payload.action === "opened") {
         return {
-          id: parseInt(event.id, 10) || Math.random() * 1e9,
+          id: parseInt(event.id, 10) || stableId(event.id),
           type: "pr_opened" as ActivityType,
           text: `Opened PR #${event.payload.pull_request?.number}`,
           repo,
@@ -155,7 +161,7 @@ export function mapEvent(event: GHEvent): ActivityItem | null {
     case "IssueCommentEvent":
     case "PullRequestReviewCommentEvent":
       return {
-        id: parseInt(event.id, 10) || Math.random() * 1e9,
+        id: parseInt(event.id, 10) || stableId(event.id),
         type: "comment" as ActivityType,
         text: `Commented on ${event.payload.issue ? `Issue #${event.payload.issue.number}` : "a PR"}`,
         repo,
@@ -164,7 +170,7 @@ export function mapEvent(event: GHEvent): ActivityItem | null {
       };
     case "PullRequestReviewEvent":
       return {
-        id: parseInt(event.id, 10) || Math.random() * 1e9,
+        id: parseInt(event.id, 10) || stableId(event.id),
         type: "review" as ActivityType,
         text: `Reviewed PR #${event.payload.pull_request?.number}`,
         repo,
@@ -175,7 +181,7 @@ export function mapEvent(event: GHEvent): ActivityItem | null {
     case "IssuesEvent":
       if (event.payload.action === "closed") {
         return {
-          id: parseInt(event.id, 10) || Math.random() * 1e9,
+          id: parseInt(event.id, 10) || stableId(event.id),
           type: "issue_closed" as ActivityType,
           text: `Closed Issue #${event.payload.issue?.number}`,
           repo,

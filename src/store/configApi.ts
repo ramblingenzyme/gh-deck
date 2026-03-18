@@ -3,6 +3,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { ColumnConfig, ColumnType } from "@/types";
 import { mkId } from "@/constants";
 import { loadLayout, saveLayout } from "./layoutStorage";
+import {
+  applyAdd,
+  applyRemove,
+  applyMoveLeft,
+  applyMoveRight,
+  applyUpdateQuery,
+} from "./layoutMutations";
 
 function mutateLayout(fn: (draft: ColumnConfig[]) => void): ColumnConfig[] {
   const next = produce(loadLayout(), fn);
@@ -21,47 +28,31 @@ export const configApi = createApi({
     }),
     addColumn: build.mutation<ColumnConfig[], { type: ColumnType; title: string; query?: string }>({
       queryFn: ({ type, title, query }) => ({
-        data: mutateLayout((d) => {
-          d.push({ id: mkId(), type, title, ...(query ? { query } : {}) });
-        }),
+        data: mutateLayout((d) => applyAdd(d, mkId(), type, title, query)),
       }),
       invalidatesTags: ["Layout"],
     }),
     removeColumn: build.mutation<ColumnConfig[], string>({
       queryFn: (id) => ({
-        data: mutateLayout((d) => {
-          d.splice(
-            d.findIndex((c) => c.id === id),
-            1,
-          );
-        }),
+        data: mutateLayout((d) => applyRemove(d, id)),
       }),
       invalidatesTags: ["Layout"],
     }),
     moveLeft: build.mutation<ColumnConfig[], string>({
       queryFn: (id) => ({
-        data: mutateLayout((d) => {
-          const i = d.findIndex((c) => c.id === id);
-          if (i > 0) [d[i - 1], d[i]] = [d[i]!, d[i - 1]!];
-        }),
+        data: mutateLayout((d) => applyMoveLeft(d, id)),
       }),
       invalidatesTags: ["Layout"],
     }),
     moveRight: build.mutation<ColumnConfig[], string>({
       queryFn: (id) => ({
-        data: mutateLayout((d) => {
-          const i = d.findIndex((c) => c.id === id);
-          if (i >= 0 && i < d.length - 1) [d[i], d[i + 1]] = [d[i + 1]!, d[i]!];
-        }),
+        data: mutateLayout((d) => applyMoveRight(d, id)),
       }),
       invalidatesTags: ["Layout"],
     }),
     updateColumnQuery: build.mutation<ColumnConfig[], { id: string; query: string }>({
       queryFn: ({ id, query }) => ({
-        data: mutateLayout((d) => {
-          const col = d.find((c) => c.id === id);
-          if (col) col.query = query || undefined;
-        }),
+        data: mutateLayout((d) => applyUpdateQuery(d, id, query)),
       }),
       invalidatesTags: ["Layout"],
     }),

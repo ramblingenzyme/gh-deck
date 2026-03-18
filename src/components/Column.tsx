@@ -135,9 +135,7 @@ export const Column = ({
         )}
         {!isLoading &&
           !error &&
-          data.map((item) =>
-            renderCard(item as PRItem & IssueItem & CIItem & NotifItem & ActivityItem),
-          )}
+          data.map((item) => renderCard(item))}
       </div>
 
       {showSettings && <ColumnSettingsModal col={col} onClose={() => setShowSettings(false)} />}
