@@ -24,13 +24,20 @@ export const Modal = ({
     dialogRef.current?.showModal();
   }, []);
 
+  useEffect(() => {
+    if (preventCancel) return;
+    const onKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [preventCancel, onClose]);
+
   return (
     <dialog
       ref={dialogRef}
       className={styles.dialog}
       onClose={onClose}
       onCancel={preventCancel ? (e) => e.preventDefault() : undefined}
-      onClick={onBackdropClick ? (e) => { if (e.target === e.currentTarget) onBackdropClick(); } : undefined}
+onClick={onBackdropClick ? (e) => { if (e.target === e.currentTarget) onBackdropClick(); } : undefined}
       aria-labelledby={titleId}
     >
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
