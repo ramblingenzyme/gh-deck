@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/preact-query";
 import { githubFetch } from "./githubClient";
 import type { PRItem, IssueItem, NotifItem, CIItem, ActivityItem } from "@/types";
 import type {
