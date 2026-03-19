@@ -73,7 +73,7 @@
 
 .demoLink {
   font-size: var(--text-sm);
-  color: var(--text-faint);
+  color: var(--text-ghost);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -104,7 +104,7 @@
 
 .countdown {
   font-size: var(--text-sm);
-  color: var(--text-faint);
+  color: var(--text-ghost);
 }
 
 .btnCancel {

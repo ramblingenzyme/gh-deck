@@ -1,18 +1,17 @@
 /* ── Design Tokens ────────────────────────────────────────────────────────── */
 :root {
-  --bg-root: #080808;
-  --bg-topbar: #111827;
-  --bg-column: #0d0d0d;
-  --bg-card: #111111;
-  --border-structural: #1a1a1a;
-  --border-card: #1f1f1f;
-  --border-mid: #2a2a2a;
+  --bg-root: #13131a;
+  --bg-topbar: #1a1f2e;
+  --bg-column: #16161f;
+  --bg-card: #1c1c28;
+  --border-structural: #565670;
+  --border-card: #585870;
+  --border-mid: #626278;
 
   --text-primary: #e5e7eb;
   --text-secondary: #d1d5db;
-  --text-muted: #8a95a5;
-  --text-faint: #748291;
-  --text-ghost: #6e7f90;
+  --text-muted: #a8b8cb;
+  --text-ghost: #93adc2;
 
   --accent-notifications: #4ade80;
   --accent-prs: #818cf8;
@@ -36,8 +35,8 @@
   --radius-lg: 4px;
 
   --text-on-light: #000;
-  --bg-hover: #161616;
-  --border-hover: #3a3a3a;
+  --bg-hover: #20202e;
+  --border-hover: #7a7a9a;
 }
 
 /* ── Reset ────────────────────────────────────────────────────────────────── */

@@ -114,7 +114,7 @@
 
 .demoBadge {
   font-size: var(--text-sm);
-  color: var(--text-faint);
+  color: var(--text-ghost);
   background: var(--bg-card);
   padding: 2px 8px;
   border-radius: var(--radius-sm);
