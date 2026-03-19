@@ -9,7 +9,11 @@ import type {
   GHWorkflowRunsResult,
   GHEvent,
 } from "@/types/github";
-import type { AuthUser } from "./authSlice";
+export interface AuthUser {
+  login: string;
+  avatarUrl: string;
+  name: string | null;
+}
 import {
   mapSearchItemToPR,
   mapSearchItemToIssue,

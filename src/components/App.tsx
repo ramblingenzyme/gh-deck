@@ -7,8 +7,7 @@ import {
   useRemoveColumnMutation,
 } from "@/store/configApi";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { logOut, userLoaded } from "@/store/authSlice";
-import { useGetUserQuery } from "@/store/githubApi";
+import { logOut } from "@/store/authSlice";
 import { isDemoMode } from "@/env";
 import { Topbar } from "./Topbar";
 import { Board } from "./Board";
@@ -24,15 +23,6 @@ export const App = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((s) => s.auth);
   const authModal = useModal(!isDemoMode && auth.status === "idle");
-
-  // Fetch user profile when token is available
-  const { data: userData } = useGetUserQuery(undefined, {
-    skip: !auth.token || !!auth.user,
-  });
-
-  useEffect(() => {
-    if (userData) dispatch(userLoaded(userData));
-  }, [userData, dispatch]);
 
   // Close auth modal when authed
   useEffect(() => {

@@ -7,6 +7,7 @@ import {
   useGetNotificationsQuery,
   useGetCIRunsQuery,
   useGetActivityQuery,
+  useGetUserQuery,
 } from "@/store/githubApi";
 import { useAppSelector } from "@/store";
 import type { ColumnConfig, PRItem, IssueItem, CIItem, NotifItem, ActivityItem } from "@/types";
@@ -33,8 +34,9 @@ const DEMO_DATA_MAP: Record<ColumnConfig["type"], ColumnData> = {
 
 export function useColumnData(col: ColumnConfig): UseColumnDataResult {
   const token = useAppSelector((s) => s.auth.token);
-  const login = useAppSelector((s) => s.auth.user?.login ?? "");
   const demo = isDemoMode || !token;
+  const { data: user } = useGetUserQuery(undefined, { skip: demo || !token });
+  const login = user?.login ?? "";
 
   const tokens = useMemo(() => parseQuery(col.query ?? ""), [col.query]);
   const repos = useMemo(() => tokens.filter((t) => t.key === "repo").map((t) => t.value), [tokens]);

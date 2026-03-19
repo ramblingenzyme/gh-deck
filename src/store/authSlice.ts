@@ -3,16 +3,9 @@ import { loadToken } from "./tokenStorage";
 
 export type AuthStatus = "idle" | "polling" | "authed" | "error";
 
-export interface AuthUser {
-  login: string;
-  avatarUrl: string;
-  name: string | null;
-}
-
 export interface AuthState {
   status: AuthStatus;
   token: string | null;
-  user: AuthUser | null;
   deviceCode: string | null;
   userCode: string | null;
   verificationUri: string | null;
@@ -24,7 +17,6 @@ export interface AuthState {
 const initialState: AuthState = {
   status: loadToken() ? "authed" : "idle",
   token: loadToken(),
-  user: null,
   deviceCode: null,
   userCode: null,
   verificationUri: null,
@@ -63,13 +55,9 @@ const authSlice = createSlice({
       state.verificationUri = null;
       state.expiresAt = null;
     },
-    userLoaded(state, action: PayloadAction<AuthUser>) {
-      state.user = action.payload;
-    },
     logOut(state) {
       state.status = "idle";
       state.token = null;
-      state.user = null;
       state.deviceCode = null;
       state.userCode = null;
       state.verificationUri = null;
@@ -87,6 +75,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { deviceCodeReceived, tokenReceived, userLoaded, logOut, setError, clearError } =
+export const { deviceCodeReceived, tokenReceived, logOut, setError, clearError } =
   authSlice.actions;
 export default authSlice.reducer;
