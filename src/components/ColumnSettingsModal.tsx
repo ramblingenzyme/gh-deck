@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { ColumnConfig } from '@/types';
+import { useConfirmation } from '@/hooks/useConfirmation';
 import { useUpdateColumnQueryMutation } from '@/store/configApi';
 import { Modal, ModalBody, ModalFooter, modalStyles } from './ui/Modal';
 import styles from './AddColumnModal.module.css';
@@ -11,7 +12,7 @@ interface ColumnSettingsModalProps {
 
 export const ColumnSettingsModal = ({ col, onClose }: ColumnSettingsModalProps) => {
   const [query, setQuery] = useState(col.query ?? '');
-  const [confirmingClear, setConfirmingClear] = useState(false);
+  const { isConfirming: confirmingClear, startConfirm: startConfirmClear, cancelConfirm: cancelConfirmClear } = useConfirmation();
   const [updateQuery] = useUpdateColumnQueryMutation();
 
   const handleSave = () => {
@@ -21,7 +22,7 @@ export const ColumnSettingsModal = ({ col, onClose }: ColumnSettingsModalProps) 
 
   const handleClear = () => {
     setQuery('');
-    setConfirmingClear(false);
+    cancelConfirmClear();
   };
 
   return (
@@ -43,7 +44,7 @@ export const ColumnSettingsModal = ({ col, onClose }: ColumnSettingsModalProps) 
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
-              setConfirmingClear(false);
+              cancelConfirmClear();
             }}
             placeholder="repo:owner/repo label:bug is:open"
             autoFocus
@@ -55,7 +56,7 @@ export const ColumnSettingsModal = ({ col, onClose }: ColumnSettingsModalProps) 
           <button
             type="button"
             className={`${modalStyles.btnModal} ${modalStyles.btnModalDanger}`}
-            onClick={() => setConfirmingClear(true)}
+            onClick={() => startConfirmClear()}
             disabled={!query}
           >
             Clear
@@ -79,7 +80,7 @@ export const ColumnSettingsModal = ({ col, onClose }: ColumnSettingsModalProps) 
             <button
               type="button"
               className={modalStyles.btnModal}
-              onClick={() => setConfirmingClear(false)}
+              onClick={() => cancelConfirmClear()}
             >
               No
             </button>

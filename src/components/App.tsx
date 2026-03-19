@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useModal } from "@/hooks/useModal";
 import type { ColumnType } from "@/types";
 import {
   useGetLayoutQuery,
@@ -18,11 +19,11 @@ export const App = () => {
   const { data: columns = [] } = useGetLayoutQuery();
   const [addColumn] = useAddColumnMutation();
   const [removeColumn] = useRemoveColumnMutation();
-  const [showModal, setShowModal] = useState(false);
+  const addColumnModal = useModal();
 
   const dispatch = useAppDispatch();
   const auth = useAppSelector((s) => s.auth);
-  const [showAuthModal, setShowAuthModal] = useState(!isDemoMode && auth.status === "idle");
+  const authModal = useModal(!isDemoMode && auth.status === "idle");
 
   // Fetch user profile when token is available
   const { data: userData } = useGetUserQuery(undefined, {
@@ -35,36 +36,36 @@ export const App = () => {
 
   // Close auth modal when authed
   useEffect(() => {
-    if (auth.status === "authed") setShowAuthModal(false);
+    if (auth.status === "authed") authModal.close();
   }, [auth.status]);
 
   const handleAddColumn = (type: ColumnType, title: string, query?: string) => {
     addColumn({ type, title, query });
-    setShowModal(false);
+    addColumnModal.close();
   };
 
   const handleSignOut = () => {
     dispatch(logOut());
-    setShowAuthModal(true);
+    authModal.open();
   };
 
   return (
     <>
       <Topbar
-        onAddColumn={() => setShowModal(true)}
-        onSignIn={() => setShowAuthModal(true)}
+        onAddColumn={() => addColumnModal.open()}
+        onSignIn={() => authModal.open()}
         onSignOut={handleSignOut}
       />
       <Board
         columns={columns}
-        onAddColumn={() => setShowModal(true)}
+        onAddColumn={() => addColumnModal.open()}
         onRemove={(id) => removeColumn(id)}
       />
-      {showModal && <AddColumnModal onAdd={handleAddColumn} onClose={() => setShowModal(false)} />}
-      {showAuthModal && (
+      {addColumnModal.isOpen && <AddColumnModal onAdd={handleAddColumn} onClose={() => addColumnModal.close()} />}
+      {authModal.isOpen && (
         <AuthModal
-          onDemoMode={() => setShowAuthModal(false)}
-          onClose={() => setShowAuthModal(false)}
+          onDemoMode={() => authModal.close()}
+          onClose={() => authModal.close()}
         />
       )}
     </>

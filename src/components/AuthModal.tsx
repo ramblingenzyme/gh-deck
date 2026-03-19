@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDeviceFlow } from '@/auth/useDeviceFlow';
+import { useCountdownTimer } from '@/hooks/useCountdownTimer';
 import { useAppDispatch } from '@/store';
 import { clearError } from '@/store/authSlice';
 import { Modal } from './ui/Modal';
@@ -13,19 +14,11 @@ interface AuthModalProps {
 export const AuthModal = ({ onDemoMode, onClose }: AuthModalProps) => {
   const dispatch = useAppDispatch();
   const { userCode, verificationUri, expiresAt, status, error, start } = useDeviceFlow();
-  const [secondsLeft, setSecondsLeft] = useState(0);
+  const secondsLeft = useCountdownTimer(expiresAt);
 
   useEffect(() => {
     if (status === 'authed') onClose();
   }, [status, onClose]);
-
-  useEffect(() => {
-    if (!expiresAt) return;
-    const update = () => setSecondsLeft(Math.max(0, Math.floor((expiresAt - Date.now()) / 1000)));
-    update();
-    const id = setInterval(update, 1000);
-    return () => clearInterval(id);
-  }, [expiresAt]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

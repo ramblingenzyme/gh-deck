@@ -1,7 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
-import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { useState } from 'react';
 import type { ColumnConfig, PRItem, IssueItem, CIItem, NotifItem, ActivityItem } from '@/types';
 import { useColumnData } from '@/hooks/useColumnData';
+import { useMinuteTicker } from '@/hooks/useMinuteTicker';
+import { useConfirmation } from '@/hooks/useConfirmation';
+import { useRefreshSpinner } from '@/hooks/useRefreshSpinner';
+import { useColumnDragDrop } from '@/hooks/useColumnDragDrop';
 import styles from './Column.module.css';
 import { ColumnHeader } from './ColumnHeader';
 import { ColumnConfirmDelete } from './ColumnConfirmDelete';
@@ -18,69 +21,14 @@ interface ColumnProps {
 }
 
 export const Column = ({ col, onRemove }: ColumnProps) => {
-  const [confirming, setConfirming] = useState(false);
-  const [spinning, setSpinning] = useState(false);
+  const { isConfirming: confirming, startConfirm, cancelConfirm } = useConfirmation();
   const [showSettings, setShowSettings] = useState(false);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [, setTick] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dropEdge, setDropEdge] = useState<'left' | 'right' | null>(null);
-  const ref = useRef<HTMLElement>(null);
-  const handleRef = useRef<HTMLSpanElement>(null);
   const { data, isLoading, isFetching, error, refetch } = useColumnData(col);
-  const prevFetching = useRef(false);
-
-  useEffect(() => {
-    if (prevFetching.current && !isFetching) {
-      setLastUpdated(new Date());
-    }
-    prevFetching.current = isFetching;
-  }, [isFetching]);
+  const { spinning, lastUpdated, handleRefresh } = useRefreshSpinner(isFetching, refetch);
+  const { ref, handleRef, isDragging, dropEdge } = useColumnDragDrop(col.id);
 
   // Re-render every minute so the relative time stays accurate.
-  useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), 60_000);
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const cleanupDraggable = draggable({
-      element: el,
-      dragHandle: handleRef.current ?? undefined,
-      getInitialData: () => ({ columnId: col.id }),
-      onDragStart: () => setIsDragging(true),
-      onDrop: () => setIsDragging(false),
-    });
-    const cleanupDropTarget = dropTargetForElements({
-      element: el,
-      getData: () => ({ columnId: col.id }),
-      canDrop: ({ source }) => source.data.columnId !== col.id,
-      onDragEnter: ({ location }) => {
-        const rect = el.getBoundingClientRect();
-        const mid = rect.left + rect.width / 2;
-        setDropEdge(location.current.input.clientX < mid ? 'left' : 'right');
-      },
-      onDrag: ({ location }) => {
-        const rect = el.getBoundingClientRect();
-        const mid = rect.left + rect.width / 2;
-        setDropEdge(location.current.input.clientX < mid ? 'left' : 'right');
-      },
-      onDragLeave: () => setDropEdge(null),
-      onDrop: () => setDropEdge(null),
-    });
-    return () => {
-      cleanupDraggable();
-      cleanupDropTarget();
-    };
-  }, [col.id]);
-
-  const handleRefresh = () => {
-    refetch();
-    setSpinning(true);
-    setTimeout(() => setSpinning(false), 800);
-  };
+  useMinuteTicker();
 
   const renderCard = (item: PRItem | IssueItem | CIItem | NotifItem | ActivityItem) => {
     switch (col.type) {
@@ -118,7 +66,7 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
         lastUpdated={lastUpdated}
         onRefresh={handleRefresh}
         onOpenSettings={() => setShowSettings(true)}
-        onConfirmRemove={() => setConfirming(true)}
+        onConfirmRemove={() => startConfirm()}
       />
 
       {col.query && (
@@ -137,7 +85,7 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
       {confirming && (
         <ColumnConfirmDelete
           col={col}
-          onCancel={() => setConfirming(false)}
+          onCancel={() => cancelConfirm()}
           onConfirm={() => onRemove(col.id)}
         />
       )}
