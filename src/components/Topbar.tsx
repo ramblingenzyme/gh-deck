@@ -18,44 +18,53 @@ export const Topbar = ({ onAddColumn, onSignIn, onSignOut }: TopbarProps) => {
     <header className={styles.topbar}>
       <div className={styles.topbarLeft}>
         <div className={styles.topbarLogo}>HubDeck</div>
-        <div className={styles.topbarStatus}>
-          <div className={styles.statusDot} aria-hidden="true" />
-          {authed ? (
-            <span>connected · {user.login}</span>
-          ) : isDemoMode ? (
-            <span>demo mode</span>
-          ) : (
-            <span>not connected</span>
-          )}
-        </div>
       </div>
 
       <div className={styles.topbarRight}>
-        {authed ? (
-          <div className={styles.userProfile}>
-            <img
-              className={styles.userAvatar}
-              src={user.avatarUrl}
-              alt={user.login}
-              width={24}
-              height={24}
-            />
-            <span className={styles.userLogin}>@{user.login}</span>
-            <button className={styles.btnSignOut} onClick={onSignOut}>
-              Sign out
-            </button>
-          </div>
-        ) : isDemoMode ? (
-          <div className={styles.userProfile}>
-            <span className={styles.demoBadge}>Demo mode</span>
-            <button className={styles.btnSignIn} onClick={onSignIn}>
-              Sign in
-            </button>
-          </div>
-        ) : null}
         <button className={styles.btnAdd} onClick={onAddColumn}>
           + Add Column
         </button>
+        {authed ? (
+          <>
+            <button
+              className={styles.avatarBtn}
+              popoverTarget="user-menu"
+              aria-label="User menu"
+            >
+              <img
+                className={styles.userAvatar}
+                src={user.avatarUrl}
+                alt={user.login}
+                width={28}
+                height={28}
+              />
+            </button>
+            <div id="user-menu" popover="auto" className={styles.userMenu}>
+              <span className={styles.menuLogin}>@{user.login}</span>
+              <hr className={styles.menuDivider} />
+              <button
+                className={styles.menuSignOut}
+                onClick={() => {
+                  onSignOut();
+                  (document.getElementById('user-menu') as HTMLElement & { hidePopover(): void })?.hidePopover();
+                }}
+              >
+                Sign out
+              </button>
+            </div>
+          </>
+        ) : isDemoMode ? (
+          <>
+            <span className={styles.demoBadge}>Demo</span>
+            <button className={styles.btnSignIn} onClick={onSignIn}>
+              Sign in
+            </button>
+          </>
+        ) : (
+          <button className={styles.btnSignIn} onClick={onSignIn}>
+            Sign in
+          </button>
+        )}
       </div>
     </header>
   );

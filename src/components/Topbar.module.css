@@ -23,21 +23,6 @@
   text-transform: uppercase;
 }
 
-.topbarStatus {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-faint);
-  font-size: var(--text-md);
-}
-
-.statusDot {
-  width: 6px;
-  height: 6px;
-  background: var(--ci-success);
-  border-radius: 50%;
-}
-
 .btnAdd {
   font-size: var(--text-md);
   font-weight: 500;
@@ -58,22 +43,73 @@
   gap: 12px;
 }
 
-.userProfile {
+.avatarBtn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.15s;
+  anchor-name: --avatar-btn;
+}
+
+.avatarBtn:hover {
+  border-color: var(--text-muted);
 }
 
 .userAvatar {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
+  display: block;
 }
 
-.userLogin {
+.userMenu {
+  position: fixed;
+  position-anchor: --avatar-btn;
+  position-area: end;
+  top: calc(anchor(bottom) + 6px);
+  margin: 0;
+  min-width: 160px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-mid);
+  border-radius: 0 0 0 var(--radius-md);
+  padding: 8px 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.menuLogin {
+  display: block;
+  padding: 6px 14px;
   font-size: var(--text-md);
-  color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.menuDivider {
+  border: none;
+  border-top: 1px solid var(--border-mid);
+  margin: 6px 0;
+}
+
+.menuSignOut {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 14px;
+  font-size: var(--text-md);
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.menuSignOut:hover {
+  color: var(--text-primary);
+  background: var(--bg-column);
 }
 
 .demoBadge {
@@ -85,8 +121,7 @@
   border: 1px solid var(--border-mid);
 }
 
-.btnSignIn,
-.btnSignOut {
+.btnSignIn {
   font-size: var(--text-md);
   font-weight: 500;
   color: var(--text-muted);
@@ -98,8 +133,7 @@
     color 0.15s;
 }
 
-.btnSignIn:hover,
-.btnSignOut:hover {
+.btnSignIn:hover {
   border-color: var(--text-muted);
   color: var(--text-primary);
 }
