@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { isDemoMode } from "@/env";
 import { MOCK_PRS, MOCK_ISSUES, MOCK_CI, MOCK_NOTIFS, MOCK_ACTIVITY } from "@/test/fixtures/mock";
 import {
@@ -22,6 +22,8 @@ interface UseColumnDataResult {
   error: string | null;
   refetch: () => void;
 }
+
+const noop = () => {};
 
 const DEMO_DATA_MAP: Partial<Record<ColumnConfig["type"], ColumnData>> = {
   prs: MOCK_PRS,
@@ -53,10 +55,11 @@ export function useColumnData(col: ColumnConfig): UseColumnDataResult {
     ...pollOpts,
   });
 
-  const filter = (items: ColumnData) =>
-    tokens.length ? items.filter((item) => matchesTokens(item as KnownItem, tokens)) : items;
-
-  const noop = () => {};
+  const filter = useCallback(
+    (items: ColumnData) =>
+      tokens.length ? items.filter((item) => matchesTokens(item as KnownItem, tokens)) : items,
+    [tokens],
+  );
 
   if (demo) {
     return { data: filter(DEMO_DATA_MAP[col.type] ?? []), isLoading: false, isFetching: false, error: null, refetch: noop };

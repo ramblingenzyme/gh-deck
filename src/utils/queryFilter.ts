@@ -48,7 +48,7 @@ export function matchesTokens(item: KnownItem, tokens: ReturnType<typeof parseQu
       case 'branch':
         return 'branch' in item && (item as CIItem).branch.toLowerCase().includes(value);
       default:
-        return true;
+        return false;
     }
   });
 }

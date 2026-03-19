@@ -7,7 +7,9 @@ export function loadLayout(): ColumnConfig[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_COLUMNS;
-    const cols = JSON.parse(raw) as (ColumnConfig & { repos?: string[] })[];
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return DEFAULT_COLUMNS;
+    const cols = parsed as (ColumnConfig & { repos?: string[] })[];
     // Migrate old repos field to a query string
     return cols.map(({ repos, ...col }) => {
       if (repos?.length && !col.query) {

@@ -1,16 +1,5 @@
 import cardStyles from '../cards/Card.module.css';
-
-interface CardTopProps {
-  repo: string;
-  age: string;
-}
-
-const CardTop = ({ repo, age }: CardTopProps) => (
-  <header className={cardStyles.cardTop}>
-    <span className={cardStyles.cardRepo}>{repo}</span>
-    <time className={cardStyles.cardAge}>{age}</time>
-  </header>
-);
+import { CardTop } from '../cards/CardParts';
 
 interface CardProps {
   repo: string;

@@ -17,20 +17,18 @@ export function useColumnDragDrop(columnId: string) {
       onDragStart: () => setIsDragging(true),
       onDrop: () => setIsDragging(false),
     });
+    const updateDropEdge = (clientX: number) => {
+      const rect = el.getBoundingClientRect();
+      const mid = rect.left + rect.width / 2;
+      setDropEdge(clientX < mid ? 'left' : 'right');
+    };
+
     const cleanupDropTarget = dropTargetForElements({
       element: el,
       getData: () => ({ columnId }),
       canDrop: ({ source }) => source.data.columnId !== columnId,
-      onDragEnter: ({ location }) => {
-        const rect = el.getBoundingClientRect();
-        const mid = rect.left + rect.width / 2;
-        setDropEdge(location.current.input.clientX < mid ? 'left' : 'right');
-      },
-      onDrag: ({ location }) => {
-        const rect = el.getBoundingClientRect();
-        const mid = rect.left + rect.width / 2;
-        setDropEdge(location.current.input.clientX < mid ? 'left' : 'right');
-      },
+      onDragEnter: ({ location }) => updateDropEdge(location.current.input.clientX),
+      onDrag: ({ location }) => updateDropEdge(location.current.input.clientX),
       onDragLeave: () => setDropEdge(null),
       onDrop: () => setDropEdge(null),
     });

@@ -68,6 +68,7 @@ export interface GHEvent {
   repo: { name: string };
   payload: {
     action?: string;
+    ref?: string;
     commits?: Array<{ sha: string; message: string }>;
     pull_request?: { number: number; title: string; html_url: string };
     issue?: { number: number; title: string; html_url: string };

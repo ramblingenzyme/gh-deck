@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ColumnConfig, PRItem, IssueItem, CIItem, NotifItem, ActivityItem, FallbackItem } from '@/types';
+import type { ColumnConfig, ColumnType, PRItem, IssueItem, CIItem, NotifItem, ActivityItem, FallbackItem, AnyItem } from '@/types';
 import { useColumnData } from '@/hooks/useColumnData';
 import { useMinuteTicker } from '@/hooks/useMinuteTicker';
 import { useConfirmation } from '@/hooks/useConfirmation';
@@ -17,6 +17,23 @@ import { CICard } from './cards/CICard';
 import { NotifCard } from './cards/NotifCard';
 import { ActivityCard } from './cards/ActivityCard';
 import { FallbackCard } from './cards/FallbackCard';
+
+function renderCard(colType: ColumnType, item: AnyItem) {
+  switch (colType) {
+    case 'prs':
+      return <PRCard key={item.id} item={item as PRItem} />;
+    case 'issues':
+      return <IssueCard key={item.id} item={item as IssueItem} />;
+    case 'ci':
+      return <CICard key={item.id} item={item as CIItem} />;
+    case 'notifications':
+      return <NotifCard key={item.id} item={item as NotifItem} />;
+    case 'activity':
+      return <ActivityCard key={item.id} item={item as ActivityItem} />;
+    default:
+      return <FallbackCard key={item.id} item={item as unknown as FallbackItem} />;
+  }
+}
 
 interface ColumnProps {
   col: ColumnConfig;
@@ -38,23 +55,6 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
 
   // Re-render every minute so the relative time stays accurate.
   useMinuteTicker();
-
-  const renderCard = (item: PRItem | IssueItem | CIItem | NotifItem | ActivityItem | FallbackItem) => {
-    switch (col.type) {
-      case 'prs':
-        return <PRCard key={item.id} item={item as PRItem} />;
-      case 'issues':
-        return <IssueCard key={item.id} item={item as IssueItem} />;
-      case 'ci':
-        return <CICard key={item.id} item={item as CIItem} />;
-      case 'notifications':
-        return <NotifCard key={item.id} item={item as NotifItem} />;
-      case 'activity':
-        return <ActivityCard key={item.id} item={item as ActivityItem} />;
-      default:
-        return <FallbackCard key={item.id} item={item as unknown as FallbackItem} />;
-    }
-  };
 
   const columnClass = [
     styles.column,
@@ -144,10 +144,8 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
             {error}
           </div>
         )}
-        {!isLoading && !error && data.map((item) => renderCard(item))}
+        {!isLoading && !error && data.map((item) => renderCard(col.type, item))}
       </div>
-
-
     </section>
   );
 };

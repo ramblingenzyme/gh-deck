@@ -1,7 +1,10 @@
+import { useRef } from "react";
 import { useAppSelector } from "@/store";
 import { useGetUserQuery } from "@/store/githubApi";
 import { isDemoMode } from "@/env";
 import styles from "./Topbar.module.css";
+
+type PopoverElement = HTMLDivElement & { hidePopover(): void };
 
 interface TopbarProps {
   onAddColumn: () => void;
@@ -13,6 +16,7 @@ export const Topbar = ({ onAddColumn, onSignIn, onSignOut }: TopbarProps) => {
   const status = useAppSelector((s) => s.auth.status);
   const { data: user } = useGetUserQuery(undefined, { skip: status !== 'authed' });
   const authed = status === 'authed' && user;
+  const userMenuRef = useRef<PopoverElement>(null);
 
   return (
     <header className={styles.topbar}>
@@ -39,14 +43,14 @@ export const Topbar = ({ onAddColumn, onSignIn, onSignOut }: TopbarProps) => {
                 height={28}
               />
             </button>
-            <div id="user-menu" popover="auto" className={styles.userMenu}>
+            <div ref={userMenuRef} id="user-menu" popover="auto" className={styles.userMenu}>
               <span className={styles.menuLogin}>@{user.login}</span>
               <hr className={styles.menuDivider} />
               <button
                 className={styles.menuSignOut}
                 onClick={() => {
                   onSignOut();
-                  (document.getElementById('user-menu') as HTMLElement & { hidePopover(): void })?.hidePopover();
+                  userMenuRef.current?.hidePopover();
                 }}
               >
                 Sign out
