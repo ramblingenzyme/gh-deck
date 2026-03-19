@@ -1,9 +1,9 @@
-import type { CIItem } from '@/types';
-import { CI_STATUS } from '@/constants';
-import { Card, CardTitle, CardMeta } from '../ui/Card';
-import { Icon } from '../ui/Icon';
-import cardStyles from './Card.module.css';
-import styles from './CICard.module.css';
+import type { CIItem } from "@/types";
+import { CI_STATUS } from "@/constants";
+import { Card, CardTitle, CardMeta } from "../ui/Card";
+import { Icon } from "../ui/Icon";
+import cardStyles from "./Card.module.css";
+import styles from "./CICard.module.css";
 
 interface CICardProps {
   item: CIItem;

@@ -1,10 +1,10 @@
-import type { PRItem } from '@/types';
-import { Card, CardTitle, CardMeta } from '../ui/Card';
-import { Icon } from '../ui/Icon';
-import { CommentIcon } from './CommentIcon';
-import { LabelList } from './LabelList';
-import cardStyles from './Card.module.css';
-import styles from './PRCard.module.css';
+import type { PRItem } from "@/types";
+import { Card, CardTitle, CardMeta } from "../ui/Card";
+import { Icon } from "../ui/Icon";
+import { CommentIcon } from "./CommentIcon";
+import { LabelList } from "./LabelList";
+import cardStyles from "./Card.module.css";
+import styles from "./PRCard.module.css";
 
 interface PRCardProps {
   item: PRItem;
@@ -13,7 +13,9 @@ interface PRCardProps {
 export const PRCard = ({ item }: PRCardProps) => {
   return (
     <Card repo={item.repo} age={item.age}>
-      <CardTitle href={item.url} prefix={`#${item.number}`}>{item.title}</CardTitle>
+      <CardTitle href={item.url} prefix={`#${item.number}`}>
+        {item.title}
+      </CardTitle>
       <CardMeta>
         <span className={cardStyles.cardAuthor}>@{item.author}</span>
         <div className={cardStyles.cardStats}>

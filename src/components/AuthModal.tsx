@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { useDeviceFlow } from '@/auth/useDeviceFlow';
-import { useCountdownTimer } from '@/hooks/useCountdownTimer';
-import { useAppDispatch } from '@/store';
-import { clearError } from '@/store/authSlice';
-import { Modal } from './ui/Modal';
-import styles from './AuthModal.module.css';
+import { useEffect } from "react";
+import { useDeviceFlow } from "@/auth/useDeviceFlow";
+import { useCountdownTimer } from "@/hooks/useCountdownTimer";
+import { useAppDispatch } from "@/store";
+import { clearError } from "@/store/authSlice";
+import { Modal } from "./ui/Modal";
+import styles from "./AuthModal.module.css";
 
 interface AuthModalProps {
   onDemoMode: () => void;
@@ -17,15 +17,15 @@ export const AuthModal = ({ onDemoMode, onClose }: AuthModalProps) => {
   const secondsLeft = useCountdownTimer(expiresAt);
 
   useEffect(() => {
-    if (status === 'authed') onClose();
+    if (status === "authed") onClose();
   }, [status, onClose]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && status === 'idle') onDemoMode();
+      if (e.key === "Escape" && status === "idle") onDemoMode();
     };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, [status, onDemoMode]);
 
   const handleCancel = () => {
@@ -36,9 +36,9 @@ export const AuthModal = ({ onDemoMode, onClose }: AuthModalProps) => {
   return (
     <Modal title="Sign In" titleId="auth-modal-title" onClose={onClose} preventCancel>
       <div className={styles.modalBody}>
-        {(status === 'idle' || status === 'error') && (
+        {(status === "idle" || status === "error") && (
           <>
-            {status === 'error' && error && <p className={styles.errorText}>{error}</p>}
+            {status === "error" && error && <p className={styles.errorText}>{error}</p>}
             <p className={styles.description}>
               Connect to GitHub to load your real pull requests, issues, notifications, and
               activity.
@@ -46,7 +46,7 @@ export const AuthModal = ({ onDemoMode, onClose }: AuthModalProps) => {
             <button
               className={styles.btnGitHub}
               onClick={
-                status === 'error'
+                status === "error"
                   ? () => {
                       dispatch(clearError());
                       void start();
@@ -62,18 +62,18 @@ export const AuthModal = ({ onDemoMode, onClose }: AuthModalProps) => {
           </>
         )}
 
-        {status === 'polling' && userCode && (
+        {status === "polling" && userCode && (
           <>
             <p className={styles.description}>
-              Visit{' '}
+              Visit{" "}
               <a
-                href={verificationUri ?? 'https://github.com/login/device'}
+                href={verificationUri ?? "https://github.com/login/device"}
                 target="_blank"
                 rel="noreferrer"
                 className={styles.verifyLink}
               >
                 github.com/login/device
-              </a>{' '}
+              </a>{" "}
               and enter this code:
             </p>
             <div className={styles.userCodeBox}>{userCode}</div>

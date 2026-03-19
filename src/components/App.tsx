@@ -52,12 +52,11 @@ export const App = () => {
         onAddColumn={() => addColumnModal.open()}
         onRemove={(id) => removeColumn(id)}
       />
-      {addColumnModal.isOpen && <AddColumnModal onAdd={handleAddColumn} onClose={() => addColumnModal.close()} />}
+      {addColumnModal.isOpen && (
+        <AddColumnModal onAdd={handleAddColumn} onClose={() => addColumnModal.close()} />
+      )}
       {authModal.isOpen && (
-        <AuthModal
-          onDemoMode={() => authModal.close()}
-          onClose={() => authModal.close()}
-        />
+        <AuthModal onDemoMode={() => authModal.close()} onClose={() => authModal.close()} />
       )}
     </>
   );

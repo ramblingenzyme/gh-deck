@@ -1,8 +1,8 @@
-import type { NotifItem } from '@/types';
-import { NOTIF_ICONS } from '@/constants';
-import { Card, CardTitle, CardFooter } from '../ui/Card';
-import { CardTypeIcon } from './CardParts';
-import styles from './NotifCard.module.css';
+import type { NotifItem } from "@/types";
+import { NOTIF_ICONS } from "@/constants";
+import { Card, CardTitle, CardFooter } from "../ui/Card";
+import { CardTypeIcon } from "./CardParts";
+import styles from "./NotifCard.module.css";
 
 interface NotifCardProps {
   item: NotifItem;

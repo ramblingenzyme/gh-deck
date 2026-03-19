@@ -1,22 +1,22 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { useRefreshSpinner } from './useRefreshSpinner';
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { renderHook, act } from "@testing-library/react";
+import { useRefreshSpinner } from "./useRefreshSpinner";
 
-describe('useRefreshSpinner', () => {
+describe("useRefreshSpinner", () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
-  it('spinning starts false', () => {
+  it("spinning starts false", () => {
     const { result } = renderHook(() => useRefreshSpinner(false, vi.fn()));
     expect(result.current.spinning).toBe(false);
   });
 
-  it('lastUpdated starts null', () => {
+  it("lastUpdated starts null", () => {
     const { result } = renderHook(() => useRefreshSpinner(false, vi.fn()));
     expect(result.current.lastUpdated).toBeNull();
   });
 
-  it('handleRefresh calls refetch and sets spinning to true', () => {
+  it("handleRefresh calls refetch and sets spinning to true", () => {
     const refetch = vi.fn();
     const { result } = renderHook(() => useRefreshSpinner(false, refetch));
 
@@ -28,7 +28,7 @@ describe('useRefreshSpinner', () => {
 
   // ─── Bug 1: spinner must not stop while isFetching is still true ────────────
 
-  it('spinning stays true after 800 ms when isFetching is still true (bug fix)', () => {
+  it("spinning stays true after 800 ms when isFetching is still true (bug fix)", () => {
     const { result, rerender } = renderHook(
       ({ isFetching }) => useRefreshSpinner(isFetching, vi.fn()),
       { initialProps: { isFetching: false } },
@@ -43,7 +43,7 @@ describe('useRefreshSpinner', () => {
     expect(result.current.spinning).toBe(true);
   });
 
-  it('spinning stops after isFetching transitions from true to false', () => {
+  it("spinning stops after isFetching transitions from true to false", () => {
     const { result, rerender } = renderHook(
       ({ isFetching }) => useRefreshSpinner(isFetching, vi.fn()),
       { initialProps: { isFetching: false } },
@@ -59,7 +59,7 @@ describe('useRefreshSpinner', () => {
     expect(result.current.spinning).toBe(false);
   });
 
-  it('spinner respects minimum display time for fast fetches', () => {
+  it("spinner respects minimum display time for fast fetches", () => {
     const { result, rerender } = renderHook(
       ({ isFetching }) => useRefreshSpinner(isFetching, vi.fn()),
       { initialProps: { isFetching: false } },
@@ -81,8 +81,8 @@ describe('useRefreshSpinner', () => {
     expect(result.current.spinning).toBe(false);
   });
 
-  it('lastUpdated is set to the current time when fetch completes', () => {
-    const now = new Date('2024-06-01T12:00:00Z');
+  it("lastUpdated is set to the current time when fetch completes", () => {
+    const now = new Date("2024-06-01T12:00:00Z");
     vi.setSystemTime(now);
 
     const { result, rerender } = renderHook(
@@ -100,7 +100,7 @@ describe('useRefreshSpinner', () => {
     expect(result.current.lastUpdated).toEqual(now);
   });
 
-  it('lastUpdated updates on each completed fetch', () => {
+  it("lastUpdated updates on each completed fetch", () => {
     const { result, rerender } = renderHook(
       ({ isFetching }) => useRefreshSpinner(isFetching, vi.fn()),
       { initialProps: { isFetching: false } },
@@ -108,14 +108,20 @@ describe('useRefreshSpinner', () => {
 
     // First fetch cycle
     rerender({ isFetching: true });
-    vi.setSystemTime(new Date('2024-01-01T10:00:00Z'));
-    act(() => { rerender({ isFetching: false }); vi.runAllTimers(); });
+    vi.setSystemTime(new Date("2024-01-01T10:00:00Z"));
+    act(() => {
+      rerender({ isFetching: false });
+      vi.runAllTimers();
+    });
     const first = result.current.lastUpdated;
 
     // Second fetch cycle
     rerender({ isFetching: true });
-    vi.setSystemTime(new Date('2024-01-01T10:05:00Z'));
-    act(() => { rerender({ isFetching: false }); vi.runAllTimers(); });
+    vi.setSystemTime(new Date("2024-01-01T10:05:00Z"));
+    act(() => {
+      rerender({ isFetching: false });
+      vi.runAllTimers();
+    });
     const second = result.current.lastUpdated;
 
     expect(second!.getTime()).toBeGreaterThan(first!.getTime());

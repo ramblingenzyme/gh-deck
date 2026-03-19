@@ -1,10 +1,10 @@
-import type { RefObject } from 'react';
-import type { ColumnConfig } from '@/types';
-import { COLUMN_TYPES } from '@/constants';
-import { Icon } from './ui/Icon';
-import { Tooltip } from './ui/Tooltip';
-import { PencilIcon } from './ui/PencilIcon';
-import styles from './Column.module.css';
+import type { RefObject } from "react";
+import type { ColumnConfig } from "@/types";
+import { COLUMN_TYPES } from "@/constants";
+import { Icon } from "./ui/Icon";
+import { Tooltip } from "./ui/Tooltip";
+import { PencilIcon } from "./ui/PencilIcon";
+import styles from "./Column.module.css";
 
 interface ColumnHeaderProps {
   col: ColumnConfig;
@@ -20,8 +20,8 @@ interface ColumnHeaderProps {
 
 function formatAge(date: Date): string {
   const mins = Math.floor((Date.now() - date.getTime()) / 60_000);
-  if (mins < 1) return 'just now';
-  if (mins === 1) return '1m ago';
+  if (mins < 1) return "just now";
+  if (mins === 1) return "1m ago";
   return `${mins}m ago`;
 }
 
@@ -41,17 +41,16 @@ export const ColumnHeader = ({
 
   return (
     <header className={styles.colHeader}>
-      <span ref={handleRef} className={styles.dragHandle} aria-hidden="true">⠿</span>
+      <span ref={handleRef} className={styles.dragHandle} aria-hidden="true">
+        ⠿
+      </span>
       <div className={styles.colHeaderLeft}>
         <Icon className={styles.colIcon}>{cfg.icon}</Icon>
         <Tooltip text={col.title} position="below">
           <h2 className={styles.colTitle}>{col.title}</h2>
         </Tooltip>
         <Tooltip text={`${itemCount} ${itemLabel}`} position="below">
-          <output
-            className={styles.colBadge}
-            aria-label={`${itemCount} ${itemLabel}`}
-          >
+          <output className={styles.colBadge} aria-label={`${itemCount} ${itemLabel}`}>
             {itemCount}
           </output>
         </Tooltip>
@@ -64,7 +63,7 @@ export const ColumnHeader = ({
         )}
         <Tooltip text="Refresh" position="below">
           <button
-            className={`${styles.btnIcon} ${spinning || isFetching ? styles.btnIconSpinning : ''}`}
+            className={`${styles.btnIcon} ${spinning || isFetching ? styles.btnIconSpinning : ""}`}
             onClick={onRefresh}
             aria-label="Refresh"
           >
@@ -73,21 +72,13 @@ export const ColumnHeader = ({
         </Tooltip>
         {!col.query && (
           <Tooltip text="Add filter" position="below">
-            <button
-              className={styles.btnIcon}
-              onClick={onOpenSettings}
-              aria-label="Add filter"
-            >
+            <button className={styles.btnIcon} onClick={onOpenSettings} aria-label="Add filter">
               <PencilIcon className={styles.btnIconPencil} />
             </button>
           </Tooltip>
         )}
         <Tooltip text="Remove column" position="below">
-          <button
-            className={styles.btnIcon}
-            onClick={onConfirmRemove}
-            aria-label="Remove column"
-          >
+          <button className={styles.btnIcon} onClick={onConfirmRemove} aria-label="Remove column">
             <Icon>✕</Icon>
           </button>
         </Tooltip>

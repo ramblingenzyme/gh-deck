@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import styles from './Modal.module.css';
+import { useEffect, useRef } from "react";
+import styles from "./Modal.module.css";
 
 interface ModalProps {
   title: string;
@@ -26,9 +26,11 @@ export const Modal = ({
 
   useEffect(() => {
     if (preventCancel) return;
-    const onKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [preventCancel, onClose]);
 
   return (
@@ -38,7 +40,13 @@ export const Modal = ({
       onClose={onClose}
       onCancel={preventCancel ? (e) => e.preventDefault() : undefined}
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- <dialog> has native keyboard accessibility via onCancel/Escape; backdrop click is a pointer-only affordance
-      onClick={onBackdropClick ? (e) => { if (e.target === e.currentTarget) onBackdropClick(); } : undefined}
+      onClick={
+        onBackdropClick
+          ? (e) => {
+              if (e.target === e.currentTarget) onBackdropClick();
+            }
+          : undefined
+      }
       aria-labelledby={titleId}
     >
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- not an interaction point; stopPropagation prevents backdrop-click from firing on modal content clicks */}

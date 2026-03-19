@@ -43,8 +43,14 @@ export function useColumnData(col: ColumnConfig): UseColumnDataResult {
   const repos = useMemo(() => tokens.filter((t) => t.key === "repo").map((t) => t.value), [tokens]);
 
   const pollOpts = { pollingInterval: 5 * 60 * 1000 };
-  const prsResult = useGetPRsQuery(login, { skip: demo || col.type !== "prs" || !login, ...pollOpts });
-  const issuesResult = useGetIssuesQuery(login, { skip: demo || col.type !== "issues" || !login, ...pollOpts });
+  const prsResult = useGetPRsQuery(login, {
+    skip: demo || col.type !== "prs" || !login,
+    ...pollOpts,
+  });
+  const issuesResult = useGetIssuesQuery(login, {
+    skip: demo || col.type !== "issues" || !login,
+    ...pollOpts,
+  });
   const notifsResult = useGetNotificationsQuery(undefined, {
     skip: demo || col.type !== "notifications",
     ...pollOpts,
@@ -62,7 +68,13 @@ export function useColumnData(col: ColumnConfig): UseColumnDataResult {
   );
 
   if (demo) {
-    return { data: filter(DEMO_DATA_MAP[col.type] ?? []), isLoading: false, isFetching: false, error: null, refetch: noop };
+    return {
+      data: filter(DEMO_DATA_MAP[col.type] ?? []),
+      isLoading: false,
+      isFetching: false,
+      error: null,
+      refetch: noop,
+    };
   }
 
   switch (col.type) {

@@ -1,12 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { produce } from "immer";
 import type { ColumnConfig } from "@/types";
-import {
-  applyAdd,
-  applyRemove,
-  applyReorder,
-  applyUpdateQuery,
-} from "./layoutMutations";
+import { applyAdd, applyRemove, applyReorder, applyUpdateQuery } from "./layoutMutations";
 
 function apply(cols: ColumnConfig[], fn: (d: ColumnConfig[]) => void): ColumnConfig[] {
   return produce(cols, fn);

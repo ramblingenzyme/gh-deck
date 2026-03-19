@@ -1,4 +1,4 @@
-import styles from './Icon.module.css';
+import styles from "./Icon.module.css";
 
 interface IconProps {
   children: React.ReactNode;
@@ -6,7 +6,7 @@ interface IconProps {
 }
 
 export const Icon = ({ children, className }: IconProps) => (
-  <span className={`${styles.icon}${className ? ` ${className}` : ''}`} aria-hidden="true">
+  <span className={`${styles.icon}${className ? ` ${className}` : ""}`} aria-hidden="true">
     {children}
   </span>
 );

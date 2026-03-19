@@ -1,5 +1,5 @@
-import cardStyles from '../cards/Card.module.css';
-import { CardTop } from '../cards/CardParts';
+import cardStyles from "../cards/Card.module.css";
+import { CardTop } from "../cards/CardParts";
 
 interface CardProps {
   repo: string;
@@ -9,7 +9,7 @@ interface CardProps {
 }
 
 export const Card = ({ repo, age, className, children }: CardProps) => (
-  <article className={`${cardStyles.card}${className ? ` ${className}` : ''}`}>
+  <article className={`${cardStyles.card}${className ? ` ${className}` : ""}`}>
     <CardTop repo={repo} age={age} />
     {children}
   </article>
@@ -24,7 +24,8 @@ interface CardTitleProps {
 export const CardTitle = ({ href, prefix, children }: CardTitleProps) => (
   <p className={cardStyles.cardTitle}>
     <a href={href} target="_blank" rel="noreferrer" className={cardStyles.cardTitleLink}>
-      {prefix ? `${prefix} ` : ''}{children}
+      {prefix ? `${prefix} ` : ""}
+      {children}
     </a>
   </p>
 );

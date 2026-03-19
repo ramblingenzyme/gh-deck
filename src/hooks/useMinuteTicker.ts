@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function useMinuteTicker(): void {
   const [, setTick] = useState(0);

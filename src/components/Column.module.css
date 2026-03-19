@@ -328,15 +328,23 @@
   padding: 2px 4px;
   border-radius: var(--radius-sm);
   flex-shrink: 0;
-  transition: opacity 0.15s, color 0.15s;
+  transition:
+    opacity 0.15s,
+    color 0.15s;
   margin-right: 2px;
 }
-.colHeader:hover .dragHandle { opacity: 0.5; }
-.dragHandle:hover { opacity: 1 !important; color: var(--text-secondary); background: var(--border-mid); }
+.colHeader:hover .dragHandle {
+  opacity: 0.5;
+}
+.dragHandle:hover {
+  opacity: 1 !important;
+  color: var(--text-secondary);
+  background: var(--border-mid);
+}
 
 .dropLeft::before,
 .dropRight::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 4px;
   bottom: 4px;
@@ -346,5 +354,9 @@
   pointer-events: none;
   z-index: 10;
 }
-.dropLeft::before { left: -8px; }
-.dropRight::after { right: -8px; }
+.dropLeft::before {
+  left: -8px;
+}
+.dropRight::after {
+  right: -8px;
+}

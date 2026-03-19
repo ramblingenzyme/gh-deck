@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export function useConfirmation() {
   const [isConfirming, setIsConfirming] = useState(false);

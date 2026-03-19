@@ -1,34 +1,44 @@
-import { useState } from 'react';
-import type { ColumnConfig, ColumnType, PRItem, IssueItem, CIItem, NotifItem, ActivityItem, FallbackItem, AnyItem } from '@/types';
-import { useColumnData } from '@/hooks/useColumnData';
-import { useMinuteTicker } from '@/hooks/useMinuteTicker';
-import { useConfirmation } from '@/hooks/useConfirmation';
-import { useRefreshSpinner } from '@/hooks/useRefreshSpinner';
-import { useColumnDragDrop } from '@/hooks/useColumnDragDrop';
-import { useUpdateColumnQueryMutation } from '@/store/configApi';
-import styles from './Column.module.css';
-import { Icon } from './ui/Icon';
-import { PencilIcon } from './ui/PencilIcon';
-import { ColumnHeader } from './ColumnHeader';
-import { ColumnConfirmDelete } from './ColumnConfirmDelete';
-import { PRCard } from './cards/PRCard';
-import { IssueCard } from './cards/IssueCard';
-import { CICard } from './cards/CICard';
-import { NotifCard } from './cards/NotifCard';
-import { ActivityCard } from './cards/ActivityCard';
-import { FallbackCard } from './cards/FallbackCard';
+import { useState } from "react";
+import type {
+  ColumnConfig,
+  ColumnType,
+  PRItem,
+  IssueItem,
+  CIItem,
+  NotifItem,
+  ActivityItem,
+  FallbackItem,
+  AnyItem,
+} from "@/types";
+import { useColumnData } from "@/hooks/useColumnData";
+import { useMinuteTicker } from "@/hooks/useMinuteTicker";
+import { useConfirmation } from "@/hooks/useConfirmation";
+import { useRefreshSpinner } from "@/hooks/useRefreshSpinner";
+import { useColumnDragDrop } from "@/hooks/useColumnDragDrop";
+import { useUpdateColumnQueryMutation } from "@/store/configApi";
+import styles from "./Column.module.css";
+import { Icon } from "./ui/Icon";
+import { PencilIcon } from "./ui/PencilIcon";
+import { ColumnHeader } from "./ColumnHeader";
+import { ColumnConfirmDelete } from "./ColumnConfirmDelete";
+import { PRCard } from "./cards/PRCard";
+import { IssueCard } from "./cards/IssueCard";
+import { CICard } from "./cards/CICard";
+import { NotifCard } from "./cards/NotifCard";
+import { ActivityCard } from "./cards/ActivityCard";
+import { FallbackCard } from "./cards/FallbackCard";
 
 function renderCard(colType: ColumnType, item: AnyItem) {
   switch (colType) {
-    case 'prs':
+    case "prs":
       return <PRCard key={item.id} item={item as PRItem} />;
-    case 'issues':
+    case "issues":
       return <IssueCard key={item.id} item={item as IssueItem} />;
-    case 'ci':
+    case "ci":
       return <CICard key={item.id} item={item as CIItem} />;
-    case 'notifications':
+    case "notifications":
       return <NotifCard key={item.id} item={item as NotifItem} />;
-    case 'activity':
+    case "activity":
       return <ActivityCard key={item.id} item={item as ActivityItem} />;
     default:
       return <FallbackCard key={item.id} item={item as unknown as FallbackItem} />;
@@ -43,11 +53,17 @@ interface ColumnProps {
 export const Column = ({ col, onRemove }: ColumnProps) => {
   const { isConfirming: confirming, startConfirm, cancelConfirm } = useConfirmation();
   const [editingQuery, setEditingQuery] = useState(false);
-  const [draftQuery, setDraftQuery] = useState('');
+  const [draftQuery, setDraftQuery] = useState("");
   const [updateColumnQuery] = useUpdateColumnQueryMutation();
 
-  const startEditQuery = () => { setDraftQuery(col.query ?? ''); setEditingQuery(true); };
-  const confirmQuery = () => { updateColumnQuery({ id: col.id, query: draftQuery }); setEditingQuery(false); };
+  const startEditQuery = () => {
+    setDraftQuery(col.query ?? "");
+    setEditingQuery(true);
+  };
+  const confirmQuery = () => {
+    updateColumnQuery({ id: col.id, query: draftQuery });
+    setEditingQuery(false);
+  };
 
   const { data, isLoading, isFetching, error, refetch } = useColumnData(col);
   const { spinning, lastUpdated, handleRefresh } = useRefreshSpinner(isFetching, refetch);
@@ -59,12 +75,12 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
   const columnClass = [
     styles.column,
     styles[col.type],
-    isDragging ? styles.columnDragging : '',
-    dropEdge === 'left' ? styles.dropLeft : '',
-    dropEdge === 'right' ? styles.dropRight : '',
+    isDragging ? styles.columnDragging : "",
+    dropEdge === "left" ? styles.dropLeft : "",
+    dropEdge === "right" ? styles.dropRight : "",
   ]
     .filter(Boolean)
-    .join(' ');
+    .join(" ");
 
   return (
     <section ref={ref} className={columnClass} aria-label={col.title}>
@@ -87,10 +103,10 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
               <input
                 className={styles.colQueryInput}
                 value={draftQuery}
-                onChange={e => setDraftQuery(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') confirmQuery();
-                  if (e.key === 'Escape') setEditingQuery(false);
+                onChange={(e) => setDraftQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") confirmQuery();
+                  if (e.key === "Escape") setEditingQuery(false);
                 }}
                 // eslint-disable-next-line jsx-a11y/no-autofocus -- user-triggered edit (clicking the query text), not autofocus on page load
                 autoFocus
@@ -100,19 +116,25 @@ export const Column = ({ col, onRemove }: ColumnProps) => {
                 className={styles.colQueryConfirm}
                 onClick={confirmQuery}
                 aria-label="Confirm"
-              >✓</button>
+              >
+                ✓
+              </button>
               <button
                 className={styles.colQueryCancel}
                 onClick={() => setEditingQuery(false)}
                 aria-label="Cancel"
-              ><Icon>✕</Icon></button>
+              >
+                <Icon>✕</Icon>
+              </button>
             </>
           ) : (
             <button
               type="button"
               className={styles.colQueryText}
               onClick={startEditQuery}
-              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') startEditQuery(); }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") startEditQuery();
+              }}
               aria-label="Edit filter query"
               title={col.query}
             >

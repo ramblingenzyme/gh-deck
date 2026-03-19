@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const MIN_SPIN_MS = 800;
 
@@ -16,7 +16,8 @@ export function useRefreshSpinner(isFetching: boolean, refetch: () => void) {
     if (prevFetching.current && !isFetching) {
       setLastUpdated(new Date());
       // Respect the minimum display time so the spinner doesn't flash.
-      const elapsed = spinStartedAt.current != null ? Date.now() - spinStartedAt.current : MIN_SPIN_MS;
+      const elapsed =
+        spinStartedAt.current != null ? Date.now() - spinStartedAt.current : MIN_SPIN_MS;
       const remaining = Math.max(0, MIN_SPIN_MS - elapsed);
       setTimeout(() => setSpinning(false), remaining);
       spinStartedAt.current = null;

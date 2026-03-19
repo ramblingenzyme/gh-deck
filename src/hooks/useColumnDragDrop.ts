@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { useEffect, useRef, useState } from "react";
+import {
+  draggable,
+  dropTargetForElements,
+} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 
 export function useColumnDragDrop(columnId: string) {
   const [isDragging, setIsDragging] = useState(false);
-  const [dropEdge, setDropEdge] = useState<'left' | 'right' | null>(null);
+  const [dropEdge, setDropEdge] = useState<"left" | "right" | null>(null);
   const ref = useRef<HTMLElement>(null);
   const handleRef = useRef<HTMLSpanElement>(null);
 
@@ -20,7 +23,7 @@ export function useColumnDragDrop(columnId: string) {
     const updateDropEdge = (clientX: number) => {
       const rect = el.getBoundingClientRect();
       const mid = rect.left + rect.width / 2;
-      setDropEdge(clientX < mid ? 'left' : 'right');
+      setDropEdge(clientX < mid ? "left" : "right");
     };
 
     const cleanupDropTarget = dropTargetForElements({

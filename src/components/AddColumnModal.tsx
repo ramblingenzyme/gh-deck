@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import type { ColumnType } from '@/types';
-import { COLUMN_TYPES } from '@/constants';
-import colStyles from './Column.module.css';
-import { Icon } from './ui/Icon';
-import { Modal, ModalBody, ModalFooter, modalStyles } from './ui/Modal';
-import styles from './AddColumnModal.module.css';
+import { useState } from "react";
+import type { ColumnType } from "@/types";
+import { COLUMN_TYPES } from "@/constants";
+import colStyles from "./Column.module.css";
+import { Icon } from "./ui/Icon";
+import { Modal, ModalBody, ModalFooter, modalStyles } from "./ui/Modal";
+import styles from "./AddColumnModal.module.css";
 
 interface AddColumnModalProps {
   onAdd: (type: ColumnType, title: string, query?: string) => void;
@@ -12,9 +12,9 @@ interface AddColumnModalProps {
 }
 
 export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
-  const [selectedType, setSelectedType] = useState<ColumnType>('prs');
+  const [selectedType, setSelectedType] = useState<ColumnType>("prs");
   const [title, setTitle] = useState(COLUMN_TYPES[selectedType].label);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const handleTypeChange = (type: ColumnType) => {
     setSelectedType(type);
@@ -28,7 +28,12 @@ export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
   };
 
   return (
-    <Modal title="Add Column" titleId="add-column-modal-title" onClose={onClose} onBackdropClick={onClose}>
+    <Modal
+      title="Add Column"
+      titleId="add-column-modal-title"
+      onClose={onClose}
+      onBackdropClick={onClose}
+    >
       <form onSubmit={handleSubmit}>
         <ModalBody>
           <div className={styles.modalTypes}>
@@ -38,7 +43,7 @@ export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
                 <button
                   key={type}
                   type="button"
-                  className={`${styles.typeBtn} ${colStyles[type]} ${selectedType === type ? styles.active : ''}`}
+                  className={`${styles.typeBtn} ${colStyles[type]} ${selectedType === type ? styles.active : ""}`}
                   onClick={() => handleTypeChange(type)}
                   aria-pressed={selectedType === type}
                 >
@@ -79,7 +84,10 @@ export const AddColumnModal = ({ onAdd, onClose }: AddColumnModalProps) => {
           <button type="button" className={modalStyles.btnModal} onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className={`${modalStyles.btnModal} ${modalStyles.btnModalPrimary}`}>
+          <button
+            type="submit"
+            className={`${modalStyles.btnModal} ${modalStyles.btnModalPrimary}`}
+          >
             Add Column
           </button>
         </ModalFooter>

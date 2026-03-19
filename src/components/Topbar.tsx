@@ -14,8 +14,8 @@ interface TopbarProps {
 
 export const Topbar = ({ onAddColumn, onSignIn, onSignOut }: TopbarProps) => {
   const status = useAppSelector((s) => s.auth.status);
-  const { data: user } = useGetUserQuery(undefined, { skip: status !== 'authed' });
-  const authed = status === 'authed' && user;
+  const { data: user } = useGetUserQuery(undefined, { skip: status !== "authed" });
+  const authed = status === "authed" && user;
   const userMenuRef = useRef<PopoverElement>(null);
 
   return (
@@ -30,11 +30,7 @@ export const Topbar = ({ onAddColumn, onSignIn, onSignOut }: TopbarProps) => {
         </button>
         {authed ? (
           <>
-            <button
-              className={styles.avatarBtn}
-              popoverTarget="user-menu"
-              aria-label="User menu"
-            >
+            <button className={styles.avatarBtn} popoverTarget="user-menu" aria-label="User menu">
               <img
                 className={styles.userAvatar}
                 src={user.avatarUrl}

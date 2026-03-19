@@ -21,7 +21,9 @@
   /* hidden state */
   opacity: 0;
   scale: 0.95;
-  transition: opacity 0.12s, scale 0.12s;
+  transition:
+    opacity 0.12s,
+    scale 0.12s;
 }
 
 .above {

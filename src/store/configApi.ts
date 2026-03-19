@@ -3,12 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { ColumnConfig, ColumnType } from "@/types";
 import { mkId } from "@/constants";
 import { loadLayout, saveLayout } from "./layoutStorage";
-import {
-  applyAdd,
-  applyRemove,
-  applyReorder,
-  applyUpdateQuery,
-} from "./layoutMutations";
+import { applyAdd, applyRemove, applyReorder, applyUpdateQuery } from "./layoutMutations";
 
 function mutateLayout(fn: (draft: ColumnConfig[]) => void): ColumnConfig[] {
   const next = produce(loadLayout(), fn);

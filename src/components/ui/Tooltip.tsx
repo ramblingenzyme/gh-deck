@@ -1,13 +1,13 @@
-import { useId } from 'react';
-import styles from './Tooltip.module.css';
+import { useId } from "react";
+import styles from "./Tooltip.module.css";
 
 interface TooltipProps {
   text: string;
   children: React.ReactNode;
-  position?: 'above' | 'below';
+  position?: "above" | "below";
 }
 
-export const Tooltip = ({ text, children, position = 'above' }: TooltipProps) => {
+export const Tooltip = ({ text, children, position = "above" }: TooltipProps) => {
   const id = useId();
   return (
     <span className={styles.wrapper} aria-describedby={id}>

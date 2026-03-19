@@ -1,5 +1,5 @@
-import type { ColumnConfig } from '@/types';
-import styles from './Column.module.css';
+import type { ColumnConfig } from "@/types";
+import styles from "./Column.module.css";
 
 interface ColumnConfirmDeleteProps {
   col: ColumnConfig;

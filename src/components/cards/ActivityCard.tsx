@@ -1,8 +1,8 @@
-import type { ActivityItem } from '@/types';
-import { ACTIVITY_ICONS } from '@/constants';
-import { Card, CardTitle, CardFooter } from '../ui/Card';
-import { CardTypeIcon } from './CardParts';
-import styles from './ActivityCard.module.css';
+import type { ActivityItem } from "@/types";
+import { ACTIVITY_ICONS } from "@/constants";
+import { Card, CardTitle, CardFooter } from "../ui/Card";
+import { CardTypeIcon } from "./CardParts";
+import styles from "./ActivityCard.module.css";
 
 interface ActivityCardProps {
   item: ActivityItem;

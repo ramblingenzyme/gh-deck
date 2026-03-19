@@ -20,7 +20,7 @@ npx husky init
   "src/**/*.{ts,tsx}": [
     "oxfmt",
     "oxlint",
-    "vitest run --related"
+    "vitest related --run"
   ]
 }
 ```
@@ -41,4 +41,4 @@ lint-staged
 ## Key decisions
 
 - **No `npx`**: husky v9 adds `node_modules/.bin` to PATH in hook scripts, so `npx` overhead is unnecessary
-- **Tests inside lint-staged**: `vitest run --related` accepts file paths as arguments, so lint-staged can pass staged files and vitest will run only affected tests — faster than running the full suite on every commit
+- **Tests inside lint-staged**: `vitest related --run` accepts file paths as arguments, so lint-staged can pass staged files and vitest will run only affected tests — faster than running the full suite on every commit

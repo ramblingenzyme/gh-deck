@@ -21,7 +21,7 @@ export const Board = ({ columns, onAddColumn, onRemove }: BoardProps) => {
         if (!target) return;
         const fromId = source.data.columnId;
         const toId = target.data.columnId;
-        if (typeof fromId !== 'string' || typeof toId !== 'string') return;
+        if (typeof fromId !== "string" || typeof toId !== "string") return;
         if (fromId === toId) return;
         const from = columns.findIndex((c) => c.id === fromId);
         const to = columns.findIndex((c) => c.id === toId);
