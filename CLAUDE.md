@@ -16,14 +16,14 @@ npm run test:watch  # Run tests in watch mode
 
 ## Architecture
 
-**gh-deck** is a TweetDeck-style GitHub dashboard (prototype with mock data). React 19 + TypeScript + Vite, state via Redux Toolkit.
+**Octodeck** is a TweetDeck-style GitHub dashboard (prototype with mock data). React 19 + TypeScript + Vite, state via Redux Toolkit.
 
 ### Key data flow
 
 - `src/types/index.ts` — `ColumnType` discriminated union (`prs | issues | ci | notifications | activity`) and item types
 - `src/constants/index.ts` — `COLUMN_TYPES` config (labels/icons per type), `DEFAULT_COLUMNS`, `mkId()`
 - `src/store/configApi.ts` — RTK Query API for column layout mutations (add, remove, move); persists to `localStorage` via `layoutStorage.ts`
-- `src/data/mock.ts` — Mock data arrays (`MOCK_PRS`, `MOCK_ISSUES`, etc.)
+- `src/test/fixtures/mock.ts` — Mock data arrays (`MOCK_PRS`, `MOCK_ISSUES`, etc.)
 
 ### Component tree
 

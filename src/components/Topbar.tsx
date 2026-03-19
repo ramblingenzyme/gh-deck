@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useAppSelector } from "@/store";
 import { useGetUserQuery } from "@/store/githubApi";
 import { isDemoMode } from "@/env";
+import { OctodeckLogo } from "./OctodeckLogo";
 import styles from "./Topbar.module.css";
 
 type PopoverElement = HTMLDivElement & { hidePopover(): void };
@@ -21,7 +22,10 @@ export const Topbar = ({ onAddColumn, onSignIn, onSignOut }: TopbarProps) => {
   return (
     <header className={styles.topbar}>
       <div className={styles.topbarLeft}>
-        <div className={styles.topbarLogo}>HubDeck</div>
+        <div className={styles.topbarLogo}>
+          <OctodeckLogo size={29} />
+          Octodeck
+        </div>
       </div>
 
       <div className={styles.topbarRight}>
