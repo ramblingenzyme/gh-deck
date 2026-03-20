@@ -1,7 +1,7 @@
 import type { CIItem } from "@/types";
 import { CI_STATUS } from "@/constants";
 import { Card, CardTitle, CardMeta } from "../ui/Card";
-import { Icon } from "../ui/Icon";
+import { SvgIcon } from "../ui/SvgIcon";
 import cardStyles from "./Card.module.css";
 import styles from "./CICard.module.css";
 
@@ -20,7 +20,7 @@ export const CICard = ({ item }: CICardProps) => {
           {item.branch} · {item.duration}
         </span>
         <span className={styles.ciBadge}>
-          <Icon>{status.icon}</Icon> {status.label}
+          <SvgIcon name={status.icon} /> {status.label}
         </span>
       </CardMeta>
     </Card>

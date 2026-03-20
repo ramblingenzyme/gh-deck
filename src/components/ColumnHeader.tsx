@@ -1,7 +1,7 @@
 import type { RefObject } from "preact";
 import type { ColumnConfig } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
-import { Icon } from "./ui/Icon";
+import { SvgIcon } from "./ui/SvgIcon";
 import { Tooltip } from "./ui/Tooltip";
 import { PencilIcon } from "./ui/PencilIcon";
 import styles from "./Column.module.css";
@@ -42,10 +42,10 @@ export const ColumnHeader = ({
   return (
     <header className={styles.colHeader}>
       <span ref={handleRef} className={styles.dragHandle} aria-hidden="true">
-        ⠿
+        <SvgIcon name="grip" />
       </span>
       <div className={styles.colHeaderLeft}>
-        <Icon className={styles.colIcon}>{cfg.icon}</Icon>
+        <SvgIcon name={cfg.icon} className={styles.colIcon} />
         <Tooltip text={col.title} position="below">
           <h2 className={styles.colTitle}>{col.title}</h2>
         </Tooltip>
@@ -67,7 +67,7 @@ export const ColumnHeader = ({
             onClick={onRefresh}
             aria-label="Refresh"
           >
-            <Icon>↻</Icon>
+            <SvgIcon name="refresh" />
           </button>
         </Tooltip>
         {!col.query && (
@@ -79,7 +79,7 @@ export const ColumnHeader = ({
         )}
         <Tooltip text="Remove column" position="below">
           <button className={styles.btnIcon} onClick={onConfirmRemove} aria-label="Remove column">
-            <Icon>✕</Icon>
+            <SvgIcon name="x" />
           </button>
         </Tooltip>
       </div>

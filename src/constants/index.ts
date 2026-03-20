@@ -1,36 +1,58 @@
-import type { ColumnType, CIStatus, NotifType, ActivityType, ColumnConfig } from "@/types";
+import type {
+  ColumnType,
+  CIStatus,
+  NotifType,
+  ActivityType,
+  ColumnConfig,
+  IconName,
+} from "@/types";
 
-export const CI_STATUS: Record<CIStatus, { label: string; icon: string }> = {
-  success: { label: "PASS", icon: "✓" },
-  failure: { label: "FAIL", icon: "✗" },
-  running: { label: "RUN", icon: "◉" },
+export const CI_STATUS: Record<CIStatus, { label: string; icon: IconName }> = {
+  success: { label: "PASS", icon: "check" },
+  failure: { label: "FAIL", icon: "x" },
+  running: { label: "RUN", icon: "circleDot" },
 };
 
-export const NOTIF_ICONS: Record<NotifType, string> = {
-  review_requested: "⟳",
-  mention: "@",
-  assigned: "→",
-  approved: "✓",
-  comment: "◈",
+export const NOTIF_ICONS: Record<NotifType, IconName> = {
+  review_requested: "eye",
+  mention: "at",
+  assigned: "tag",
+  approved: "check",
+  comment: "comment",
 };
 
-export const ACTIVITY_ICONS: Record<ActivityType, string> = {
-  commit: "●",
-  comment: "◈",
-  pr_opened: "⟳",
-  review: "◈",
-  issue_closed: "✗",
+export const ACTIVITY_ICONS: Record<ActivityType, IconName> = {
+  commit: "gitCommit",
+  comment: "comment",
+  pr_opened: "gitMerge",
+  review: "eye",
+  issue_closed: "x",
 };
 
 export const COLUMN_TYPES: Record<
   ColumnType,
-  { label: string; icon: string; itemLabel: string; defaultQuery: string }
+  { label: string; icon: IconName; itemLabel: string; defaultQuery: string }
 > = {
-  prs: { label: "Pull Requests", icon: "⟳", itemLabel: "PR", defaultQuery: "involves:@me is:open" },
-  issues: { label: "Issues", icon: "◎", itemLabel: "issue", defaultQuery: "involves:@me is:open" },
-  ci: { label: "CI / CD", icon: "◉", itemLabel: "run", defaultQuery: "" },
-  notifications: { label: "Notifications", icon: "@", itemLabel: "notification", defaultQuery: "" },
-  activity: { label: "My Activity", icon: "●", itemLabel: "event", defaultQuery: "" },
+  prs: {
+    label: "Pull Requests",
+    icon: "gitMerge",
+    itemLabel: "PR",
+    defaultQuery: "involves:@me is:open",
+  },
+  issues: {
+    label: "Issues",
+    icon: "issueOpen",
+    itemLabel: "issue",
+    defaultQuery: "involves:@me is:open",
+  },
+  ci: { label: "CI / CD", icon: "play", itemLabel: "run", defaultQuery: "" },
+  notifications: {
+    label: "Notifications",
+    icon: "bell",
+    itemLabel: "notification",
+    defaultQuery: "",
+  },
+  activity: { label: "My Activity", icon: "gitCommit", itemLabel: "event", defaultQuery: "" },
 };
 
 export const mkId = (): string => crypto.randomUUID();

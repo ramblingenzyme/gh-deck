@@ -1,6 +1,6 @@
 import { useRef, useState } from "preact/hooks";
 import { PencilIcon } from "./PencilIcon";
-import { Icon } from "./Icon";
+import { SvgIcon } from "./SvgIcon";
 import styles from "./InlineEdit.module.css";
 
 interface InlineEditProps {
@@ -44,10 +44,10 @@ export const InlineEdit = ({ value, onCommit, "aria-label": ariaLabel }: InlineE
           aria-label={ariaLabel}
         />
         <button className={styles.confirm} onClick={commit} aria-label="Confirm">
-          ✓
+          <SvgIcon name="check" />
         </button>
         <button className={styles.cancel} onClick={cancel} aria-label="Cancel">
-          <Icon>✕</Icon>
+          <SvgIcon name="x" />
         </button>
       </div>
     );

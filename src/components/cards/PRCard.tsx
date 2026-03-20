@@ -1,7 +1,6 @@
 import type { PRItem } from "@/types";
 import { Card, CardTitle, CardMeta } from "../ui/Card";
-import { Icon } from "../ui/Icon";
-import { CommentIcon } from "./CommentIcon";
+import { SvgIcon } from "../ui/SvgIcon";
 import { LabelList } from "./LabelList";
 import cardStyles from "./Card.module.css";
 import styles from "./PRCard.module.css";
@@ -26,7 +25,7 @@ export const PRCard = ({ item }: PRCardProps) => {
             }
             aria-label={`${item.reviews.approved} approvals`}
           >
-            <Icon>✓</Icon>
+            <SvgIcon name="check" />
             {item.reviews.approved}
           </span>
           {item.reviews.requested > 0 && (
@@ -34,12 +33,12 @@ export const PRCard = ({ item }: PRCardProps) => {
               className={cardStyles.cardStatPending}
               aria-label={`${item.reviews.requested} reviews requested`}
             >
-              <Icon>⟳</Icon>
+              <SvgIcon name="refresh" />
               {item.reviews.requested}
             </span>
           )}
           <span className={cardStyles.cardStat} aria-label={`${item.comments} comments`}>
-            <CommentIcon />
+            <SvgIcon name="comment" />
             {item.comments}
           </span>
         </div>

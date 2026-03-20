@@ -15,7 +15,7 @@ export const ActivityCard = ({ item }: ActivityCardProps) => {
     <Card repo={item.repo} age={item.age}>
       <CardTitle href={item.url}>{item.text}</CardTitle>
       <CardFooter>
-        <CardTypeIcon type={item.type} icon={icon} />
+        <CardTypeIcon icon={icon} />
         {item.ref && <span className={styles.activityRef}>{item.ref}</span>}
       </CardFooter>
     </Card>

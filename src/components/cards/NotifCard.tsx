@@ -15,7 +15,7 @@ export const NotifCard = ({ item }: NotifCardProps) => {
     <Card repo={item.repo} age={item.age}>
       <CardTitle href={item.url}>{item.text}</CardTitle>
       <CardFooter>
-        <CardTypeIcon type={item.type} icon={icon} />
+        <CardTypeIcon icon={icon} />
         <span className={styles.notifRef}>{item.ref}</span>
       </CardFooter>
     </Card>

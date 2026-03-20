@@ -1,5 +1,5 @@
-import { Icon } from "../ui/Icon";
-import { CommentIcon } from "./CommentIcon";
+import type { IconName } from "@/types";
+import { SvgIcon } from "../ui/SvgIcon";
 import styles from "./Card.module.css";
 
 interface CardTopProps {
@@ -15,9 +15,9 @@ export const CardTop = ({ repo, age }: CardTopProps) => (
 );
 
 interface CardTypeIconProps {
-  type: string;
-  icon: string;
+  icon: IconName;
 }
 
-export const CardTypeIcon = ({ type, icon }: CardTypeIconProps) =>
-  type === "comment" ? <CommentIcon /> : <Icon className={styles.cardIcon}>{icon}</Icon>;
+export const CardTypeIcon = ({ icon }: CardTypeIconProps) => (
+  <SvgIcon name={icon} className={styles.cardIcon} />
+);

@@ -53,6 +53,9 @@
 }
 
 .cardAuthor {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: var(--text-muted);
 }
 
@@ -64,7 +67,7 @@
 .cardStat {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   color: var(--text-muted);
 }
 

@@ -2,7 +2,7 @@ import { useState } from "preact/hooks";
 import type { ColumnType } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
 import colStyles from "./Column.module.css";
-import { Icon } from "./ui/Icon";
+import { SvgIcon } from "./ui/SvgIcon";
 import { Modal, ModalBody, ModalFooter, modalStyles } from "./ui/Modal";
 import styles from "./AddColumnModal.module.css";
 
@@ -50,7 +50,7 @@ export const AddColumnModal = ({ open, onAdd, onClose }: AddColumnModalProps) =>
                   onClick={() => handleTypeChange(type)}
                   aria-pressed={selectedType === type}
                 >
-                  <Icon className={styles.colIcon}>{cfg.icon}</Icon>
+                  <SvgIcon name={cfg.icon} className={styles.colIcon} />
                   <span>{cfg.label}</span>
                 </button>
               );

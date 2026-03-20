@@ -1,4 +1,20 @@
 export type ColumnType = "prs" | "issues" | "ci" | "notifications" | "activity";
+export type IconName =
+  | "check"
+  | "x"
+  | "refresh"
+  | "circleDot"
+  | "at"
+  | "arrowRight"
+  | "grip"
+  | "comment"
+  | "bell"
+  | "gitMerge"
+  | "gitCommit"
+  | "eye"
+  | "play"
+  | "issueOpen"
+  | "tag";
 export type CIStatus = "success" | "failure" | "running";
 export type IssueState = "open" | "closed";
 export type CITrigger = "push" | "pull_request" | "release";
