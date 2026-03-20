@@ -7,7 +7,7 @@ import { useConfirmation } from "@/hooks/useConfirmation";
 import { useRefreshSpinner } from "@/hooks/useRefreshSpinner";
 import { useColumnDragDrop } from "@/hooks/useColumnDragDrop";
 import { useLayoutStore } from "@/store/layoutStore";
-import styles from "./Column.module.css";
+import styles from "./BaseColumn.module.css";
 import { InlineEdit } from "./ui/InlineEdit";
 import { ColumnHeader } from "./ColumnHeader";
 import { ColumnConfirmDelete } from "./ColumnConfirmDelete";
@@ -16,9 +16,10 @@ interface BaseColumnProps {
   col: ColumnConfig;
   onRemove: (id: string) => void;
   renderCard: (item: AnyItem) => ReactNode;
+  accentClass?: string;
 }
 
-export const BaseColumn = ({ col, onRemove, renderCard }: BaseColumnProps) => {
+export const BaseColumn = ({ col, onRemove, renderCard, accentClass }: BaseColumnProps) => {
   const { isConfirming: confirming, startConfirm, cancelConfirm } = useConfirmation();
   const [queryOpen, setQueryOpen] = useState(false);
   const updateColumnQuery = useLayoutStore((s) => s.updateColumnQuery);
@@ -31,7 +32,7 @@ export const BaseColumn = ({ col, onRemove, renderCard }: BaseColumnProps) => {
 
   const columnClass = [
     styles.column,
-    styles[col.type],
+    accentClass,
     isDragging ? styles.columnDragging : "",
     dropEdge === "left" ? styles.dropLeft : "",
     dropEdge === "right" ? styles.dropRight : "",

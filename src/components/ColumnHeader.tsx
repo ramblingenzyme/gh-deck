@@ -4,7 +4,7 @@ import { COLUMN_TYPES } from "@/constants";
 import { SvgIcon } from "./ui/SvgIcon";
 import { Tooltip } from "./ui/Tooltip";
 import { PencilIcon } from "./ui/PencilIcon";
-import styles from "./Column.module.css";
+import styles from "./BaseColumn.module.css";
 
 interface ColumnHeaderProps {
   col: ColumnConfig;

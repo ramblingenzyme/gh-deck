@@ -1,7 +1,19 @@
 import { useState } from "preact/hooks";
 import type { ColumnType } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
-import colStyles from "./Column.module.css";
+import prStyles from "./columns/PRColumn.module.css";
+import issueStyles from "./columns/IssueColumn.module.css";
+import ciStyles from "./columns/CIColumn.module.css";
+import notifStyles from "./columns/NotifColumn.module.css";
+import activityStyles from "./columns/ActivityColumn.module.css";
+
+const ACCENT_CLASS: Record<ColumnType, string | undefined> = {
+  prs: prStyles.accent,
+  issues: issueStyles.accent,
+  ci: ciStyles.accent,
+  notifications: notifStyles.accent,
+  activity: activityStyles.accent,
+};
 import { SvgIcon } from "./ui/SvgIcon";
 import { Modal, ModalBody, ModalFooter, modalStyles } from "./ui/Modal";
 import styles from "./AddColumnModal.module.css";
@@ -46,7 +58,7 @@ export const AddColumnModal = ({ open, onAdd, onClose }: AddColumnModalProps) =>
                 <button
                   key={type}
                   type="button"
-                  className={`${styles.typeBtn} ${colStyles[type]} ${selectedType === type ? styles.active : ""}`}
+                  className={`${styles.typeBtn} ${ACCENT_CLASS[type]} ${selectedType === type ? styles.active : ""}`}
                   onClick={() => handleTypeChange(type)}
                   aria-pressed={selectedType === type}
                 >
