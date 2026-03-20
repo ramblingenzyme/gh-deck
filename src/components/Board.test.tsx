@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/preact";
-import { QueryClient, QueryClientProvider } from "@tanstack/preact-query";
-
 afterEach(cleanup);
 import userEvent from "@testing-library/user-event";
 import { Board } from "./Board";
@@ -15,8 +13,7 @@ const SAMPLE_COLUMNS: ColumnConfig[] = [
 ];
 
 function wrap(ui: preact.ComponentChild) {
-  const queryClient = new QueryClient();
-  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+  return render(ui);
 }
 
 describe("Board", () => {

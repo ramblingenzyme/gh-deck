@@ -29,11 +29,11 @@ function toResult(
   result: {
     data?: AnyItem[];
     isLoading: boolean;
-    isFetching: boolean;
-    isError: boolean;
-    refetch: () => void;
+    isValidating: boolean;
+    error?: unknown;
+    mutate: () => void;
   },
-  error: string,
+  errorMsg: string,
   filter: (items: AnyItem[]) => AnyItem[],
   applyFilter = false,
 ): UseColumnDataResult {
@@ -41,9 +41,9 @@ function toResult(
   return {
     data: applyFilter ? filter(data) : data,
     isLoading: result.isLoading,
-    isFetching: result.isFetching,
-    error: result.isError ? error : null,
-    refetch: result.refetch,
+    isFetching: result.isValidating,
+    error: result.error ? errorMsg : null,
+    refetch: result.mutate,
   };
 }
 

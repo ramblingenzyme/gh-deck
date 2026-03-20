@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/preact-query";
+import useSWR from "swr";
 import { githubFetch } from "./githubClient";
 import type { PRItem, IssueItem, NotifItem, CIItem, ActivityItem } from "@/types";
 import type {
@@ -25,66 +25,62 @@ export interface AuthUser {
 const POLL = 5 * 60 * 1000;
 
 export function useGetUser(token: string | null) {
-  return useQuery<AuthUser>({
-    queryKey: ["user", token],
-    queryFn: async () => {
+  return useSWR<AuthUser>(
+    token ? ["user", token] : null,
+    async () => {
       const raw = await githubFetch<GHUser>("/user", token!);
       return { login: raw.login, avatarUrl: raw.avatar_url, name: raw.name };
     },
-    enabled: !!token,
-    refetchInterval: POLL,
-  });
+    { refreshInterval: POLL },
+  );
 }
 
 export function useGetPRs(q: string, token: string | null) {
-  return useQuery<PRItem[]>({
-    queryKey: ["prs", q, token],
-    queryFn: async () => {
+  return useSWR<PRItem[]>(
+    token ? ["prs", q, token] : null,
+    async () => {
       const raw = await githubFetch<GHSearchResult>(
         `/search/issues?q=${encodeURIComponent("is:pr " + q)}&sort=updated&per_page=30`,
         token!,
       );
       return raw.items.map(mapSearchItemToPR);
     },
-    enabled: !!token,
-    refetchInterval: POLL,
-  });
+    { refreshInterval: POLL },
+  );
 }
 
 export function useGetIssues(q: string, token: string | null) {
-  return useQuery<IssueItem[]>({
-    queryKey: ["issues", q, token],
-    queryFn: async () => {
+  return useSWR<IssueItem[]>(
+    token ? ["issues", q, token] : null,
+    async () => {
       const raw = await githubFetch<GHSearchResult>(
         `/search/issues?q=${encodeURIComponent("is:issue " + q)}&sort=updated&per_page=30`,
         token!,
       );
       return raw.items.map(mapSearchItemToIssue);
     },
-    enabled: !!token,
-    refetchInterval: POLL,
-  });
+    { refreshInterval: POLL },
+  );
 }
 
 export function useGetNotifications(token: string | null) {
-  return useQuery<NotifItem[]>({
-    queryKey: ["notifications", token],
-    queryFn: async () => {
+  return useSWR<NotifItem[]>(
+    token ? ["notifications", token] : null,
+    async () => {
       const raw = await githubFetch<GHNotification[]>(
         "/notifications?all=false&per_page=30",
         token!,
       );
       return raw.map(mapNotification);
     },
-    enabled: !!token,
-    refetchInterval: POLL,
-  });
+    { refreshInterval: POLL },
+  );
 }
 
 export function useGetCIRuns(repos: string[], token: string | null) {
-  return useQuery<CIItem[]>({
-    queryKey: ["ci", repos, token],
-    queryFn: async () => {
+  return useSWR<CIItem[]>(
+    token && repos.length > 0 ? ["ci", repos, token] : null,
+    async () => {
       const results = await Promise.all(
         repos.slice(0, 5).map(async (repo) => {
           try {
@@ -102,22 +98,20 @@ export function useGetCIRuns(repos: string[], token: string | null) {
       runs.sort((a, b) => (a.age > b.age ? 1 : -1));
       return runs.slice(0, 20);
     },
-    enabled: !!token && repos.length > 0,
-    refetchInterval: POLL,
-  });
+    { refreshInterval: POLL },
+  );
 }
 
 export function useGetActivity(login: string, token: string | null) {
-  return useQuery<ActivityItem[]>({
-    queryKey: ["activity", login, token],
-    queryFn: async () => {
+  return useSWR<ActivityItem[]>(
+    token && login ? ["activity", login, token] : null,
+    async () => {
       const raw = await githubFetch<GHEvent[]>(`/users/${login}/events?per_page=30`, token!);
       return raw.flatMap((e) => {
         const item = mapEvent(e);
         return item ? [item] : [];
       });
     },
-    enabled: !!token && !!login,
-    refetchInterval: POLL,
-  });
+    { refreshInterval: POLL },
+  );
 }

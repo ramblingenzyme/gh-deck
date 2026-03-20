@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/preact";
-import { QueryClient, QueryClientProvider } from "@tanstack/preact-query";
-
 afterEach(cleanup);
 import userEvent from "@testing-library/user-event";
 import { Column } from "./Column";
@@ -19,12 +17,7 @@ function renderColumn(
     onRemove: (id: string) => void;
   }> = {},
 ) {
-  const queryClient = new QueryClient();
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <Column col={col} onRemove={overrides.onRemove ?? noop} />
-    </QueryClientProvider>,
-  );
+  return render(<Column col={col} onRemove={overrides.onRemove ?? noop} />);
 }
 
 describe("Column card type switching", () => {

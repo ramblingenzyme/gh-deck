@@ -8,7 +8,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, cleanup, within } from "@testing-library/preact";
 import userEvent from "@testing-library/user-event";
-import { QueryClient, QueryClientProvider } from "@tanstack/preact-query";
 import { useLayoutStore } from "@/store/layoutStore";
 import { loadLayout } from "@/store/layoutStorage";
 
@@ -19,12 +18,7 @@ vi.mock("@/env", () => ({ isDemoMode: true, GITHUB_CLIENT_ID: undefined }));
 const { App } = await import("./App");
 
 function renderApp() {
-  const queryClient = new QueryClient();
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>,
-  );
+  return render(<App />);
 }
 
 beforeEach(() => {
