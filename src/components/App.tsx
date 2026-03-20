@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "preact/compat";
 import { useModal } from "@/hooks/useModal";
 import type { ColumnType } from "@/types";
 import { useLayoutStore } from "@/store/layoutStore";
@@ -5,8 +6,11 @@ import { useAuthStore } from "@/store/authStore";
 import { isDemoMode } from "@/env";
 import { Topbar } from "./Topbar";
 import { Board } from "./Board";
-import { AddColumnModal } from "./AddColumnModal";
-import { AuthModal } from "./AuthModal";
+
+const AddColumnModal = lazy(() =>
+  import("./AddColumnModal").then((m) => ({ default: m.AddColumnModal })),
+);
+const AuthModal = lazy(() => import("./AuthModal").then((m) => ({ default: m.AuthModal })));
 
 export const App = () => {
   const columns = useLayoutStore((s) => s.columns);
@@ -40,16 +44,20 @@ export const App = () => {
         onAddColumn={() => addColumnModal.open()}
         onRemove={(id) => removeColumn(id)}
       />
-      <AddColumnModal
-        open={addColumnModal.isOpen}
-        onAdd={handleAddColumn}
-        onClose={() => addColumnModal.close()}
-      />
-      <AuthModal
-        open={authModal.isOpen && authStatus !== "authed"}
-        onDemoMode={() => authModal.close()}
-        onClose={() => authModal.close()}
-      />
+      <Suspense fallback={null}>
+        <AddColumnModal
+          open={addColumnModal.isOpen}
+          onAdd={handleAddColumn}
+          onClose={() => addColumnModal.close()}
+        />
+      </Suspense>
+      <Suspense fallback={null}>
+        <AuthModal
+          open={authModal.isOpen && authStatus !== "authed"}
+          onDemoMode={() => authModal.close()}
+          onClose={() => authModal.close()}
+        />
+      </Suspense>
     </>
   );
 };

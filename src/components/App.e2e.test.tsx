@@ -37,10 +37,10 @@ describe("demo board loads", () => {
     renderApp();
 
     await screen.findByRole("region", { name: "Inbox" });
-    expect(screen.getByRole("region", { name: "Open PRs" })).toBeTruthy();
-    expect(screen.getByRole("region", { name: "Issues" })).toBeTruthy();
-    expect(screen.getByRole("region", { name: "CI / CD" })).toBeTruthy();
-    expect(screen.getByRole("region", { name: "Activity" })).toBeTruthy();
+    expect(await screen.findByRole("region", { name: "Open PRs" })).toBeTruthy();
+    expect(await screen.findByRole("region", { name: "Issues" })).toBeTruthy();
+    expect(await screen.findByRole("region", { name: "CI / CD" })).toBeTruthy();
+    expect(await screen.findByRole("region", { name: "Activity" })).toBeTruthy();
   });
 
   it("each column contains at least one card", async () => {

@@ -21,36 +21,36 @@ function renderColumn(
 }
 
 describe("Column card type switching", () => {
-  it("renders PR cards for prs type", () => {
+  it("renders PR cards for prs type", async () => {
     renderColumn(makeCol("prs", "PRs"));
-    expect(screen.getAllByRole("article").length).toBeGreaterThan(0);
+    expect((await screen.findAllByRole("article")).length).toBeGreaterThan(0);
   });
 
-  it("renders Issue cards for issues type", () => {
+  it("renders Issue cards for issues type", async () => {
     renderColumn(makeCol("issues", "Issues"));
-    expect(screen.getAllByRole("article").length).toBeGreaterThan(0);
+    expect((await screen.findAllByRole("article")).length).toBeGreaterThan(0);
   });
 
-  it("renders CI cards for ci type", () => {
+  it("renders CI cards for ci type", async () => {
     renderColumn(makeCol("ci", "CI"));
-    expect(screen.getAllByRole("article").length).toBeGreaterThan(0);
+    expect((await screen.findAllByRole("article")).length).toBeGreaterThan(0);
   });
 
-  it("renders Notification cards for notifications type", () => {
+  it("renders Notification cards for notifications type", async () => {
     renderColumn(makeCol("notifications", "Notifs"));
-    expect(screen.getAllByRole("article").length).toBeGreaterThan(0);
+    expect((await screen.findAllByRole("article")).length).toBeGreaterThan(0);
   });
 
-  it("renders Activity cards for activity type", () => {
+  it("renders Activity cards for activity type", async () => {
     renderColumn(makeCol("activity", "Activity"));
-    expect(screen.getAllByRole("article").length).toBeGreaterThan(0);
+    expect((await screen.findAllByRole("article")).length).toBeGreaterThan(0);
   });
 });
 
 describe("Column header", () => {
-  it("shows the column title", () => {
+  it("shows the column title", async () => {
     renderColumn(makeCol("prs", "My Pull Requests"));
-    expect(screen.getAllByText("My Pull Requests").length).toBeGreaterThan(0);
+    expect((await screen.findAllByText("My Pull Requests")).length).toBeGreaterThan(0);
   });
 });
 
@@ -60,7 +60,7 @@ describe("Column remove confirmation", () => {
     const onRemove = vi.fn();
     renderColumn(makeCol("prs", "My PRs"), { onRemove });
 
-    await user.click(screen.getByRole("button", { name: /remove column/i }));
+    await user.click(await screen.findByRole("button", { name: /remove column/i }));
     expect(screen.getByRole("alert")).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: /yes, remove/i }));

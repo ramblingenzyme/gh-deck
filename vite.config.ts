@@ -26,4 +26,18 @@ export default defineConfig({
   resolve: {
     alias: [{ find: '@', replacement: srcPath }],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('@atlaskit/pragmatic-drag-and-drop')) {
+            return 'dnd';
+          }
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        },
+      },
+    },
+  },
 });

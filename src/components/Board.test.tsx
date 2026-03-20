@@ -31,9 +31,9 @@ describe("Board", () => {
     expect(onAddColumn).toHaveBeenCalled();
   });
 
-  it("renders one column per entry in columns", () => {
+  it("renders one column per entry in columns", async () => {
     wrap(<Board columns={SAMPLE_COLUMNS} onAddColumn={noop} onRemove={noop} />);
-    expect(screen.getByRole("region", { name: "PRs" })).toBeTruthy();
-    expect(screen.getByRole("region", { name: "Issues" })).toBeTruthy();
+    expect(await screen.findByRole("region", { name: "PRs" })).toBeTruthy();
+    expect(await screen.findByRole("region", { name: "Issues" })).toBeTruthy();
   });
 });

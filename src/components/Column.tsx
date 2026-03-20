@@ -1,9 +1,17 @@
+import { lazy, Suspense } from "preact/compat";
 import type { ColumnConfig } from "@/types";
-import { PRColumn } from "./columns/PRColumn";
-import { IssueColumn } from "./columns/IssueColumn";
-import { CIColumn } from "./columns/CIColumn";
-import { NotifColumn } from "./columns/NotifColumn";
-import { ActivityColumn } from "./columns/ActivityColumn";
+
+const PRColumn = lazy(() => import("./columns/PRColumn").then((m) => ({ default: m.PRColumn })));
+const IssueColumn = lazy(() =>
+  import("./columns/IssueColumn").then((m) => ({ default: m.IssueColumn })),
+);
+const CIColumn = lazy(() => import("./columns/CIColumn").then((m) => ({ default: m.CIColumn })));
+const NotifColumn = lazy(() =>
+  import("./columns/NotifColumn").then((m) => ({ default: m.NotifColumn })),
+);
+const ActivityColumn = lazy(() =>
+  import("./columns/ActivityColumn").then((m) => ({ default: m.ActivityColumn })),
+);
 
 interface ColumnProps {
   col: ColumnConfig;
@@ -13,14 +21,34 @@ interface ColumnProps {
 export const Column = ({ col, onRemove }: ColumnProps) => {
   switch (col.type) {
     case "prs":
-      return <PRColumn col={col} onRemove={onRemove} />;
+      return (
+        <Suspense fallback={null}>
+          <PRColumn col={col} onRemove={onRemove} />
+        </Suspense>
+      );
     case "issues":
-      return <IssueColumn col={col} onRemove={onRemove} />;
+      return (
+        <Suspense fallback={null}>
+          <IssueColumn col={col} onRemove={onRemove} />
+        </Suspense>
+      );
     case "ci":
-      return <CIColumn col={col} onRemove={onRemove} />;
+      return (
+        <Suspense fallback={null}>
+          <CIColumn col={col} onRemove={onRemove} />
+        </Suspense>
+      );
     case "notifications":
-      return <NotifColumn col={col} onRemove={onRemove} />;
+      return (
+        <Suspense fallback={null}>
+          <NotifColumn col={col} onRemove={onRemove} />
+        </Suspense>
+      );
     case "activity":
-      return <ActivityColumn col={col} onRemove={onRemove} />;
+      return (
+        <Suspense fallback={null}>
+          <ActivityColumn col={col} onRemove={onRemove} />
+        </Suspense>
+      );
   }
 };
