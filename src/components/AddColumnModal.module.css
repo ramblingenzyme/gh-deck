@@ -10,7 +10,7 @@
   gap: 6px;
 }
 
-.modalFieldLabel {
+.modalField label {
   font-size: var(--text-sm);
   color: var(--text-muted);
   letter-spacing: 0.03em;

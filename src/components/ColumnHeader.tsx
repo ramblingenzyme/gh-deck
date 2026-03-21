@@ -47,12 +47,10 @@ export const ColumnHeader = ({
       <div className={styles.colHeaderLeft}>
         <SvgIcon name={cfg.icon} className={styles.colIcon} />
         <Tooltip text={col.title} position="below" className={styles.colTitleTooltip}>
-          <h2 className={styles.colTitle}>{col.title}</h2>
+          <h2>{col.title}</h2>
         </Tooltip>
         <Tooltip text={`${itemCount} ${itemLabel}`} position="below">
-          <output className={styles.colBadge} aria-label={`${itemCount} ${itemLabel}`}>
-            {itemCount}
-          </output>
+          <output aria-label={`${itemCount} ${itemLabel}`}>{itemCount}</output>
         </Tooltip>
       </div>
       <div className={styles.colControls}>

@@ -7,7 +7,7 @@
   transition: border-color 0.15s;
 }
 
-.cardTop {
+.card > header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,7 +21,7 @@
   text-transform: uppercase;
 }
 
-.cardAge {
+.card time {
   color: var(--text-ghost);
   font-size: var(--text-md);
 }
@@ -33,7 +33,7 @@
   margin-bottom: 6px;
 }
 
-.cardTitleLink {
+.cardTitle > a {
   &:hover {
     text-decoration: underline;
     color: var(--color-accent);

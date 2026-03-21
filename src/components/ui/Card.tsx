@@ -23,7 +23,7 @@ interface CardTitleProps {
 
 export const CardTitle = ({ href, prefix, children }: CardTitleProps) => (
   <p className={cardStyles.cardTitle}>
-    <a href={href} target="_blank" rel="noreferrer" className={cardStyles.cardTitleLink}>
+    <a href={href} target="_blank" rel="noreferrer">
       {prefix ? `${prefix} ` : ""}
       {children}
     </a>

@@ -52,11 +52,9 @@ export const Modal = ({
     >
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- not an interaction point; stopPropagation prevents backdrop-click from firing on modal content clicks */}
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.modalHeader}>
-          <h2 id={titleId} className={styles.modalTitle}>
-            {title}
-          </h2>
-        </div>
+        <header>
+          <h2 id={titleId}>{title}</h2>
+        </header>
         {children}
       </div>
     </dialog>
@@ -64,11 +62,11 @@ export const Modal = ({
 };
 
 export const ModalBody = ({ children }: { children: React.ReactNode }) => (
-  <div className={styles.modalBody}>{children}</div>
+  <section>{children}</section>
 );
 
 export const ModalFooter = ({ children }: { children: React.ReactNode }) => (
-  <div className={styles.modalFooter}>{children}</div>
+  <footer>{children}</footer>
 );
 
 export { styles as modalStyles };

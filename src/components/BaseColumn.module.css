@@ -45,7 +45,7 @@
   cursor: default;
 }
 
-.colTitle {
+.colHeader h2 {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: var(--text-md);
@@ -63,7 +63,7 @@
   min-width: 0;
 }
 
-.colBadge {
+.colHeader output {
   background: var(--bg-card);
   color: var(--text-ghost);
   font-size: var(--text-sm);

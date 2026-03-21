@@ -4,44 +4,44 @@
   align-items: center;
 
   /* Show on hover OR keyboard focus of any focusable child */
-  &:hover .tooltip,
-  &:focus-within .tooltip {
+  &:hover [role="tooltip"],
+  &:focus-within [role="tooltip"] {
     opacity: 1;
     scale: 1;
   }
-}
 
-.tooltip {
-  position: absolute;
-  left: 50%;
-  translate: -50% 0;
-  background: var(--bg-card);
-  border: 1px solid var(--border-mid);
-  color: var(--text-secondary);
-  font-size: var(--text-sm);
-  font-family: var(--font-mono);
-  padding: 3px 7px;
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
-  pointer-events: none;
-  z-index: 100;
-  /* hidden state */
-  opacity: 0;
-  scale: 0.95;
-  transition:
-    opacity 0.12s,
-    scale 0.12s;
+  & [role="tooltip"] {
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-family: var(--font-mono);
+    padding: 3px 7px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 100;
+    /* hidden state */
+    opacity: 0;
+    scale: 0.95;
+    transition:
+      opacity 0.12s,
+      scale 0.12s;
 
-  &.above {
-    bottom: calc(100% + 6px);
-  }
+    &.above {
+      bottom: calc(100% + 6px);
+    }
 
-  &.below {
-    top: calc(100% + 6px);
-  }
+    &.below {
+      top: calc(100% + 6px);
+    }
 
-  /* Respect reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 }

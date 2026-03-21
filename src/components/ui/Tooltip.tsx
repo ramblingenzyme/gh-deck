@@ -13,7 +13,7 @@ export const Tooltip = ({ text, children, position = "above", className }: Toolt
   return (
     <span className={`${styles.wrapper}${className ? ` ${className}` : ""}`} aria-describedby={id}>
       {children}
-      <span role="tooltip" id={id} className={`${styles.tooltip} ${styles[position]}`}>
+      <span role="tooltip" id={id} className={styles[position]}>
         {text}
       </span>
     </span>

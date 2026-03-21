@@ -75,9 +75,7 @@ export const AddColumnModal = ({ open, onAdd, onClose }: AddColumnModalProps) =>
             })}
           </div>
           <div className={styles.modalField}>
-            <label htmlFor="column-title-input" className={styles.modalFieldLabel}>
-              Column Title
-            </label>
+            <label htmlFor="column-title-input">Column Title</label>
             <input
               id="column-title-input"
               className={modalStyles.fieldInput}
@@ -88,9 +86,7 @@ export const AddColumnModal = ({ open, onAdd, onClose }: AddColumnModalProps) =>
             />
           </div>
           <div className={styles.modalField}>
-            <label htmlFor="column-query-input" className={styles.modalFieldLabel}>
-              Filter Query
-            </label>
+            <label htmlFor="column-query-input">Filter Query</label>
             <input
               id="column-query-input"
               className={modalStyles.fieldInput}

@@ -8,9 +8,9 @@ interface CardTopProps {
 }
 
 export const CardTop = ({ repo, age }: CardTopProps) => (
-  <header className={styles.cardTop}>
+  <header>
     <span className={styles.cardRepo}>{repo}</span>
-    <time className={styles.cardAge}>{age}</time>
+    <time>{age}</time>
   </header>
 );
 
