@@ -262,7 +262,9 @@ describe("mapEvent", () => {
 
   it("maps ForkEvent", () => {
     const item = mapEvent(
-      makeEvent("ForkEvent", { forkee: { html_url: "https://github.com/alice/repo" } }),
+      makeEvent("ForkEvent", {
+        forkee: { full_name: "alice/repo", html_url: "https://github.com/alice/repo" },
+      }),
     );
     expect(item).not.toBeNull();
     expect(item!.type).toBe("fork");

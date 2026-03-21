@@ -82,7 +82,7 @@ describe("useGetPRs", () => {
 
     const result = (await capturedFetcher!()) as Array<{ id: number }>;
     expect(result).toHaveLength(1);
-    expect(result[0].id).toBe(1);
+    expect(result[0]!.id).toBe(1);
   });
 });
 
@@ -98,7 +98,7 @@ describe("useGetIssues", () => {
     useGetIssues("repo:owner/repo", "tok");
     const result = (await capturedFetcher!()) as Array<{ id: number }>;
     expect(result).toHaveLength(1);
-    expect(result[0].id).toBe(1);
+    expect(result[0]!.id).toBe(1);
   });
 });
 
@@ -127,7 +127,7 @@ describe("useGetNotifications", () => {
 
     const result = (await capturedFetcher!()) as Array<{ id: number }>;
     expect(result).toHaveLength(1);
-    expect(result[0].id).toBe(42);
+    expect(result[0]!.id).toBe(42);
   });
 });
 

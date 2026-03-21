@@ -9,6 +9,7 @@ const mockTokenReceived = vi.fn();
 // Base store state
 let storeState = {
   status: "idle" as string,
+  token: null as string | null,
   userCode: null as string | null,
   verificationUri: null as string | null,
   expiresAt: null as number | null,
@@ -18,12 +19,15 @@ let storeState = {
   setError: mockSetError,
   deviceCodeReceived: mockDeviceCodeReceived,
   tokenReceived: mockTokenReceived,
+  logOut: vi.fn(),
+  clearError: vi.fn(),
 };
 
 vi.mock("@/store/authStore", () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   useAuthStore: vi.fn((selector?: (s: typeof storeState) => unknown) =>
     selector ? selector(storeState) : storeState,
-  ),
+  ) as any,
 }));
 
 vi.mock("./deviceFlow", () => ({
@@ -41,8 +45,10 @@ import { requestDeviceCode, pollForToken } from "./deviceFlow";
 
 function setStatus(status: string, extra: Partial<typeof storeState> = {}) {
   storeState = { ...storeState, status, ...extra };
-  vi.mocked(useAuthStore).mockImplementation((selector?: (s: typeof storeState) => unknown) =>
-    selector ? selector(storeState) : storeState,
+  vi.mocked(useAuthStore).mockImplementation(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((selector?: (s: typeof storeState) => unknown) =>
+      selector ? selector(storeState) : storeState) as any,
   );
 }
 
@@ -50,6 +56,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   storeState = {
     status: "idle",
+    token: null,
     userCode: null,
     verificationUri: null,
     expiresAt: null,
@@ -59,9 +66,13 @@ beforeEach(() => {
     setError: mockSetError,
     deviceCodeReceived: mockDeviceCodeReceived,
     tokenReceived: mockTokenReceived,
+    logOut: vi.fn(),
+    clearError: vi.fn(),
   };
-  vi.mocked(useAuthStore).mockImplementation((selector?: (s: typeof storeState) => unknown) =>
-    selector ? selector(storeState) : storeState,
+  vi.mocked(useAuthStore).mockImplementation(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((selector?: (s: typeof storeState) => unknown) =>
+      selector ? selector(storeState) : storeState) as any,
   );
 });
 
