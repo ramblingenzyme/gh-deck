@@ -2,7 +2,13 @@ import { create } from "zustand";
 import type { ColumnConfig, ColumnType } from "@/types";
 import { mkId } from "@/constants";
 import { loadLayout, saveLayout } from "./layoutStorage";
-import { applyAdd, applyRemove, applyReorder, applyUpdateQuery } from "./layoutMutations";
+import {
+  applyAdd,
+  applyRemove,
+  applyReorder,
+  applyUpdateQuery,
+  applyUpdateTitle,
+} from "./layoutMutations";
 
 interface LayoutState {
   columns: ColumnConfig[];
@@ -10,6 +16,7 @@ interface LayoutState {
   removeColumn: (id: string) => void;
   reorder: (from: number, to: number) => void;
   updateColumnQuery: (id: string, query: string) => void;
+  updateColumnTitle: (id: string, title: string) => void;
 }
 
 export const useLayoutStore = create<LayoutState>((set, get) => {
@@ -31,6 +38,9 @@ export const useLayoutStore = create<LayoutState>((set, get) => {
     },
     updateColumnQuery(id, query) {
       mutate(applyUpdateQuery(get().columns, id, query));
+    },
+    updateColumnTitle(id, title) {
+      mutate(applyUpdateTitle(get().columns, id, title));
     },
   };
 });

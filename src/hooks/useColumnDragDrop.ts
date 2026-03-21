@@ -8,7 +8,7 @@ export function useColumnDragDrop(columnId: string) {
   const [isDragging, setIsDragging] = useState(false);
   const [dropEdge, setDropEdge] = useState<"left" | "right" | null>(null);
   const ref = useRef<HTMLElement>(null);
-  const handleRef = useRef<HTMLSpanElement>(null);
+  const handleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const el = ref.current;

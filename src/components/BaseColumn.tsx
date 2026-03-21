@@ -1,3 +1,4 @@
+import { useState } from "preact/hooks";
 import type { ReactNode } from "preact/compat";
 import type { ColumnConfig, AnyItem } from "@/types";
 import { useColumnData } from "@/hooks/useColumnData";
@@ -10,6 +11,7 @@ import styles from "./BaseColumn.module.css";
 import { InlineEdit } from "./ui/InlineEdit";
 import { ColumnHeader } from "./ColumnHeader";
 import { ColumnConfirmDelete } from "./ColumnConfirmDelete";
+import { ColumnSettingsModal } from "./ColumnSettingsModal";
 
 interface BaseColumnProps {
   col: ColumnConfig;
@@ -21,6 +23,7 @@ interface BaseColumnProps {
 export const BaseColumn = ({ col, onRemove, renderCard, accentClass }: BaseColumnProps) => {
   const { isConfirming: confirming, startConfirm, cancelConfirm } = useConfirmation();
   const updateColumnQuery = useLayoutStore((s) => s.updateColumnQuery);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const { data, isLoading, isFetching, error, refetch } = useColumnData(col);
   const { spinning, lastUpdated, handleRefresh } = useRefreshSpinner(isFetching, refetch);
@@ -49,7 +52,9 @@ export const BaseColumn = ({ col, onRemove, renderCard, accentClass }: BaseColum
         lastUpdated={lastUpdated}
         onRefresh={handleRefresh}
         onConfirmRemove={() => startConfirm()}
+        onOpenSettings={() => setSettingsOpen(true)}
       />
+      <ColumnSettingsModal open={settingsOpen} col={col} onClose={() => setSettingsOpen(false)} />
 
       <div className={styles.colQuery}>
         <InlineEdit

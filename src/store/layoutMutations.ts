@@ -25,3 +25,7 @@ export function applyUpdateQuery(cols: ColumnConfig[], id: string, query: string
     c.id === id ? { ...c, ...(query ? { query } : { query: undefined }) } : c,
   );
 }
+
+export function applyUpdateTitle(cols: ColumnConfig[], id: string, title: string): ColumnConfig[] {
+  return cols.map((c) => (c.id === id ? { ...c, title } : c));
+}

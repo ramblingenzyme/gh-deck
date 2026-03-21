@@ -1,0 +1,32 @@
+.dropMenu {
+  position: absolute;
+  top: anchor(bottom);
+  left: anchor(left);
+  margin: 4px 0 0;
+  z-index: 100;
+  background: var(--bg-column);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  list-style: none;
+  min-width: 120px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.dropMenuItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-md);
+  color: var(--text-secondary);
+  transition:
+    background 0.1s,
+    color 0.1s;
+
+  &:hover {
+    background: var(--border-mid);
+    color: var(--text-primary);
+  }
+}
