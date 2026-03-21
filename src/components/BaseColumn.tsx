@@ -1,5 +1,4 @@
 import type { ReactNode } from "preact/compat";
-import { useState } from "preact/hooks";
 import type { ColumnConfig, AnyItem } from "@/types";
 import { useColumnData } from "@/hooks/useColumnData";
 import { useMinuteTicker } from "@/hooks/useMinuteTicker";
@@ -21,7 +20,6 @@ interface BaseColumnProps {
 
 export const BaseColumn = ({ col, onRemove, renderCard, accentClass }: BaseColumnProps) => {
   const { isConfirming: confirming, startConfirm, cancelConfirm } = useConfirmation();
-  const [queryOpen, setQueryOpen] = useState(false);
   const updateColumnQuery = useLayoutStore((s) => s.updateColumnQuery);
 
   const { data, isLoading, isFetching, error, refetch } = useColumnData(col);
@@ -50,24 +48,17 @@ export const BaseColumn = ({ col, onRemove, renderCard, accentClass }: BaseColum
         spinning={spinning}
         lastUpdated={lastUpdated}
         onRefresh={handleRefresh}
-        onOpenSettings={() => setQueryOpen(true)}
         onConfirmRemove={() => startConfirm()}
       />
 
-      {(col.query != null || queryOpen) && (
-        <div className={styles.colQuery}>
-          <InlineEdit
-            value={col.query ?? ""}
-            initialEditing={queryOpen}
-            onCommit={(v) => {
-              updateColumnQuery(col.id, v);
-              setQueryOpen(false);
-            }}
-            onCancel={() => setQueryOpen(false)}
-            aria-label="Filter query"
-          />
-        </div>
-      )}
+      <div className={styles.colQuery}>
+        <InlineEdit
+          value={col.query ?? ""}
+          onCommit={(v) => updateColumnQuery(col.id, v)}
+          placeholder="Add filter…"
+          aria-label="Filter query"
+        />
+      </div>
 
       {confirming && (
         <ColumnConfirmDelete

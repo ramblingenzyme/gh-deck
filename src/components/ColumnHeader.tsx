@@ -3,7 +3,6 @@ import type { ColumnConfig } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
 import { SvgIcon } from "./ui/SvgIcon";
 import { Tooltip } from "./ui/Tooltip";
-import { PencilIcon } from "./ui/PencilIcon";
 import styles from "./BaseColumn.module.css";
 
 interface ColumnHeaderProps {
@@ -14,7 +13,6 @@ interface ColumnHeaderProps {
   spinning: boolean;
   lastUpdated: Date | null;
   onRefresh: () => void;
-  onOpenSettings: () => void;
   onConfirmRemove: () => void;
 }
 
@@ -33,7 +31,6 @@ export const ColumnHeader = ({
   spinning,
   lastUpdated,
   onRefresh,
-  onOpenSettings,
   onConfirmRemove,
 }: ColumnHeaderProps) => {
   const cfg = COLUMN_TYPES[col.type];
@@ -68,13 +65,6 @@ export const ColumnHeader = ({
             <SvgIcon name="refresh" />
           </button>
         </Tooltip>
-        {!col.query && (
-          <Tooltip text="Add filter" position="below">
-            <button className={styles.btnIcon} onClick={onOpenSettings} aria-label="Add filter">
-              <PencilIcon className={styles.btnIconPencil} />
-            </button>
-          </Tooltip>
-        )}
         <Tooltip text="Remove column" position="below">
           <button className={styles.btnIcon} onClick={onConfirmRemove} aria-label="Remove column">
             <SvgIcon name="x" />

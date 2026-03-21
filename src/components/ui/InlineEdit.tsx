@@ -8,6 +8,7 @@ interface InlineEditProps {
   onCommit: (value: string) => void;
   onCancel?: () => void;
   initialEditing?: boolean;
+  placeholder?: string;
   "aria-label"?: string;
 }
 
@@ -16,6 +17,7 @@ export const InlineEdit = ({
   onCommit,
   onCancel,
   initialEditing = false,
+  placeholder,
   "aria-label": ariaLabel,
 }: InlineEditProps) => {
   const [editing, setEditing] = useState(initialEditing);
@@ -70,7 +72,7 @@ export const InlineEdit = ({
       aria-label={ariaLabel ? `Edit ${ariaLabel}` : undefined}
       title={value}
     >
-      {value}
+      {value || (placeholder && <span className={styles.placeholder}>{placeholder}</span>)}
       <PencilIcon className={styles.pencil} />
     </button>
   );

@@ -84,34 +84,34 @@ describe("add column flow", () => {
 // ─── 3. Column query editing ────────────────────────────────────────────────
 
 describe("column query editing", () => {
-  it("Add filter button opens the query editor in edit mode", async () => {
+  it("clicking the query bar opens the editor", async () => {
     const user = userEvent.setup();
     renderApp();
 
     const col = await screen.findByRole("region", { name: "CI / CD" });
-    await user.click(within(col).getByRole("button", { name: /add filter/i }));
+    await user.click(within(col).getByRole("button", { name: /edit filter query/i }));
 
     expect(within(col).getByRole("textbox", { name: /filter query/i })).toBeTruthy();
   });
 
-  it("cancelling Add filter hides the query editor", async () => {
+  it("cancelling the editor returns to display mode", async () => {
     const user = userEvent.setup();
     renderApp();
 
     const col = await screen.findByRole("region", { name: "CI / CD" });
-    await user.click(within(col).getByRole("button", { name: /add filter/i }));
+    await user.click(within(col).getByRole("button", { name: /edit filter query/i }));
     await user.click(within(col).getByRole("button", { name: /cancel/i }));
 
     expect(within(col).queryByRole("textbox")).toBeNull();
-    expect(within(col).queryByRole("button", { name: /edit filter query/i })).toBeNull();
+    expect(within(col).getByRole("button", { name: /edit filter query/i })).toBeTruthy();
   });
 
-  it("committing a query value persists it and shows the display button", async () => {
+  it("committing a query value persists it and returns to display mode", async () => {
     const user = userEvent.setup();
     renderApp();
 
     const col = await screen.findByRole("region", { name: "CI / CD" });
-    await user.click(within(col).getByRole("button", { name: /add filter/i }));
+    await user.click(within(col).getByRole("button", { name: /edit filter query/i }));
 
     const textarea = within(col).getByRole("textbox", { name: /filter query/i });
     await user.type(textarea, "repo:my-org/my-repo");
@@ -126,7 +126,7 @@ describe("column query editing", () => {
     renderApp();
 
     const col = await screen.findByRole("region", { name: "CI / CD" });
-    await user.click(within(col).getByRole("button", { name: /add filter/i }));
+    await user.click(within(col).getByRole("button", { name: /edit filter query/i }));
     await user.type(within(col).getByRole("textbox"), "repo:my-org/my-repo");
     await user.keyboard("{Enter}");
 
@@ -149,18 +149,6 @@ describe("column query editing", () => {
     expect(useLayoutStore.getState().columns.find((c) => c.title === "Open PRs")?.query).toBe(
       "author:octocat",
     );
-  });
-
-  it("Add filter button is hidden once a query is set", async () => {
-    const user = userEvent.setup();
-    renderApp();
-
-    const col = await screen.findByRole("region", { name: "CI / CD" });
-    await user.click(within(col).getByRole("button", { name: /add filter/i }));
-    await user.type(within(col).getByRole("textbox"), "repo:my-org/my-repo");
-    await user.keyboard("{Enter}");
-
-    expect(within(col).queryByRole("button", { name: /add filter/i })).toBeNull();
   });
 });
 

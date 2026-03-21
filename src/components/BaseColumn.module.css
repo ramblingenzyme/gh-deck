@@ -59,9 +59,9 @@
 }
 
 .colTitleTooltip {
-  flex: 1;
   min-width: 0;
 }
+
 
 .colHeader output {
   background: var(--bg-card);

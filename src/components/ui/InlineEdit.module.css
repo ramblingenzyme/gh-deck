@@ -1,7 +1,11 @@
+.placeholder {
+  color: var(--text-ghost);
+}
+
 .display {
   flex: 1;
   font-size: var(--text-xs, 11px);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-family: monospace;
   overflow-wrap: break-word;
   cursor: default;
@@ -55,14 +59,13 @@
 .confirm {
   flex-shrink: 0;
   font-size: var(--text-xs, 11px);
-  color: var(--color-accent);
+  color: var(--text-muted);
   padding: 1px 4px;
   border-radius: var(--radius-sm);
-  opacity: 0.8;
 
   &:hover {
-    opacity: 1;
-    background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+    color: var(--text-primary);
+    background: var(--border-mid);
   }
 }
 
