@@ -1,11 +1,14 @@
 .success {
   --ci-color: var(--ci-success);
+  border-left: 3px solid var(--ci-color);
 }
 .failure {
   --ci-color: var(--ci-failure);
+  border-left: 3px solid var(--ci-color);
 }
 .running {
   --ci-color: var(--ci-running);
+  border-left: 3px solid var(--ci-color);
 }
 
 .ciBadge {
@@ -17,6 +20,5 @@
   display: inline-block;
   white-space: nowrap;
   flex-shrink: 0;
-  background: color-mix(in srgb, var(--ci-color, var(--text-muted)) 12%, transparent);
   color: var(--ci-color, var(--text-muted));
 }
