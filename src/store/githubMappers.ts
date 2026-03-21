@@ -21,7 +21,6 @@ import type {
   GHDeployment,
   GHDependabotAlert,
 } from "@/types/github";
-import { formatAge } from "@/utils/relativeTime";
 
 function repoFromUrl(url: string): string {
   // https://api.github.com/repos/owner/repo  OR  owner/repo
@@ -39,7 +38,7 @@ export function mapSearchItemToPR(item: GHSearchItem): PRItem {
     reviews: { approved: 0, requested: 0 },
     comments: item.comments,
     draft: item.draft ?? false,
-    age: formatAge(item.updated_at),
+    age: item.updated_at,
     labels: item.labels.map((l) => ({ name: l.name, color: l.color })),
     url: item.html_url,
   };
@@ -54,7 +53,7 @@ export function mapSearchItemToIssue(item: GHSearchItem): IssueItem {
     labels: item.labels.map((l) => ({ name: l.name, color: l.color })),
     assignee: item.assignees?.[0]?.login ?? null,
     comments: item.comments,
-    age: formatAge(item.updated_at),
+    age: item.updated_at,
     state: item.state as "open" | "closed",
     url: item.html_url,
   };
@@ -84,7 +83,7 @@ export function mapNotification(n: GHNotification): NotifItem {
     text: n.subject.title,
     repo: n.repository.full_name,
     ref: n.subject.type,
-    age: formatAge(n.updated_at),
+    age: n.updated_at,
     url: apiUrlToHtmlUrl(n.subject.url),
   };
 }
@@ -121,7 +120,7 @@ export function mapWorkflowRun(run: GHWorkflowRun, repoFullName: string): CIItem
     branch: run.head_branch,
     status,
     duration,
-    age: formatAge(run.created_at),
+    age: run.created_at,
     triggered: triggerMap[run.event] ?? "push",
     url: run.html_url,
   };
@@ -134,7 +133,7 @@ export function mapRelease(r: GHRelease, repo: string): ReleaseItem {
     tag: r.tag_name,
     name: r.name ?? r.tag_name,
     prerelease: r.prerelease,
-    age: formatAge(r.published_at),
+    age: r.published_at,
     url: r.html_url,
   };
 }
@@ -151,7 +150,7 @@ export function mapDeployment(
     status,
     ref: d.ref,
     creator: d.creator.login,
-    age: formatAge(d.created_at),
+    age: d.created_at,
     url: `https://github.com/${repo}/deployments`,
   };
 }
@@ -164,14 +163,14 @@ export function mapDependabotAlert(a: GHDependabotAlert, repo: string): Security
     package: a.dependency.package.name,
     severity,
     summary: a.security_advisory.summary,
-    age: formatAge(a.created_at),
+    age: a.created_at,
     url: a.html_url,
   };
 }
 
 export function mapEvent(event: GHEvent): ActivityItem | null {
   const repo = event.repo.name;
-  const age = formatAge(event.created_at);
+  const age = event.created_at;
 
   const ghBase = `https://github.com/${repo}`;
 

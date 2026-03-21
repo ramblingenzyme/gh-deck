@@ -53,7 +53,7 @@ export const Modal = ({
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- not an interaction point; stopPropagation prevents backdrop-click from firing on modal content clicks */}
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <header>
-          <h2 id={titleId}>{title}</h2>
+          <h1 id={titleId}>{title}</h1>
         </header>
         {children}
       </div>

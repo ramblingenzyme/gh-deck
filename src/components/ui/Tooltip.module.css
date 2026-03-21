@@ -1,47 +1,61 @@
 .wrapper {
-  position: relative;
   display: inline-flex;
   align-items: center;
+}
 
-  /* Show on hover OR keyboard focus of any focusable child */
-  &:hover [role="tooltip"],
-  &:focus-within [role="tooltip"] {
+[role="tooltip"] {
+  /* Reset popover defaults */
+  inset: auto;
+  margin: 0;
+  overflow: visible;
+
+  /* Anchor positioning */
+  position-area: none;
+  left: anchor(center);
+  translate: -50% 0;
+
+  background: var(--bg-card);
+  border: 1px solid var(--border-mid);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  padding: 3px 7px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  pointer-events: none;
+
+  /* Hidden state */
+  opacity: 0;
+  scale: 0.95;
+  transition:
+    opacity 0.12s,
+    scale 0.12s,
+    display 0.12s allow-discrete,
+    overlay 0.12s allow-discrete;
+
+  &.above {
+    bottom: anchor(top);
+    translate: -50% -6px;
+  }
+
+  &.below {
+    top: anchor(bottom);
+    translate: -50% 6px;
+  }
+
+  &:popover-open {
     opacity: 1;
     scale: 1;
   }
 
-  & [role="tooltip"] {
-    position: absolute;
-    left: 50%;
-    translate: -50% 0;
-    background: var(--bg-card);
-    border: 1px solid var(--border-mid);
-    color: var(--text-secondary);
-    font-size: var(--text-sm);
-    font-family: var(--font-mono);
-    padding: 3px 7px;
-    border-radius: var(--radius-sm);
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 100;
-    /* hidden state */
-    opacity: 0;
-    scale: 0.95;
-    transition:
-      opacity 0.12s,
-      scale 0.12s;
-
-    &.above {
-      bottom: calc(100% + 6px);
+  @starting-style {
+    &:popover-open {
+      opacity: 0;
+      scale: 0.95;
     }
+  }
 
-    &.below {
-      top: calc(100% + 6px);
-    }
-
-    /* Respect reduced motion */
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 }

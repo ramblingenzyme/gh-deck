@@ -1,4 +1,6 @@
 import type { IconName } from "@/types";
+import { formatAge } from "@/utils/relativeTime";
+import { Tooltip } from "../ui/Tooltip";
 import { SvgIcon } from "../ui/SvgIcon";
 import styles from "./Card.module.css";
 
@@ -10,7 +12,9 @@ interface CardTopProps {
 export const CardTop = ({ repo, age }: CardTopProps) => (
   <header>
     <span className={styles.cardRepo}>{repo}</span>
-    <time>{age}</time>
+    <Tooltip text={new Date(age).toLocaleString()} position="below">
+      <time dateTime={age}>{formatAge(age)}</time>
+    </Tooltip>
   </header>
 );
 

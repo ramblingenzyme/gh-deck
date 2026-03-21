@@ -61,7 +61,7 @@ describe("Column remove confirmation", () => {
     renderColumn(makeCol("prs", "My PRs"), { onRemove });
 
     await user.click(await screen.findByRole("button", { name: /remove column/i }));
-    expect(screen.getByRole("alert")).toBeTruthy();
+    expect(screen.getByRole("alertdialog")).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: /yes, remove/i }));
     expect(onRemove).toHaveBeenCalledWith("col-1");
