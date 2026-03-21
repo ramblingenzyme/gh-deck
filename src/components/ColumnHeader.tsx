@@ -46,7 +46,7 @@ export const ColumnHeader = ({
       </span>
       <div className={styles.colHeaderLeft}>
         <SvgIcon name={cfg.icon} className={styles.colIcon} />
-        <Tooltip text={col.title} position="below">
+        <Tooltip text={col.title} position="below" className={styles.colTitleTooltip}>
           <h2 className={styles.colTitle}>{col.title}</h2>
         </Tooltip>
         <Tooltip text={`${itemCount} ${itemLabel}`} position="below">
