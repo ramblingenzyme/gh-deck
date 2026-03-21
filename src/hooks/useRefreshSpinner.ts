@@ -29,6 +29,14 @@ export function useRefreshSpinner(isFetching: boolean, refetch: () => void) {
     refetch();
     setSpinning(true);
     spinStartedAt.current = Date.now();
+    // Fallback: if isFetching never goes true (e.g. demo/noop refetch),
+    // stop the spinner after MIN_SPIN_MS.
+    setTimeout(() => {
+      if (!prevFetching.current) {
+        setSpinning(false);
+        spinStartedAt.current = null;
+      }
+    }, MIN_SPIN_MS);
   }, [refetch]);
 
   return { spinning, lastUpdated, handleRefresh };

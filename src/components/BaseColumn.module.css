@@ -133,27 +133,28 @@
     background: var(--border-mid);
   }
 
-  &Active {
+}
+
+.btnIconActive {
+  color: var(--color-accent);
+}
+
+.btnIconSpinning {
+  color: var(--color-accent);
+
+  &:hover {
     color: var(--color-accent);
   }
 
-  &Spinning {
-    color: var(--color-accent);
-
-    &:hover {
-      color: var(--color-accent);
-    }
-
-    & > * {
-      display: inline-block;
-      animation: spin 0.8s linear infinite;
-    }
+  & > * {
+    display: inline-block;
+    animation: spin 0.8s linear infinite;
   }
 }
 
 @keyframes spin {
   to {
-    rotate: 360deg;
+    transform: rotate(360deg);
   }
 }
 

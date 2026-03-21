@@ -67,30 +67,31 @@
     color: var(--text-primary);
   }
 
-  &Primary {
-    background: var(--accent-prs);
-    color: var(--text-on-light);
-    border-color: var(--accent-prs);
+}
 
-    &:hover {
-      opacity: 0.9;
-    }
+.btnModalPrimary {
+  background: var(--accent-prs);
+  color: var(--text-on-light);
+  border-color: var(--accent-prs);
+
+  &:hover {
+    opacity: 0.9;
   }
+}
 
-  &Danger {
+.btnModalDanger {
+  color: var(--accent-issues, #f87171);
+  border-color: var(--accent-issues, #f87171);
+
+  &:hover {
+    background: color-mix(in srgb, var(--accent-issues, #f87171) 12%, transparent);
     color: var(--accent-issues, #f87171);
     border-color: var(--accent-issues, #f87171);
+  }
 
-    &:hover {
-      background: color-mix(in srgb, var(--accent-issues, #f87171) 12%, transparent);
-      color: var(--accent-issues, #f87171);
-      border-color: var(--accent-issues, #f87171);
-    }
-
-    &:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-    }
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
   }
 }
 
