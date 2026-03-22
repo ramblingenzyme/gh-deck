@@ -32,6 +32,7 @@ interface UseColumnDataResult {
   isLoading: boolean;
   isFetching: boolean;
   error: string | null;
+  warnings: string[];
   refetch: () => void;
 }
 
@@ -55,6 +56,29 @@ function toResult(
     isLoading: result.isLoading,
     isFetching: result.isValidating,
     error: result.error ? errorMsg : null,
+    warnings: [],
+    refetch: result.mutate,
+  };
+}
+
+function toMultiResult(
+  result: {
+    data?: { items: AnyItem[]; fetchErrors: string[] };
+    isLoading: boolean;
+    isValidating: boolean;
+    error?: unknown;
+    mutate: () => void;
+  },
+  errorMsg: string,
+  filter: (items: AnyItem[]) => AnyItem[],
+): UseColumnDataResult {
+  const items = result.data?.items ?? [];
+  return {
+    data: filter(items),
+    isLoading: result.isLoading,
+    isFetching: result.isValidating,
+    error: result.error ? errorMsg : null,
+    warnings: result.data?.fetchErrors ?? [],
     refetch: result.mutate,
   };
 }
@@ -112,6 +136,7 @@ export function useColumnData(col: ColumnConfig): UseColumnDataResult {
       isLoading: false,
       isFetching: false,
       error: null,
+      warnings: [],
       refetch: noop,
     };
   }
@@ -124,16 +149,23 @@ export function useColumnData(col: ColumnConfig): UseColumnDataResult {
     case "notifications":
       return toResult(notifsResult, "Failed to load notifications", filter, true);
     case "ci":
-      return toResult(ciResult, "Failed to load CI runs", filter, true);
+      return toMultiResult(ciResult, "Failed to load CI runs", filter);
     case "activity":
       return toResult(activityResult, "Failed to load activity", filter, true);
     case "releases":
-      return toResult(releasesResult, "Failed to load releases", filter, true);
+      return toMultiResult(releasesResult, "Failed to load releases", filter);
     case "deployments":
-      return toResult(deploymentsResult, "Failed to load deployments", filter, true);
+      return toMultiResult(deploymentsResult, "Failed to load deployments", filter);
     case "security":
-      return toResult(securityResult, "Failed to load security alerts", filter, true);
+      return toMultiResult(securityResult, "Failed to load security alerts", filter);
     default:
-      return { data: [], isLoading: false, isFetching: false, error: null, refetch: noop };
+      return {
+        data: [],
+        isLoading: false,
+        isFetching: false,
+        error: null,
+        warnings: [],
+        refetch: noop,
+      };
   }
 }

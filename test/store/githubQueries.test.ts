@@ -182,27 +182,29 @@ describe("useGetCIRuns", () => {
     expect(mockFetch).toHaveBeenCalledTimes(5);
   });
 
-  it("rejects when any repo fetch fails", async () => {
+  it("isolates fetch failure to fetchErrors", async () => {
     mockFetch
       .mockResolvedValueOnce(mockOk({ workflow_runs: [makeRun(1)] }))
       .mockRejectedValueOnce(new Error("Network error"));
 
     useGetCIRuns(["owner/repo1", "owner/repo2"], "tok");
-    await expect(capturedFetcher!()).rejects.toThrow("Network error");
+    const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
+    expect(result.fetchErrors).toHaveLength(1);
+    expect(result.fetchErrors[0]).toContain("Network error");
   });
 
   it("handles null workflow_runs in API response", async () => {
     mockFetch.mockResolvedValueOnce(mockOk({ workflow_runs: null }));
     useGetCIRuns(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as unknown[];
-    expect(result).toEqual([]);
+    const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
+    expect(result.items).toEqual([]);
   });
 
   it("handles missing workflow_runs property in API response", async () => {
     mockFetch.mockResolvedValueOnce(mockOk({}));
     useGetCIRuns(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as unknown[];
-    expect(result).toEqual([]);
+    const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
+    expect(result.items).toEqual([]);
   });
 
   it("sorts by age and slices to 20", async () => {
@@ -213,8 +215,8 @@ describe("useGetCIRuns", () => {
     mockFetch.mockResolvedValueOnce(mockOk({ workflow_runs: runs }));
 
     useGetCIRuns(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as unknown[];
-    expect(result).toHaveLength(20);
+    const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
+    expect(result.items).toHaveLength(20);
   });
 });
 
@@ -287,8 +289,8 @@ describe("useGetReleases", () => {
     useGetReleases(["owner/repo1", "owner/repo2"], "tok");
     expect(capturedKey).toEqual(["releases", ["owner/repo1", "owner/repo2"], "tok"]);
 
-    const result = (await capturedFetcher!()) as Array<{ id: number }>;
-    expect(result).toHaveLength(2);
+    const result = (await capturedFetcher!()) as { items: Array<{ id: number }>; fetchErrors: string[] };
+    expect(result.items).toHaveLength(2);
   });
 
   it("slices repos to 5", async () => {
@@ -298,13 +300,15 @@ describe("useGetReleases", () => {
     expect(mockFetch).toHaveBeenCalledTimes(5);
   });
 
-  it("rejects when any repo fetch fails", async () => {
+  it("isolates fetch failure to fetchErrors", async () => {
     mockFetch
       .mockResolvedValueOnce(mockOk([makeRelease(1)]))
       .mockRejectedValueOnce(new Error("403 Forbidden"));
 
     useGetReleases(["owner/repo1", "owner/repo2"], "tok");
-    await expect(capturedFetcher!()).rejects.toThrow("403 Forbidden");
+    const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
+    expect(result.fetchErrors).toHaveLength(1);
+    expect(result.fetchErrors[0]).toContain("403 Forbidden");
   });
 
   it("sorts by age and slices to 20", async () => {
@@ -314,8 +318,8 @@ describe("useGetReleases", () => {
     mockFetch.mockResolvedValueOnce(mockOk(releases));
 
     useGetReleases(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as unknown[];
-    expect(result).toHaveLength(20);
+    const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
+    expect(result.items).toHaveLength(20);
   });
 });
 
@@ -346,9 +350,9 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce(mockOk([successStatus])); // statuses for deployment 1
 
     useGetDeployments(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as Array<{ status: string }>;
-    expect(result).toHaveLength(1);
-    expect(result[0]!.status).toBe("success");
+    const result = (await capturedFetcher!()) as { items: Array<{ status: string }>; fetchErrors: string[] };
+    expect(result.items).toHaveLength(1);
+    expect(result.items[0]!.status).toBe("success");
   });
 
   it("maps unknown status state to pending", async () => {
@@ -357,8 +361,8 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce(mockOk([{ state: "inactive" } as GHDeploymentStatus]));
 
     useGetDeployments(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as Array<{ status: string }>;
-    expect(result[0]!.status).toBe("pending");
+    const result = (await capturedFetcher!()) as { items: Array<{ status: string }>; fetchErrors: string[] };
+    expect(result.items[0]!.status).toBe("pending");
   });
 
   it("falls back to unknown when status fetch returns non-ok", async () => {
@@ -367,17 +371,20 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce({ ok: false, status: 404, statusText: "Not Found" } as Response);
 
     useGetDeployments(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as Array<{ status: string }>;
-    expect(result[0]!.status).toBe("unknown");
+    const result = (await capturedFetcher!()) as { items: Array<{ status: string }>; fetchErrors: string[] };
+    expect(result.items[0]!.status).toBe("unknown");
   });
 
-  it("rejects when any repo deployment list fetch fails", async () => {
+  it("isolates fetch failure to fetchErrors", async () => {
     mockFetch
       .mockResolvedValueOnce(mockOk([makeDeployment(1)])) // repo1 deployments
-      .mockRejectedValueOnce(new Error("Network error")); // repo2 deployments (fails)
+      .mockRejectedValueOnce(new Error("Network error")) // repo2 deployments (fails)
+      .mockResolvedValueOnce(mockOk([successStatus])); // status for repo1's deployment
 
     useGetDeployments(["owner/repo1", "owner/repo2"], "tok");
-    await expect(capturedFetcher!()).rejects.toThrow("Network error");
+    const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
+    expect(result.fetchErrors).toHaveLength(1);
+    expect(result.fetchErrors[0]).toContain("Network error");
   });
 });
 
@@ -408,16 +415,18 @@ describe("useGetSecurityAlerts", () => {
     useGetSecurityAlerts(["owner/repo1", "owner/repo2"], "tok");
     expect(capturedKey).toEqual(["security", ["owner/repo1", "owner/repo2"], "tok"]);
 
-    const result = (await capturedFetcher!()) as unknown[];
-    expect(result).toHaveLength(3);
+    const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
+    expect(result.items).toHaveLength(3);
   });
 
-  it("rejects when any repo fetch fails", async () => {
+  it("isolates fetch failure to fetchErrors", async () => {
     mockFetch
       .mockResolvedValueOnce(mockOk([makeAlert(1)]))
       .mockRejectedValueOnce(new Error("403 Forbidden"));
 
     useGetSecurityAlerts(["owner/repo1", "owner/repo2"], "tok");
-    await expect(capturedFetcher!()).rejects.toThrow("403 Forbidden");
+    const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
+    expect(result.fetchErrors).toHaveLength(1);
+    expect(result.fetchErrors[0]).toContain("403 Forbidden");
   });
 });

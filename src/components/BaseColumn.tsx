@@ -26,7 +26,8 @@ export const BaseColumn = ({ col, onRemove, renderCard, accentClass }: BaseColum
   const updateColumnQuery = useLayoutStore((s) => s.updateColumnQuery);
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  const { data, isLoading, isFetching, error, refetch } = useColumnData(col);
+  const { data, isLoading, isFetching, error, warnings, refetch } = useColumnData(col);
+  const [warnDismissed, setWarnDismissed] = useState(false);
   const { spinning, lastUpdated, handleRefresh } = useRefreshSpinner(isFetching, refetch);
   const { ref, handleRef, isDragging, dropEdge } = useColumnDragDrop(col.id);
 
@@ -87,6 +88,17 @@ export const BaseColumn = ({ col, onRemove, renderCard, accentClass }: BaseColum
           onCancel={() => cancelConfirm()}
           onConfirm={() => onRemove(col.id)}
         />
+      )}
+
+      {warnings.length > 0 && !warnDismissed && (
+        <div className={styles.warningBanner} role="alert">
+          <span>
+            {warnings.length === 1 ? warnings[0] : `${warnings.length} repos failed to load`}
+          </span>
+          <button onClick={() => setWarnDismissed(true)} aria-label="Dismiss warning">
+            ×
+          </button>
+        </div>
       )}
 
       <div className={styles.colBody}>

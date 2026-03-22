@@ -86,5 +86,6 @@ Tests live in `test/` mirroring `src/` structure (e.g. `src/utils/foo.ts` → `t
 - **Mocks**: `vi.fn()` for callbacks; prefer `vi.spyOn` over module-level mocks
 - **Assertions**: test via semantic roles (`role="article"`, `role="button"`) not implementation details
 - **Coverage**: `npm test -- --coverage`
+- **After changes**: always run `npm test` to check for failures; update existing tests that break due to interface changes and write new tests for new behaviour
 
 Run a single test file: `npm test -- test/utils/queryFilter.test.ts`
