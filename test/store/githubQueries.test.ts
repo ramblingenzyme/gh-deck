@@ -39,6 +39,10 @@ import {
 
 const mockFetch = vi.mocked(githubFetch);
 
+function mockOk<T>(data: T): Response {
+  return { ok: true, json: () => Promise.resolve(data) } as unknown as Response;
+}
+
 beforeEach(() => {
   capturedKey = undefined;
   capturedFetcher = null;
@@ -67,7 +71,7 @@ describe("useGetUser", () => {
 
   it("fetcher maps login/avatarUrl/name", async () => {
     const raw: GHUser = { login: "alice", avatar_url: "https://example.com/a.png", name: "Alice" };
-    mockFetch.mockResolvedValueOnce(raw);
+    mockFetch.mockResolvedValueOnce(mockOk(raw));
 
     useGetUser("tok");
     expect(capturedKey).toEqual(["user", "tok"]);
@@ -88,7 +92,7 @@ describe("useGetPRs", () => {
   });
 
   it("fetcher encodes query and maps items", async () => {
-    mockFetch.mockResolvedValueOnce({ total_count: 1, items: [baseItem] });
+    mockFetch.mockResolvedValueOnce(mockOk({ total_count: 1, items: [baseItem] }));
 
     useGetPRs("repo:owner/repo", "tok");
     expect(capturedKey).toEqual(["prs", "repo:owner/repo", "tok"]);
@@ -106,7 +110,7 @@ describe("useGetIssues", () => {
   });
 
   it("fetcher maps items via mapSearchItemToIssue", async () => {
-    mockFetch.mockResolvedValueOnce({ total_count: 1, items: [baseItem] });
+    mockFetch.mockResolvedValueOnce(mockOk({ total_count: 1, items: [baseItem] }));
 
     useGetIssues("repo:owner/repo", "tok");
     const result = (await capturedFetcher!()) as Array<{ id: number }>;
@@ -133,7 +137,7 @@ describe("useGetNotifications", () => {
       repository: { full_name: "owner/repo" },
       updated_at: "2024-01-01T00:00:00Z",
     };
-    mockFetch.mockResolvedValueOnce([raw]);
+    mockFetch.mockResolvedValueOnce(mockOk([raw]));
 
     useGetNotifications("tok");
     expect(capturedKey).toEqual(["notifications", "tok"]);
@@ -169,7 +173,7 @@ describe("useGetCIRuns", () => {
 
   it("slices repos to 5", async () => {
     const repos = ["r1", "r2", "r3", "r4", "r5", "r6"];
-    mockFetch.mockResolvedValue({ workflow_runs: [] });
+    mockFetch.mockResolvedValue(mockOk({ workflow_runs: [] }));
 
     useGetCIRuns(repos, "tok");
     await capturedFetcher!();
@@ -178,26 +182,24 @@ describe("useGetCIRuns", () => {
     expect(mockFetch).toHaveBeenCalledTimes(5);
   });
 
-  it("isolates per-repo errors and flattens results", async () => {
+  it("rejects when any repo fetch fails", async () => {
     mockFetch
-      .mockResolvedValueOnce({ workflow_runs: [makeRun(1)] })
+      .mockResolvedValueOnce(mockOk({ workflow_runs: [makeRun(1)] }))
       .mockRejectedValueOnce(new Error("Network error"));
 
     useGetCIRuns(["owner/repo1", "owner/repo2"], "tok");
-    const result = (await capturedFetcher!()) as unknown[];
-    // repo1 contributes 1 run, repo2 error returns []
-    expect(result).toHaveLength(1);
+    await expect(capturedFetcher!()).rejects.toThrow("Network error");
   });
 
   it("handles null workflow_runs in API response", async () => {
-    mockFetch.mockResolvedValueOnce({ workflow_runs: null });
+    mockFetch.mockResolvedValueOnce(mockOk({ workflow_runs: null }));
     useGetCIRuns(["owner/repo"], "tok");
     const result = (await capturedFetcher!()) as unknown[];
     expect(result).toEqual([]);
   });
 
   it("handles missing workflow_runs property in API response", async () => {
-    mockFetch.mockResolvedValueOnce({});
+    mockFetch.mockResolvedValueOnce(mockOk({}));
     useGetCIRuns(["owner/repo"], "tok");
     const result = (await capturedFetcher!()) as unknown[];
     expect(result).toEqual([]);
@@ -208,7 +210,7 @@ describe("useGetCIRuns", () => {
     const runs = Array.from({ length: 25 }, (_, i) =>
       makeRun(i, `2024-01-${String(i + 1).padStart(2, "0")}T00:00:00Z`),
     );
-    mockFetch.mockResolvedValueOnce({ workflow_runs: runs });
+    mockFetch.mockResolvedValueOnce(mockOk({ workflow_runs: runs }));
 
     useGetCIRuns(["owner/repo"], "tok");
     const result = (await capturedFetcher!()) as unknown[];
@@ -246,7 +248,7 @@ describe("useGetActivity", () => {
       makeEvent("PullRequestEvent"), // maps to something
       makeEvent("UnknownEventType"), // maps to null → filtered
     ];
-    mockFetch.mockResolvedValueOnce(events);
+    mockFetch.mockResolvedValueOnce(mockOk(events));
 
     useGetActivity("alice", "tok");
     expect(capturedKey).toEqual(["activity", "alice", "tok"]);
@@ -278,7 +280,9 @@ describe("useGetReleases", () => {
   });
 
   it("fetcher maps releases from all repos", async () => {
-    mockFetch.mockResolvedValueOnce([makeRelease(1)]).mockResolvedValueOnce([makeRelease(2)]);
+    mockFetch
+      .mockResolvedValueOnce(mockOk([makeRelease(1)]))
+      .mockResolvedValueOnce(mockOk([makeRelease(2)]));
 
     useGetReleases(["owner/repo1", "owner/repo2"], "tok");
     expect(capturedKey).toEqual(["releases", ["owner/repo1", "owner/repo2"], "tok"]);
@@ -288,27 +292,26 @@ describe("useGetReleases", () => {
   });
 
   it("slices repos to 5", async () => {
-    mockFetch.mockResolvedValue([]);
+    mockFetch.mockResolvedValue(mockOk([]));
     useGetReleases(["r1", "r2", "r3", "r4", "r5", "r6"], "tok");
     await capturedFetcher!();
     expect(mockFetch).toHaveBeenCalledTimes(5);
   });
 
-  it("isolates per-repo errors", async () => {
+  it("rejects when any repo fetch fails", async () => {
     mockFetch
-      .mockResolvedValueOnce([makeRelease(1)])
+      .mockResolvedValueOnce(mockOk([makeRelease(1)]))
       .mockRejectedValueOnce(new Error("403 Forbidden"));
 
     useGetReleases(["owner/repo1", "owner/repo2"], "tok");
-    const result = (await capturedFetcher!()) as unknown[];
-    expect(result).toHaveLength(1);
+    await expect(capturedFetcher!()).rejects.toThrow("403 Forbidden");
   });
 
   it("sorts by age and slices to 20", async () => {
     const releases = Array.from({ length: 25 }, (_, i) =>
       makeRelease(i, `2024-01-${String(i + 1).padStart(2, "0")}T00:00:00Z`),
     );
-    mockFetch.mockResolvedValueOnce(releases);
+    mockFetch.mockResolvedValueOnce(mockOk(releases));
 
     useGetReleases(["owner/repo"], "tok");
     const result = (await capturedFetcher!()) as unknown[];
@@ -339,8 +342,8 @@ describe("useGetDeployments", () => {
 
   it("fetches deployments then their statuses", async () => {
     mockFetch
-      .mockResolvedValueOnce([makeDeployment(1)]) // deployments list
-      .mockResolvedValueOnce([successStatus]); // statuses for deployment 1
+      .mockResolvedValueOnce(mockOk([makeDeployment(1)])) // deployments list
+      .mockResolvedValueOnce(mockOk([successStatus])); // statuses for deployment 1
 
     useGetDeployments(["owner/repo"], "tok");
     const result = (await capturedFetcher!()) as Array<{ status: string }>;
@@ -350,33 +353,31 @@ describe("useGetDeployments", () => {
 
   it("maps unknown status state to pending", async () => {
     mockFetch
-      .mockResolvedValueOnce([makeDeployment(1)])
-      .mockResolvedValueOnce([{ state: "inactive" } as GHDeploymentStatus]);
+      .mockResolvedValueOnce(mockOk([makeDeployment(1)]))
+      .mockResolvedValueOnce(mockOk([{ state: "inactive" } as GHDeploymentStatus]));
 
     useGetDeployments(["owner/repo"], "tok");
     const result = (await capturedFetcher!()) as Array<{ status: string }>;
     expect(result[0]!.status).toBe("pending");
   });
 
-  it("falls back to pending when status fetch fails", async () => {
-    mockFetch.mockResolvedValueOnce([makeDeployment(1)]).mockRejectedValueOnce(new Error("404"));
-
-    useGetDeployments(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as Array<{ status: string }>;
-    expect(result[0]!.status).toBe("pending");
-  });
-
-  it("isolates per-repo errors", async () => {
-    // Both deployment list fetches start in parallel (repo1 first, repo2 second),
-    // then status fetch for repo1's deployment runs third.
+  it("falls back to unknown when status fetch returns non-ok", async () => {
     mockFetch
-      .mockResolvedValueOnce([makeDeployment(1)]) // repo1 deployments
-      .mockRejectedValueOnce(new Error("Network error")) // repo2 deployments (fails)
-      .mockResolvedValueOnce([successStatus]); // repo1 deployment 1 statuses
+      .mockResolvedValueOnce(mockOk([makeDeployment(1)]))
+      .mockResolvedValueOnce({ ok: false, status: 404, statusText: "Not Found" } as Response);
+
+    useGetDeployments(["owner/repo"], "tok");
+    const result = (await capturedFetcher!()) as Array<{ status: string }>;
+    expect(result[0]!.status).toBe("unknown");
+  });
+
+  it("rejects when any repo deployment list fetch fails", async () => {
+    mockFetch
+      .mockResolvedValueOnce(mockOk([makeDeployment(1)])) // repo1 deployments
+      .mockRejectedValueOnce(new Error("Network error")); // repo2 deployments (fails)
 
     useGetDeployments(["owner/repo1", "owner/repo2"], "tok");
-    const result = (await capturedFetcher!()) as unknown[];
-    expect(result).toHaveLength(1);
+    await expect(capturedFetcher!()).rejects.toThrow("Network error");
   });
 });
 
@@ -401,8 +402,8 @@ describe("useGetSecurityAlerts", () => {
 
   it("fetcher maps alerts from all repos", async () => {
     mockFetch
-      .mockResolvedValueOnce([makeAlert(1), makeAlert(2)])
-      .mockResolvedValueOnce([makeAlert(3)]);
+      .mockResolvedValueOnce(mockOk([makeAlert(1), makeAlert(2)]))
+      .mockResolvedValueOnce(mockOk([makeAlert(3)]));
 
     useGetSecurityAlerts(["owner/repo1", "owner/repo2"], "tok");
     expect(capturedKey).toEqual(["security", ["owner/repo1", "owner/repo2"], "tok"]);
@@ -411,13 +412,12 @@ describe("useGetSecurityAlerts", () => {
     expect(result).toHaveLength(3);
   });
 
-  it("isolates per-repo errors", async () => {
+  it("rejects when any repo fetch fails", async () => {
     mockFetch
-      .mockResolvedValueOnce([makeAlert(1)])
+      .mockResolvedValueOnce(mockOk([makeAlert(1)]))
       .mockRejectedValueOnce(new Error("403 Forbidden"));
 
     useGetSecurityAlerts(["owner/repo1", "owner/repo2"], "tok");
-    const result = (await capturedFetcher!()) as unknown[];
-    expect(result).toHaveLength(1);
+    await expect(capturedFetcher!()).rejects.toThrow("403 Forbidden");
   });
 });

@@ -69,6 +69,7 @@ export const DEPLOYMENT_STATUS: Record<DeploymentStatus, { label: string; icon: 
   failure: { label: "FAILED", icon: "x" },
   pending: { label: "PENDING", icon: "circleDot" },
   in_progress: { label: "IN PROGRESS", icon: "refresh" },
+  unknown: { label: "UNKNOWN", icon: "circleDot" },
 };
 
 export const SEVERITY_ORDER: Record<AlertSeverity, number> = {

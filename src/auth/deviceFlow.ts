@@ -15,7 +15,7 @@ export async function requestDeviceCode(clientId: string): Promise<DeviceCodeRes
     },
     body: JSON.stringify({
       client_id: clientId,
-      scope: "repo notifications read:user",
+      scope: "repo notifications read:user security_events",
     }),
   });
   if (!res.ok) throw new Error(`Device code request failed: ${res.status}`);

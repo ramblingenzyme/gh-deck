@@ -115,7 +115,7 @@ export interface Label {
   color: string;
 }
 
-export type DeploymentStatus = "success" | "failure" | "pending" | "in_progress";
+export type DeploymentStatus = "success" | "failure" | "pending" | "in_progress" | "unknown";
 export type AlertSeverity = "critical" | "high" | "medium" | "low";
 
 export interface ReleaseItem {

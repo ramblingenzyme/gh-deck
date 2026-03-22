@@ -55,7 +55,9 @@ export function useGetUser(token: string | null) {
   return useSWR<AuthUser>(
     token ? ["user", token] : null,
     async () => {
-      const raw = await githubFetch<GHUser>("/user", token!);
+      const res = await githubFetch("/user", token!);
+      if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+      const raw = (await res.json()) as GHUser;
       return { login: raw.login, avatarUrl: raw.avatar_url, name: raw.name };
     },
     { refreshInterval: POLL },
@@ -66,10 +68,12 @@ export function useGetPRs(q: string, token: string | null) {
   return useSWR<PRItem[]>(
     token ? ["prs", q, token] : null,
     async () => {
-      const raw = await githubFetch<GHSearchResult>(
+      const res = await githubFetch(
         `/search/issues?q=${encodeURIComponent("is:pr " + q)}&sort=updated&per_page=30`,
         token!,
       );
+      if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+      const raw = (await res.json()) as GHSearchResult;
       return raw.items.map(mapSearchItemToPR);
     },
     { refreshInterval: POLL },
@@ -80,10 +84,12 @@ export function useGetIssues(q: string, token: string | null) {
   return useSWR<IssueItem[]>(
     token ? ["issues", q, token] : null,
     async () => {
-      const raw = await githubFetch<GHSearchResult>(
+      const res = await githubFetch(
         `/search/issues?q=${encodeURIComponent("is:issue " + q)}&sort=updated&per_page=30`,
         token!,
       );
+      if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+      const raw = (await res.json()) as GHSearchResult;
       return raw.items.map(mapSearchItemToIssue);
     },
     { refreshInterval: POLL },
@@ -94,10 +100,9 @@ export function useGetNotifications(token: string | null) {
   return useSWR<NotifItem[]>(
     token ? ["notifications", token] : null,
     async () => {
-      const raw = await githubFetch<GHNotification[]>(
-        "/notifications?all=false&per_page=30",
-        token!,
-      );
+      const res = await githubFetch("/notifications?all=false&per_page=30", token!);
+      if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+      const raw = (await res.json()) as GHNotification[];
       return raw.map(mapNotification);
     },
     { refreshInterval: POLL },
@@ -111,15 +116,10 @@ export function useGetCIRuns(repos: string[], token: string | null) {
       const raw = (
         await Promise.all(
           repos.slice(0, 5).map(async (repo) => {
-            try {
-              const data = await githubFetch<GHWorkflowRunsResult>(
-                `/repos/${repo}/actions/runs?per_page=10`,
-                token!,
-              );
-              return (data.workflow_runs ?? []).map((run) => ({ run, repo }));
-            } catch {
-              return [];
-            }
+            const res = await githubFetch(`/repos/${repo}/actions/runs?per_page=10`, token!);
+            if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+            const data = (await res.json()) as GHWorkflowRunsResult;
+            return (data.workflow_runs ?? []).map((run) => ({ run, repo }));
           }),
         )
       ).flat();
@@ -137,15 +137,10 @@ export function useGetReleases(repos: string[], token: string | null) {
       const raw = (
         await Promise.all(
           repos.slice(0, 5).map(async (repo) => {
-            try {
-              const data = await githubFetch<GHRelease[]>(
-                `/repos/${repo}/releases?per_page=10`,
-                token!,
-              );
-              return data.map((release) => ({ release, repo }));
-            } catch {
-              return [];
-            }
+            const res = await githubFetch(`/repos/${repo}/releases?per_page=10`, token!);
+            if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+            const data = (await res.json()) as GHRelease[];
+            return data.map((release) => ({ release, repo }));
           }),
         )
       ).flat();
@@ -163,31 +158,24 @@ export function useGetDeployments(repos: string[], token: string | null) {
       const raw = (
         await Promise.all(
           repos.slice(0, 5).map(async (repo) => {
-            try {
-              const deployments = await githubFetch<GHDeployment[]>(
-                `/repos/${repo}/deployments?per_page=10`,
-                token!,
-              );
-              return deployments.map((deployment) => ({ deployment, repo }));
-            } catch {
-              return [];
-            }
+            const res = await githubFetch(`/repos/${repo}/deployments?per_page=10`, token!);
+            if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+            const deployments = (await res.json()) as GHDeployment[];
+            return deployments.map((deployment) => ({ deployment, repo }));
           }),
         )
       ).flat();
       raw.sort((a, b) => b.deployment.created_at.localeCompare(a.deployment.created_at));
       return await Promise.all(
         raw.slice(0, 20).map(async ({ deployment, repo }) => {
-          try {
-            const statuses = await githubFetch<GHDeploymentStatus[]>(
-              `/repos/${repo}/deployments/${deployment.id}/statuses?per_page=1`,
-              token!,
-            );
-            const state = statuses[0]?.state ?? "pending";
-            return mapDeployment(deployment, DEPLOYMENT_STATE_MAP[state] ?? "pending", repo);
-          } catch {
-            return mapDeployment(deployment, "pending", repo);
-          }
+          const res = await githubFetch(
+            `/repos/${repo}/deployments/${deployment.id}/statuses?per_page=1`,
+            token!,
+          );
+          if (!res.ok) return mapDeployment(deployment, "unknown", repo);
+          const statuses = (await res.json()) as GHDeploymentStatus[];
+          const state = statuses[0]?.state ?? "pending";
+          return mapDeployment(deployment, DEPLOYMENT_STATE_MAP[state] ?? "pending", repo);
         }),
       );
     },
@@ -202,15 +190,13 @@ export function useGetSecurityAlerts(repos: string[], token: string | null) {
       const raw = (
         await Promise.all(
           repos.slice(0, 5).map(async (repo) => {
-            try {
-              const alerts = await githubFetch<GHDependabotAlert[]>(
-                `/repos/${repo}/dependabot/alerts?state=open&per_page=10`,
-                token!,
-              );
-              return alerts.map((alert) => ({ alert, repo }));
-            } catch {
-              return [];
-            }
+            const res = await githubFetch(
+              `/repos/${repo}/dependabot/alerts?state=open&per_page=10`,
+              token!,
+            );
+            if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+            const alerts = (await res.json()) as GHDependabotAlert[];
+            return alerts.map((alert) => ({ alert, repo }));
           }),
         )
       ).flat();
@@ -225,10 +211,12 @@ export function useGetUserRepos(token: string | null) {
   return useSWR<string[]>(
     token ? ["user-repos", token] : null,
     async () => {
-      const raw = await githubFetch<GHRepo[]>(
+      const res = await githubFetch(
         "/user/repos?per_page=100&sort=updated&affiliation=owner,collaborator,organization_member",
         token!,
       );
+      if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+      const raw = (await res.json()) as GHRepo[];
       return raw.map((r) => r.full_name);
     },
     { refreshInterval: POLL },
@@ -239,7 +227,9 @@ export function useGetActivity(login: string, token: string | null) {
   return useSWR<ActivityItem[]>(
     token && login ? ["activity", login, token] : null,
     async () => {
-      const raw = await githubFetch<GHEvent[]>(`/users/${login}/events?per_page=30`, token!);
+      const res = await githubFetch(`/users/${login}/events?per_page=30`, token!);
+      if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+      const raw = (await res.json()) as GHEvent[];
       return raw.flatMap((e) => {
         const item = mapEvent(e);
         return item ? [item] : [];

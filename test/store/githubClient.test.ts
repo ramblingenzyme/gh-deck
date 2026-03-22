@@ -10,15 +10,12 @@ describe("githubFetch", () => {
     vi.unstubAllGlobals();
   });
 
-  it("returns parsed JSON on success", async () => {
-    const mockData = { login: "alice", avatar_url: "https://example.com/avatar", name: "Alice" };
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockData),
-    } as Response);
+  it("returns the Response on success", async () => {
+    const mockResponse = { ok: true, json: () => Promise.resolve({}) } as Response;
+    vi.mocked(fetch).mockResolvedValueOnce(mockResponse);
 
     const result = await githubFetch("/user", "tok123");
-    expect(result).toEqual(mockData);
+    expect(result).toBe(mockResponse);
     expect(fetch).toHaveBeenCalledWith("https://api.github.com/user", {
       headers: {
         Authorization: "Bearer tok123",
@@ -28,14 +25,13 @@ describe("githubFetch", () => {
     });
   });
 
-  it("throws on non-200 response", async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: false,
-      status: 404,
-      statusText: "Not Found",
-    } as Response);
+  it("returns the Response on non-200 without throwing", async () => {
+    const mockResponse = { ok: false, status: 404, statusText: "Not Found" } as Response;
+    vi.mocked(fetch).mockResolvedValueOnce(mockResponse);
 
-    await expect(githubFetch("/user", "tok123")).rejects.toThrow("GitHub API error: 404 Not Found");
+    const result = await githubFetch("/user", "tok123");
+    expect(result).toBe(mockResponse);
+    expect(result.ok).toBe(false);
   });
 
   it("forwards AbortSignal to fetch", async () => {

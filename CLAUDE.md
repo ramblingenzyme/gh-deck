@@ -56,6 +56,10 @@ Prefer native platform capabilities over JS implementations. Reach for JS only w
 - No CSS-in-JS, no inline styles
 - Per-column accent color set via `--color-accent` CSS variable
 
+### Fetch wrappers
+
+Keep fetch wrappers thin — they should return `Response` directly and not throw on non-2xx status codes. Callers are responsible for checking `res.ok` and handling error cases themselves. Do not add a wrapper that re-centralises error throwing, as this defeats the purpose.
+
 ### Module structure
 
 - No barrel files (`index.ts` that re-export other modules) — import directly by path.

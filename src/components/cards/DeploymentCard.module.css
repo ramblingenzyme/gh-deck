@@ -14,6 +14,10 @@
   --deploy-color: var(--ci-running);
   border-left: 3px solid var(--deploy-color);
 }
+.unknown {
+  --deploy-color: var(--text-muted);
+  border-left: 3px solid var(--deploy-color);
+}
 
 .deployBadge {
   composes: cardBadge from './Card.module.css';
