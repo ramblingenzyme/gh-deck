@@ -12,7 +12,7 @@
 }
 
 .ciBranchMeta {
-  display: inline;
+  color: var(--text-muted);
 }
 
 .ciBadge {
@@ -24,5 +24,6 @@
   display: inline-block;
   white-space: nowrap;
   flex-shrink: 0;
+  align-self: flex-end;
   color: var(--ci-color, var(--text-muted));
 }

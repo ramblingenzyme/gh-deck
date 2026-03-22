@@ -1,7 +1,8 @@
 import type { IssueItem } from "@/types";
-import { Card, CardTitle, CardMeta } from "../ui/Card";
+import { Card, CardTitle, CardFooter } from "../ui/Card";
 import { SvgIcon } from "../ui/SvgIcon";
 import { LabelList } from "./LabelList";
+import { CardStat } from "./CardParts";
 import cardStyles from "./Card.module.css";
 
 interface IssueCardProps {
@@ -15,7 +16,7 @@ export const IssueCard = ({ item }: IssueCardProps) => {
         {item.title}
       </CardTitle>
       <LabelList labels={item.labels} repo={item.repo} />
-      <CardMeta>
+      <CardFooter>
         <span className={cardStyles.cardAuthor}>
           {item.assignee ? (
             <>
@@ -28,11 +29,8 @@ export const IssueCard = ({ item }: IssueCardProps) => {
             "unassigned"
           )}
         </span>
-        <span className={cardStyles.cardStat} aria-label={`${item.comments} comments`}>
-          <SvgIcon name="comment" />
-          {item.comments}
-        </span>
-      </CardMeta>
+        <CardStat icon="comment" count={item.comments} tooltip={`${item.comments} comments`} />
+      </CardFooter>
     </Card>
   );
 };

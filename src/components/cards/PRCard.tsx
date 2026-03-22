@@ -1,8 +1,7 @@
 import type { PRItem } from "@/types";
-import { Card, CardTitle, CardMeta } from "../ui/Card";
-import { SvgIcon } from "../ui/SvgIcon";
-import { Tooltip } from "../ui/Tooltip";
+import { Card, CardTitle, CardFooter } from "../ui/Card";
 import { LabelList } from "./LabelList";
+import { CardStat } from "./CardParts";
 import cardStyles from "./Card.module.css";
 import styles from "./PRCard.module.css";
 
@@ -16,7 +15,7 @@ export const PRCard = ({ item }: PRCardProps) => {
       <CardTitle href={item.url} prefix={`#${item.number}`}>
         {item.title}
       </CardTitle>
-      <CardMeta>
+      <CardFooter>
         <a
           className={cardStyles.cardAuthor}
           href={`https://github.com/${item.author}`}
@@ -27,32 +26,23 @@ export const PRCard = ({ item }: PRCardProps) => {
         </a>
         <div className={cardStyles.cardStats}>
           {item.draft && <span className={styles.draftBadge}>DRAFT</span>}
-          <Tooltip text={`${item.reviews.approved} approvals`}>
-            <span
-              className={
-                item.reviews.approved > 0 ? cardStyles.cardStatApproved : cardStyles.cardStat
-              }
-            >
-              <SvgIcon name="check" />
-              {item.reviews.approved}
-            </span>
-          </Tooltip>
+          <CardStat
+            icon="check"
+            count={item.reviews.approved}
+            tooltip={`${item.reviews.approved} approvals`}
+            variant={item.reviews.approved > 0 ? "approved" : "default"}
+          />
           {item.reviews.requested > 0 && (
-            <Tooltip text={`${item.reviews.requested} reviews requested`}>
-              <span className={cardStyles.cardStatPending}>
-                <SvgIcon name="refresh" />
-                {item.reviews.requested}
-              </span>
-            </Tooltip>
+            <CardStat
+              icon="refresh"
+              count={item.reviews.requested}
+              tooltip={`${item.reviews.requested} reviews requested`}
+              variant="pending"
+            />
           )}
-          <Tooltip text={`${item.comments} comments`}>
-            <span className={cardStyles.cardStat}>
-              <SvgIcon name="comment" />
-              {item.comments}
-            </span>
-          </Tooltip>
+          <CardStat icon="comment" count={item.comments} tooltip={`${item.comments} comments`} />
         </div>
-      </CardMeta>
+      </CardFooter>
       <LabelList labels={item.labels} repo={item.repo} />
     </Card>
   );

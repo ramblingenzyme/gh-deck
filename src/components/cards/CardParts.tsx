@@ -4,6 +4,29 @@ import { Tooltip } from "../ui/Tooltip";
 import { SvgIcon } from "../ui/SvgIcon";
 import styles from "./Card.module.css";
 
+const statVariantClass = {
+  default: styles.cardStat,
+  approved: styles.cardStatApproved,
+  pending: styles.cardStatPending,
+} as const;
+
+interface CardStatProps {
+  icon: IconName;
+  count: number;
+  tooltip?: string;
+  variant?: keyof typeof statVariantClass;
+}
+
+export const CardStat = ({ icon, count, tooltip, variant = "default" }: CardStatProps) => {
+  const inner = (
+    <span className={statVariantClass[variant]}>
+      <SvgIcon name={icon} />
+      {count}
+    </span>
+  );
+  return tooltip ? <Tooltip text={tooltip}>{inner}</Tooltip> : inner;
+};
+
 interface CardTopProps {
   repo: string;
   age: string;

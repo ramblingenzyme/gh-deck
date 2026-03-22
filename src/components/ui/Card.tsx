@@ -30,10 +30,6 @@ export const CardTitle = ({ href, prefix, children }: CardTitleProps) => (
   </p>
 );
 
-export const CardMeta = ({ children }: { children: React.ReactNode }) => (
-  <footer className={cardStyles.cardMeta}>{children}</footer>
-);
-
 export const CardFooter = ({ children }: { children: React.ReactNode }) => (
   <footer className={cardStyles.cardFooter}>{children}</footer>
 );

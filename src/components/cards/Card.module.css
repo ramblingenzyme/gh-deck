@@ -44,18 +44,11 @@
   }
 }
 
-.cardMeta {
+.cardFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  font-size: var(--text-md);
-}
-
-.cardFooter {
-  display: flex;
-  align-items: center;
-  gap: 5px;
   font-size: var(--text-md);
 }
 
@@ -76,12 +69,17 @@
   gap: 6px;
 }
 
-.cardStat {
+.cardStat,
+.cardStatApproved,
+.cardStatPending {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  color: var(--text-muted);
 }
+
+.cardStat         { color: var(--text-muted); }
+.cardStatApproved { color: var(--ci-success); }
+.cardStatPending  { color: var(--ci-running); }
 
 .cardIcon {
   color: var(--text-muted);
@@ -95,18 +93,4 @@
   letter-spacing: 0.03em;
   font-family: var(--font-mono);
   display: inline-block;
-}
-
-.cardStatApproved {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  color: var(--ci-success);
-}
-
-.cardStatPending {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  color: var(--ci-running);
 }
