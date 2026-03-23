@@ -11,21 +11,25 @@ The second minor issue (all 5 `useGet*Query` hooks mounting per column regardles
 ## Changes
 
 ### 1. `src/store/authSlice.ts`
+
 - Remove `user: AuthUser | null` from `AuthState`
 - Remove `userLoaded` reducer
 - Remove `user: null` from `initialState` and `logOut` reducer
 - Keep `AuthUser` type exported (still used as `getUser` return type in `githubApi.ts`)
 
 ### 2. `src/store/githubApi.ts`
+
 - Move `AuthUser` definition here instead of importing from `authSlice` — co-locating with `getUser` is cleaner
 - Export `AuthUser` for any consumers
 
 ### 3. `src/components/App.tsx`
+
 - Remove `userLoaded` import
 - Remove the `useEffect` that dispatches `userLoaded(userData)`
 - Remove the `useGetUserQuery` call (no longer needed here)
 
 ### 4. `src/components/Topbar.tsx`
+
 - Replace `useAppSelector((s) => s.auth)` + `auth.user` reads with:
   - Keep `useAppSelector` for `auth.status` only
   - Add `const { data: user } = useGetUserQuery(undefined, { skip: status !== 'authed' })`
@@ -33,11 +37,13 @@ The second minor issue (all 5 `useGet*Query` hooks mounting per column regardles
   - Update `authed` guard: `status === 'authed' && user`
 
 ### 5. `src/hooks/useColumnData.ts`
+
 - Replace `useAppSelector((s) => s.auth.user?.login ?? "")` with:
   - `const { data: user } = useGetUserQuery(undefined, { skip: demo || !token })`
   - `const login = user?.login ?? ""`
 
 ## Files modified
+
 - `src/store/authSlice.ts`
 - `src/store/githubApi.ts`
 - `src/components/App.tsx`

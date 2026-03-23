@@ -96,7 +96,6 @@ describe("mapSearchItemToIssue", () => {
   });
 });
 
-
 const baseRun: GHWorkflowRun = {
   id: 999,
   name: "CI",

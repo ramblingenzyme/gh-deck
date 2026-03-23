@@ -14,18 +14,18 @@ CI, Releases, Deployments, and Security columns make parallel API requests per `
 
 ## Files Modified
 
-| File | Change |
-|------|--------|
+| File                              | Change                                                     |
+| --------------------------------- | ---------------------------------------------------------- |
 | `src/components/ColumnHeader.tsx` | Drag handle → button; dropdown menu; `onOpenSettings` prop |
-| `src/components/BaseColumn.tsx` | `settingsOpen` state; render `ColumnSettingsModal` |
-| `src/store/layoutMutations.ts` | Added `applyUpdateTitle` |
-| `src/store/layoutStore.ts` | Added `updateColumnTitle` action |
-| `src/hooks/useColumnDragDrop.ts` | `handleRef` type `HTMLSpanElement` → `HTMLButtonElement` |
+| `src/components/BaseColumn.tsx`   | `settingsOpen` state; render `ColumnSettingsModal`         |
+| `src/store/layoutMutations.ts`    | Added `applyUpdateTitle`                                   |
+| `src/store/layoutStore.ts`        | Added `updateColumnTitle` action                           |
+| `src/hooks/useColumnDragDrop.ts`  | `handleRef` type `HTMLSpanElement` → `HTMLButtonElement`   |
 
 ## New Files
 
-| File | Purpose |
-|------|---------|
-| `src/components/ColumnSettingsModal.tsx` | Settings modal (title + query fields) |
-| `src/components/ColumnSettingsModal.module.css` | Modal field label styles |
-| `src/components/ColumnHeader.module.css` | Dropdown menu styles |
+| File                                            | Purpose                               |
+| ----------------------------------------------- | ------------------------------------- |
+| `src/components/ColumnSettingsModal.tsx`        | Settings modal (title + query fields) |
+| `src/components/ColumnSettingsModal.module.css` | Modal field label styles              |
+| `src/components/ColumnHeader.module.css`        | Dropdown menu styles                  |

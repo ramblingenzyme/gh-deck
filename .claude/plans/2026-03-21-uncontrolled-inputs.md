@@ -21,7 +21,7 @@
 
 ## Files Modified
 
-| File | Change |
-|------|--------|
+| File                                     | Change                                                                             |
+| ---------------------------------------- | ---------------------------------------------------------------------------------- |
 | `src/components/ColumnSettingsModal.tsx` | Removed `title`/`query` state + sync effect; `defaultValue` + `FormData` on submit |
-| `src/components/ui/RepoChipList.tsx` | Removed `input` state; read/clear via `e.target` |
+| `src/components/ui/RepoChipList.tsx`     | Removed `input` state; read/clear via `e.target`                                   |

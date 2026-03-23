@@ -20,20 +20,20 @@ CI, Releases, Deployments, and Security columns make parallel API requests per r
 
 ## Files Modified
 
-| File | Change |
-|------|--------|
-| `src/types/index.ts` | Added `repos?: string[]` to `ColumnConfig` |
-| `src/constants/index.ts` | Added `MULTI_REPO_COLUMN_TYPES` |
-| `src/store/layoutMutations.ts` | Added `applyUpdateRepos` |
-| `src/store/layoutStore.ts` | Added `updateColumnRepos` action |
-| `src/store/layoutStorage.ts` | Removed old `repos → query` migration |
-| `src/hooks/useColumnData.ts` | Use `col.repos ?? []` directly |
-| `src/components/ColumnSettingsModal.tsx` | Conditional `RepoChipList`; reads/writes `col.repos` |
-| `test/store/layoutStorage.test.ts` | Updated migration test to reflect `repos` passthrough |
+| File                                     | Change                                                |
+| ---------------------------------------- | ----------------------------------------------------- |
+| `src/types/index.ts`                     | Added `repos?: string[]` to `ColumnConfig`            |
+| `src/constants/index.ts`                 | Added `MULTI_REPO_COLUMN_TYPES`                       |
+| `src/store/layoutMutations.ts`           | Added `applyUpdateRepos`                              |
+| `src/store/layoutStore.ts`               | Added `updateColumnRepos` action                      |
+| `src/store/layoutStorage.ts`             | Removed old `repos → query` migration                 |
+| `src/hooks/useColumnData.ts`             | Use `col.repos ?? []` directly                        |
+| `src/components/ColumnSettingsModal.tsx` | Conditional `RepoChipList`; reads/writes `col.repos`  |
+| `test/store/layoutStorage.test.ts`       | Updated migration test to reflect `repos` passthrough |
 
 ## New Files
 
-| File | Purpose |
-|------|---------|
-| `src/components/ui/RepoChipList.tsx` | Chip list + add-repo input |
-| `src/components/ui/RepoChipList.module.css` | Chip and input styles |
+| File                                        | Purpose                    |
+| ------------------------------------------- | -------------------------- |
+| `src/components/ui/RepoChipList.tsx`        | Chip list + add-repo input |
+| `src/components/ui/RepoChipList.module.css` | Chip and input styles      |

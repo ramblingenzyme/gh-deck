@@ -9,12 +9,12 @@ all tests that were blocked by a CJS/ESM module-instance split.
 
 ### Packages
 
-| Removed | Added |
-|---------|-------|
-| `react`, `react-dom` | `preact` |
-| `@testing-library/react` | `@testing-library/preact` |
-| `@types/react`, `@types/react-dom` | — |
-| `@vitejs/plugin-react` | `@preact/preset-vite` |
+| Removed                            | Added                     |
+| ---------------------------------- | ------------------------- |
+| `react`, `react-dom`               | `preact`                  |
+| `@testing-library/react`           | `@testing-library/preact` |
+| `@types/react`, `@types/react-dom` | —                         |
+| `@vitejs/plugin-react`             | `@preact/preset-vite`     |
 
 `react-redux` stays — it works with Preact via the `preact/compat` shim.
 
@@ -110,7 +110,7 @@ globalThis bridge (see below) instead of loading a second CJS preact/compat inst
 ### Fix B — `src/test/setup.ts` Vitest setupFile
 
 ```ts
-import * as preactCompat from 'preact/compat';
+import * as preactCompat from "preact/compat";
 
 declare global {
   var __preactCompat: typeof preactCompat | undefined;
@@ -127,18 +127,18 @@ all hook calls share the same closure over ESM `currentComponent`.
 ### Fix C — `vite.config.ts`
 
 ```ts
-const srcPath = resolve(__dirname, './src');   // shared constant for both aliases
+const srcPath = resolve(__dirname, "./src"); // shared constant for both aliases
 
 export default defineConfig({
-  plugins: [preact()],                          // @preact/preset-vite
+  plugins: [preact()], // @preact/preset-vite
   test: {
-    environment: 'happy-dom',
-    pool: 'vmThreads',                          // each worker gets isolated globalThis
-    alias: [{ find: '@', replacement: srcPath }],
-    setupFiles: ['src/test/setup.ts'],
+    environment: "happy-dom",
+    pool: "vmThreads", // each worker gets isolated globalThis
+    alias: [{ find: "@", replacement: srcPath }],
+    setupFiles: ["src/test/setup.ts"],
   },
   resolve: {
-    alias: [{ find: '@', replacement: srcPath }],
+    alias: [{ find: "@", replacement: srcPath }],
   },
 });
 ```

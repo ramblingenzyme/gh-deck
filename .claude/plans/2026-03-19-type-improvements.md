@@ -7,12 +7,15 @@ Reviewing `src/types/index.ts` and related utilities for duplication, inconsiste
 ## Issues Found
 
 ### 1. Duplicate `AnyItem` definition
+
 `src/utils/getItemDisplayText.ts` defines its own local `type AnyItem = PRItem | IssueItem | CIItem | NotifItem | ActivityItem` instead of importing `KnownItem` from `@/types`. These are identical — pure duplication.
 
 **Fix:** Remove the local type and use the imported `KnownItem`.
 
 ### 2. Inline literal unions not exported
+
 Two literal unions are defined inline on interfaces but never exported, so they can't be referenced elsewhere without duplicating them:
+
 - `IssueItem.state: "open" | "closed"` → export as `IssueState`
 - `CIItem.triggered: "push" | "pull_request" | "release"` → export as `CITrigger`
 
@@ -26,6 +29,7 @@ Two literal unions are defined inline on interfaces but never exported, so they 
 ## Changes
 
 ### `src/types/index.ts`
+
 ```ts
 export type IssueState = "open" | "closed";
 export type CITrigger = "push" | "pull_request" | "release";
@@ -35,6 +39,7 @@ export type CITrigger = "push" | "pull_request" | "release";
 ```
 
 ### `src/utils/getItemDisplayText.ts`
+
 ```ts
 import type { KnownItem } from "@/types";
 // remove local AnyItem; use KnownItem as parameter type

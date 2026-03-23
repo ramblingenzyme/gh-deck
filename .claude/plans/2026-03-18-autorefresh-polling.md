@@ -9,6 +9,7 @@ Users should not have to reload the page to see fresh data. Each column should p
 ### Auto-polling (`src/hooks/useColumnData.ts`)
 
 Added `pollingInterval: 5 * 60 * 1000` (5 minutes) to all RTK Query hooks:
+
 - `useGetPRsQuery`
 - `useGetIssuesQuery`
 - `useGetNotificationsQuery`
@@ -20,6 +21,7 @@ Also exposed `isFetching` and `refetch` from the active query in `UseColumnDataR
 ### Manual refresh button (`src/components/Column.tsx`)
 
 Added a ↻ button to each column header (left of ⚙). On click:
+
 - Calls `refetch()` on the column's active RTK Query.
 - Sets local `spinning` state for 800ms to guarantee at least one full icon rotation.
 - The icon also spins while `isFetching` is true (e.g. during auto-poll or slower requests).

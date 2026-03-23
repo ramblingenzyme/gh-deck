@@ -1,6 +1,7 @@
 # CSS Nesting Refactor Plan
 
 ## Context
+
 The CSS module files use flat selector patterns: pseudo-class rules (`:hover`, `:focus`) and modifier classes are declared as separate top-level rules adjacent to their parent. Native CSS nesting (`&`) is broadly supported (Chrome 112+, Firefox 117+, Safari 16.5+) and Vite + PostCSS handle it natively. Using nesting will co-locate related rules, reduce repetition, and make the modifier/state structure self-evident.
 
 ---
@@ -19,17 +20,17 @@ Three nesting patterns to apply throughout:
 
 ## Files to Modify
 
-| File | Key opportunities |
-|------|-------------------|
-| `src/components/BaseColumn.module.css` | `.btnIcon:hover`, `.btnIconActive`, `.btnIconSpinning`, `.colHeader:hover .dragHandle`, `.dragHandle:hover`, `.btnConfirmCancel:hover`, `.btnConfirmDanger:hover`, `.dropLeft::before` / `.dropRight::after`, `@keyframes skeleton-pulse` inside `.skeletonCard` |
-| `src/components/ui/Modal.module.css` | `.dialog::backdrop`, `.btnModal:hover`, `.btnModalPrimary:hover`, `.btnModalDanger:hover/:disabled`, `.fieldInput:focus` |
-| `src/components/AuthModal.module.css` | `.btnGitHub:hover`, `.demoLink:hover`, `.btnCancel:hover`, `.btnModal:hover` |
-| `src/components/Topbar.module.css` | `.btnAdd:hover`, `.btnSignIn:hover`, `.avatarBtn:hover`, `.menuSignOut:hover` |
-| `src/components/AddColumnModal.module.css` | `.typeBtn:hover`, `.typeBtn.active` |
-| `src/components/ui/Tooltip.module.css` | `.tooltip.above`, `.tooltip.below`, `.wrapper:hover .tooltip` / `:focus-within .tooltip`, `@media reduced-motion` inside `.tooltip` |
-| `src/components/ui/InlineEdit.module.css` | `.display:hover`, `.display:hover .pencil`, `.textarea:focus`, `.confirm:hover`, `.cancel:hover` |
-| `src/components/cards/Card.module.css` | `.cardTitleLink:hover` inside `.cardTitleLink` |
-| `src/components/cards/Label.module.css` | `.label.colored`, `.label.fallback` |
+| File                                       | Key opportunities                                                                                                                                                                                                                                                |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/components/BaseColumn.module.css`     | `.btnIcon:hover`, `.btnIconActive`, `.btnIconSpinning`, `.colHeader:hover .dragHandle`, `.dragHandle:hover`, `.btnConfirmCancel:hover`, `.btnConfirmDanger:hover`, `.dropLeft::before` / `.dropRight::after`, `@keyframes skeleton-pulse` inside `.skeletonCard` |
+| `src/components/ui/Modal.module.css`       | `.dialog::backdrop`, `.btnModal:hover`, `.btnModalPrimary:hover`, `.btnModalDanger:hover/:disabled`, `.fieldInput:focus`                                                                                                                                         |
+| `src/components/AuthModal.module.css`      | `.btnGitHub:hover`, `.demoLink:hover`, `.btnCancel:hover`, `.btnModal:hover`                                                                                                                                                                                     |
+| `src/components/Topbar.module.css`         | `.btnAdd:hover`, `.btnSignIn:hover`, `.avatarBtn:hover`, `.menuSignOut:hover`                                                                                                                                                                                    |
+| `src/components/AddColumnModal.module.css` | `.typeBtn:hover`, `.typeBtn.active`                                                                                                                                                                                                                              |
+| `src/components/ui/Tooltip.module.css`     | `.tooltip.above`, `.tooltip.below`, `.wrapper:hover .tooltip` / `:focus-within .tooltip`, `@media reduced-motion` inside `.tooltip`                                                                                                                              |
+| `src/components/ui/InlineEdit.module.css`  | `.display:hover`, `.display:hover .pencil`, `.textarea:focus`, `.confirm:hover`, `.cancel:hover`                                                                                                                                                                 |
+| `src/components/cards/Card.module.css`     | `.cardTitleLink:hover` inside `.cardTitleLink`                                                                                                                                                                                                                   |
+| `src/components/cards/Label.module.css`    | `.label.colored`, `.label.fallback`                                                                                                                                                                                                                              |
 
 ---
 

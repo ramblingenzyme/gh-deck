@@ -39,7 +39,6 @@ const col: ColumnConfig = {
   query: "is:open",
 };
 
-
 describe("ColumnSettingsModal", () => {
   it("title input shows the current column title", () => {
     render(<ColumnSettingsModal open={true} col={col} onClose={noop} />);
@@ -86,5 +85,4 @@ describe("ColumnSettingsModal", () => {
     const resetInput = screen.getByLabelText(/title/i) as HTMLInputElement;
     expect(resetInput.value).toBe("My PRs");
   });
-
 });

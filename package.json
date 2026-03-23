@@ -1,7 +1,7 @@
 {
   "name": "octodeck",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "oxlint src",
-    "format": "oxfmt src",
+    "format": "oxfmt .",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
@@ -22,13 +22,6 @@
     "react": "file:./shims/react",
     "swr": "^2.4.1",
     "zustand": "^5.0.12"
-  },
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "oxfmt",
-      "oxlint",
-      "vitest related --run"
-    ]
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260317.1",
@@ -47,5 +40,15 @@
     "vite": "^8.0.1",
     "vitest": "^4.1.0",
     "wrangler": "^4.76.0"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "oxfmt",
+      "oxlint",
+      "vitest related --run"
+    ],
+    "**/*.{css,md}": [
+      "oxfmt"
+    ]
   }
 }

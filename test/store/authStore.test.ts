@@ -5,8 +5,7 @@ vi.mock("@/auth/token", () => ({
   clearToken: vi.fn(),
 }));
 
-const resetStore = () =>
-  useAuthStore.setState({ status: "idle", sessionId: null, error: null });
+const resetStore = () => useAuthStore.setState({ status: "idle", sessionId: null, error: null });
 
 beforeEach(() => {
   vi.clearAllMocks();

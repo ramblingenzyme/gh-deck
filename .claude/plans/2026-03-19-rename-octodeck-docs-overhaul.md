@@ -2,19 +2,19 @@
 
 ## Context
 
-The app was called "HubDeck". Renamed to "Octodeck" — a nod to GitHub's Octocat and the TweetDeck-style deck format. Docs were stale (README listed implemented features as deferred, SETUP.md duplicated README, CLAUDE.md duplicated architecture). Goal: a README focused on *what and why*, a lean CLAUDE.md with only Claude-specific guidance, and consistent "Octodeck" branding everywhere. A SVG logo mark was also added to the topbar.
+The app was called "HubDeck". Renamed to "Octodeck" — a nod to GitHub's Octocat and the TweetDeck-style deck format. Docs were stale (README listed implemented features as deferred, SETUP.md duplicated README, CLAUDE.md duplicated architecture). Goal: a README focused on _what and why_, a lean CLAUDE.md with only Claude-specific guidance, and consistent "Octodeck" branding everywhere. A SVG logo mark was also added to the topbar.
 
 ## Changes
 
 ### Rename: HubDeck → Octodeck
 
-| File | Change |
-|------|--------|
-| `package.json` | `"name": "octodeck"` |
-| `index.html` | `<title>Octodeck</title>` |
-| `src/components/Topbar.tsx` | Logo text → `Octodeck` |
-| `CLAUDE.md` | Updated branding, corrected mock data path |
-| `README.md` | Full rewrite |
+| File                        | Change                                     |
+| --------------------------- | ------------------------------------------ |
+| `package.json`              | `"name": "octodeck"`                       |
+| `index.html`                | `<title>Octodeck</title>`                  |
+| `src/components/Topbar.tsx` | Logo text → `Octodeck`                     |
+| `CLAUDE.md`                 | Updated branding, corrected mock data path |
+| `README.md`                 | Full rewrite                               |
 
 ### Deleted
 

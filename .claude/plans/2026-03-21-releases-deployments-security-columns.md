@@ -19,10 +19,12 @@ mock data → GitHub API query hook → mapper → column component → card com
 Extended `ColumnType` union with `"releases" | "deployments" | "security"`.
 
 Added new types:
+
 - `DeploymentStatus` — `"success" | "failure" | "pending" | "in_progress"`
 - `AlertSeverity` — `"critical" | "high" | "medium" | "low"`
 
 Added new interfaces:
+
 - `ReleaseItem` — `{ id, repo, tag, name, prerelease, age, url }`
 - `DeploymentItem` — `{ id, repo, environment, status, ref, creator, age, url }`
 - `SecurityItem` — `{ id, repo, package, severity, summary, age, url }`
@@ -41,6 +43,7 @@ and the `IconName` union in `types/index.ts`.
 ## Constants (`src/constants/index.ts`)
 
 Added to `COLUMN_TYPES`:
+
 - `releases` — icon: `tag`, accent: `#34d399` (emerald)
 - `deployments` — icon: `rocket`, accent: `#60a5fa` (blue)
 - `security` — icon: `shield`, accent: `#f87171` (red)
@@ -85,14 +88,14 @@ All poll at `POLL` (5 min).
 
 ## Components
 
-| File | Purpose |
-|------|---------|
-| `src/components/columns/ReleasesColumn.tsx` + `.module.css` | Column wrapper, emerald accent |
-| `src/components/columns/DeploymentsColumn.tsx` + `.module.css` | Column wrapper, blue accent |
-| `src/components/columns/SecurityColumn.tsx` + `.module.css` | Column wrapper, red accent |
-| `src/components/cards/ReleaseCard.tsx` + `.module.css` | Tag + name + pre-release badge |
-| `src/components/cards/DeploymentCard.tsx` + `.module.css` | Environment + ref/creator + status badge |
-| `src/components/cards/SecurityCard.tsx` + `.module.css` | Package + severity badge + summary |
+| File                                                           | Purpose                                  |
+| -------------------------------------------------------------- | ---------------------------------------- |
+| `src/components/columns/ReleasesColumn.tsx` + `.module.css`    | Column wrapper, emerald accent           |
+| `src/components/columns/DeploymentsColumn.tsx` + `.module.css` | Column wrapper, blue accent              |
+| `src/components/columns/SecurityColumn.tsx` + `.module.css`    | Column wrapper, red accent               |
+| `src/components/cards/ReleaseCard.tsx` + `.module.css`         | Tag + name + pre-release badge           |
+| `src/components/cards/DeploymentCard.tsx` + `.module.css`      | Environment + ref/creator + status badge |
+| `src/components/cards/SecurityCard.tsx` + `.module.css`        | Package + severity badge + summary       |
 
 `DeploymentCard` mirrors `CICard` style (color-coded via CSS custom property + `color-mix`).
 `SecurityCard` uses the same badge pattern with severity-keyed CSS classes.

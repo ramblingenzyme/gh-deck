@@ -23,33 +23,38 @@ Goal: set up automated deployment via GitHub Actions to Cloudflare Pages (`octod
 ## Manual setup (one-time, outside of code)
 
 ### GitHub repo secrets (Settings → Secrets and variables → Actions)
-| Name | Value |
-|------|-------|
-| `CLOUDFLARE_API_TOKEN` | CF custom token with "Cloudflare Pages: Edit" (Account) permission |
-| `CLOUDFLARE_ACCOUNT_ID` | From Cloudflare dashboard right sidebar |
+
+| Name                    | Value                                                              |
+| ----------------------- | ------------------------------------------------------------------ |
+| `CLOUDFLARE_API_TOKEN`  | CF custom token with "Cloudflare Pages: Edit" (Account) permission |
+| `CLOUDFLARE_ACCOUNT_ID` | From Cloudflare dashboard right sidebar                            |
 
 ### Cloudflare Pages secrets
+
 Run for each: `npx wrangler pages secret put <NAME> --project-name=octodeck`
 
-| Name | Notes |
-|------|-------|
-| `GITHUB_CLIENT_ID` | GitHub App OAuth client ID |
-| `GITHUB_CLIENT_SECRET` | GitHub App OAuth client secret |
-| `SESSION_CRYPTO_KEY` | Generate: `openssl rand -base64 32` |
-| `ALLOWED_ORIGIN` | `https://octodeck.pages.dev` |
+| Name                   | Notes                               |
+| ---------------------- | ----------------------------------- |
+| `GITHUB_CLIENT_ID`     | GitHub App OAuth client ID          |
+| `GITHUB_CLIENT_SECRET` | GitHub App OAuth client secret      |
+| `SESSION_CRYPTO_KEY`   | Generate: `openssl rand -base64 32` |
+| `ALLOWED_ORIGIN`       | `https://octodeck.pages.dev`        |
 
 ### Cloudflare Pages environment variables (non-secret)
+
 Set in dashboard: Pages → octodeck → Settings → Environment variables
 
-| Name | Value |
-|------|-------|
+| Name                    | Value                |
+| ----------------------- | -------------------- |
 | `VITE_GITHUB_CLIENT_ID` | GitHub App client ID |
-| `VITE_DEMO_MODE` | `false` |
+| `VITE_DEMO_MODE`        | `false`              |
 
 ### GitHub App settings
+
 Update callback URL to: `https://octodeck.pages.dev/api/callback`
 
 ### Cloudflare Pages project (if not yet created)
+
 ```bash
 npx wrangler pages project create octodeck
 ```

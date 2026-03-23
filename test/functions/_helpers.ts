@@ -1,8 +1,5 @@
 /** Minimal EventContext stub for PagesFunction handlers. */
-export function makeCtx(
-  request: Request,
-  env: Record<string, string>,
-): never {
+export function makeCtx(request: Request, env: Record<string, string>): never {
   return {
     request,
     env,
@@ -11,7 +8,7 @@ export function makeCtx(
     waitUntil: () => {},
     passThroughOnException: () => {},
     next: () => Promise.resolve(new Response()),
-    functionPath: '',
+    functionPath: "",
     pluginArgs: {},
   } as never;
 }
@@ -20,9 +17,9 @@ export function makeCtx(
 export async function makeKey(): Promise<string> {
   const raw = crypto.getRandomValues(new Uint8Array(32));
   return btoa(String.fromCharCode(...raw))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
 /**

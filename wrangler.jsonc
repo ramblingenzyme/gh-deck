@@ -5,6 +5,6 @@
   "compatibility_flags": ["nodejs_compat"],
   // Cloudflare Workers free tier CPU limit
   "limits": {
-    "cpu_ms": 10
-  }
+    "cpu_ms": 10,
+  },
 }

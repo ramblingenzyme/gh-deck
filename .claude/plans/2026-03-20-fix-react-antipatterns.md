@@ -31,10 +31,12 @@ Several components used React antipatterns or unnecessary JS where native browse
 ### 3. `Modal.tsx` — Add `open` prop; remove manual Escape keydown listener
 
 **Problem:**
+
 - Visibility is split across two mechanisms: callers conditionally render `<Modal>` and Modal calls `showModal()` on mount. This is inconsistent — the dialog's open state isn't owned in one place.
 - A `document.addEventListener("keydown", ...)` effect manually handles Escape. The native `<dialog>` `onCancel` event already covers this.
 
 **Fix:**
+
 1. Add `open: boolean` prop to `Modal`. Drive `showModal()` / `close()` from a `useEffect` watching `open`:
    ```tsx
    useEffect(() => {
@@ -60,6 +62,7 @@ Several components used React antipatterns or unnecessary JS where native browse
 ### 3a. Update callers of `Modal`
 
 **`App.tsx`:** Change from conditional render to always-rendered with `open` prop:
+
 ```tsx
 // Before
 {authModal.isOpen && authStatus !== "authed" && <AuthModal ... />}

@@ -34,7 +34,9 @@ Follow-up polish to the Phase 3 repo picker work and existing CI card styling.
   white-space: nowrap;
 
   li {
-    &:not(:first-child) { padding-top: 4px; }
+    &:not(:first-child) {
+      padding-top: 4px;
+    }
     &:not(:last-child) {
       padding-bottom: 4px;
       border-bottom: 1px solid var(--border-ghost);
@@ -50,12 +52,12 @@ Follow-up polish to the Phase 3 repo picker work and existing CI card styling.
 
 ## Files Modified
 
-| File | Change |
-|------|--------|
-| `src/components/ui/Tooltip.tsx` | `text: ReactNode`; `align` prop; removed `wrapText` |
-| `src/components/ui/Tooltip.module.css` | Added `.end` class; removed `.wrapText` |
-| `src/components/BaseColumn.tsx` | Repo lozenge passes `<ul>` JSX; `align="end"` on Tooltip |
-| `src/components/BaseColumn.module.css` | Added `.repoList` styles; `--border-ghost` used for dividers |
-| `src/globals.css` | Added `--border-ghost: #3a3a52` |
-| `src/components/cards/Card.module.css` | `.cardMeta` → `align-items: flex-end` |
-| `src/components/cards/CICard.module.css` | `.ciBadge` → `white-space: nowrap; flex-shrink: 0` |
+| File                                     | Change                                                       |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| `src/components/ui/Tooltip.tsx`          | `text: ReactNode`; `align` prop; removed `wrapText`          |
+| `src/components/ui/Tooltip.module.css`   | Added `.end` class; removed `.wrapText`                      |
+| `src/components/BaseColumn.tsx`          | Repo lozenge passes `<ul>` JSX; `align="end"` on Tooltip     |
+| `src/components/BaseColumn.module.css`   | Added `.repoList` styles; `--border-ghost` used for dividers |
+| `src/globals.css`                        | Added `--border-ghost: #3a3a52`                              |
+| `src/components/cards/Card.module.css`   | `.cardMeta` → `align-items: flex-end`                        |
+| `src/components/cards/CICard.module.css` | `.ciBadge` → `white-space: nowrap; flex-shrink: 0`           |

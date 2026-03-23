@@ -15,6 +15,7 @@ Add `url: string` to `PRItem`, `IssueItem`, `CIItem`, `NotifItem`, and `Activity
 ### 2. Populate mock data with GitHub-style URLs (`src/data/mock.ts`)
 
 Add realistic URLs to all mock items:
+
 - PRs: `https://github.com/{repo}/pull/{number}`
 - Issues: `https://github.com/{repo}/issues/{number}`
 - CI: `https://github.com/{repo}/actions/runs/{id}`

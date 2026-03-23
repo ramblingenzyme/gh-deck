@@ -22,6 +22,7 @@ This shape is the widely-recognized open PR symbol and reads clearly even at sma
 ## Implementation
 
 Replaced:
+
 ```tsx
 <circle cx="5" cy="4" r="2" />
 <circle cx="5" cy="12" r="2" />
@@ -32,6 +33,7 @@ Replaced:
 ```
 
 With:
+
 ```tsx
 <circle cx="4" cy="4" r="1.75" />
 <circle cx="4" cy="12" r="1.75" />
@@ -43,4 +45,5 @@ With:
 ## Usage
 
 `GitMergeIcon` / `"gitMerge"` is used in:
+
 - `src/constants/index.ts` — `prs` column icon, `pr_opened` and `pr_merged` activity icons

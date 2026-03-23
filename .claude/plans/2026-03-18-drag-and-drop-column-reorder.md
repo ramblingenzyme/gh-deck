@@ -89,7 +89,10 @@ useEffect(() => {
     element: el,
     getData: () => ({ columnId: col.id }),
   });
-  return () => { cleanupDraggable(); cleanupDropTarget(); };
+  return () => {
+    cleanupDraggable();
+    cleanupDropTarget();
+  };
 }, [col.id]);
 ```
 

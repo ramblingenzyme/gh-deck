@@ -5,6 +5,7 @@
 The app manages column state in a local `useColumns` React hook. The goal is to replace it with an RTK Query `configApi` service. The RTK Query cache is the single source of truth — no separate reducer slice. Immer `produce` is used for collection mutations inside `queryFn`s.
 
 **Storage concern separated cleanly:**
+
 - A `layoutStorage` helper module owns all `localStorage` read/write — one place to change
 - Endpoints use `queryFn` (bypass `baseQuery`) so each endpoint is self-contained
 - `baseQuery` is a minimal placeholder pointing at the future API base URL
@@ -81,14 +82,14 @@ export const store = configureStore({
 
 ## Files Changed
 
-| Action | Path |
-|--------|------|
-| Create | `src/store/layoutStorage.ts` |
-| Create | `src/store/configApi.ts` |
-| Create | `src/store/index.ts` |
-| Modify | `src/main.tsx` — add `<Provider store={store}>` |
+| Action | Path                                                                 |
+| ------ | -------------------------------------------------------------------- |
+| Create | `src/store/layoutStorage.ts`                                         |
+| Create | `src/store/configApi.ts`                                             |
+| Create | `src/store/index.ts`                                                 |
+| Modify | `src/main.tsx` — add `<Provider store={store}>`                      |
 | Modify | `src/components/App.tsx` — replace `useColumns` with RTK Query hooks |
-| Delete | `src/hooks/useColumns.ts` |
+| Delete | `src/hooks/useColumns.ts`                                            |
 
 ---
 

@@ -11,8 +11,9 @@ vi.mock("@/auth/oauthFlow", () => ({
 }));
 
 vi.mock("@/store/authStore", () => ({
-  useAuthStore: vi.fn((selector: (s: { status: string; error: string | null; clearError: () => void }) => unknown) =>
-    selector({ status: "idle", error: null, clearError: mockClearError }),
+  useAuthStore: vi.fn(
+    (selector: (s: { status: string; error: string | null; clearError: () => void }) => unknown) =>
+      selector({ status: "idle", error: null, clearError: mockClearError }),
   ),
 }));
 

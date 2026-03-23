@@ -3,6 +3,7 @@
 ## Context
 
 Previously, the entire column header had `cursor: grab` and the whole `<section>` element was draggable. This adds:
+
 1. A dedicated drag handle icon (⠿) that is the only drag initiator
 2. Visual drop indicators (vertical bars) between columns when dragging
 
@@ -30,5 +31,6 @@ Previously, the entire column header had `cursor: grab` and the whole `<section>
 ## Status
 
 Implemented and verified:
+
 - `npm run build` — TypeScript passes
 - `npm test` — 68/68 tests pass

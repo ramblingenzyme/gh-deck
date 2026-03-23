@@ -21,9 +21,10 @@ Added three plugins: `react` (includes exhaustive-deps, jsx-key, etc.), `jsx-a11
 The `<span role="button">` for the editable query display was replaced with a `<button type="button">`. Removed `role="button"` and `tabIndex={0}` (button is focusable by default).
 
 Added a suppression comment on the `autoFocus` attribute with rationale:
+
 ```tsx
 // eslint-disable-next-line jsx-a11y/no-autofocus -- user-triggered edit (clicking the query text), not autofocus on page load
-autoFocus
+autoFocus;
 ```
 
 ### 3. `src/components/ui/Modal.tsx` — suppress two false positives
@@ -34,6 +35,7 @@ autoFocus
 ### 4. `src/components/App.tsx` — fix `exhaustive-deps`
 
 `authModal.close` was referenced inside a `useEffect` dep array as `authModal.close`. Destructured before the effect so the stable `useCallback` ref is captured directly:
+
 ```tsx
 const { close: closeAuthModal } = authModal;
 useEffect(() => {

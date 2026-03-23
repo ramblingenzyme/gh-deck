@@ -8,12 +8,12 @@ The app only uses `useQuery` (no mutations, no infinite scroll, no devtools), ma
 
 ## API mapping
 
-| TanStack Query | SWR equivalent |
-|---|---|
+| TanStack Query                                              | SWR equivalent                                               |
+| ----------------------------------------------------------- | ------------------------------------------------------------ |
 | `useQuery({ queryKey, queryFn, enabled, refetchInterval })` | `useSWR(enabled ? key : null, fetcher, { refreshInterval })` |
-| `data, isLoading, isFetching, error` | `data, isLoading, isValidating, error` |
-| `refetch()` | `mutate()` |
-| `QueryClientProvider` + `QueryClient` | *(removed — no provider needed)* |
+| `data, isLoading, isFetching, error`                        | `data, isLoading, isValidating, error`                       |
+| `refetch()`                                                 | `mutate()`                                                   |
+| `QueryClientProvider` + `QueryClient`                       | _(removed — no provider needed)_                             |
 
 ## Files changed
 

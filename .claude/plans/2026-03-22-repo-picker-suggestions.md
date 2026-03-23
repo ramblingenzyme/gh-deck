@@ -22,20 +22,20 @@
 
 ## Files Modified
 
-| File | Change |
-|------|--------|
-| `src/types/github.ts` | Added `GHRepo` interface |
-| `src/store/githubQueries.ts` | Added `useGetUserRepos` |
-| `src/components/ui/RepoChipList.tsx` | Suggestions prop + popover dropdown + keyboard nav |
-| `src/components/ui/RepoChipList.module.css` | Added `.suggestions` + `.suggestion` styles |
-| `src/components/ColumnSettingsModal.tsx` | Fetch suggestions; `key` on form and RepoChipList |
+| File                                        | Change                                             |
+| ------------------------------------------- | -------------------------------------------------- |
+| `src/types/github.ts`                       | Added `GHRepo` interface                           |
+| `src/store/githubQueries.ts`                | Added `useGetUserRepos`                            |
+| `src/components/ui/RepoChipList.tsx`        | Suggestions prop + popover dropdown + keyboard nav |
+| `src/components/ui/RepoChipList.module.css` | Added `.suggestions` + `.suggestion` styles        |
+| `src/components/ColumnSettingsModal.tsx`    | Fetch suggestions; `key` on form and RepoChipList  |
 
 ## New Tests
 
-| File | What's covered |
-|------|----------------|
-| `test/components/ui/RepoChipList.test.tsx` | Chip rendering, add/remove, Enter validation, partial text not saved on remount, suggestions filtering |
-| `test/components/ColumnSettingsModal.test.tsx` | Title/query show current values; unsaved edits to title and query are discarded on close + reopen |
+| File                                           | What's covered                                                                                         |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `test/components/ui/RepoChipList.test.tsx`     | Chip rendering, add/remove, Enter validation, partial text not saved on remount, suggestions filtering |
+| `test/components/ColumnSettingsModal.test.tsx` | Title/query show current values; unsaved edits to title and query are discarded on close + reopen      |
 
 ## Key Decisions
 

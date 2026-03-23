@@ -7,6 +7,7 @@ Replaced the settings modal for filter editing with inline editing directly in t
 ## Changes
 
 ### `src/components/Column.tsx`
+
 - Added `editingQuery` and `draftQuery` state
 - Added `useUpdateColumnQueryMutation` hook
 - Query bar now shows inline input + confirm/cancel in edit mode, clickable text + pencil icon in view mode
@@ -15,13 +16,16 @@ Replaced the settings modal for filter editing with inline editing directly in t
 - Removed `ColumnSettingsModal` import and render
 
 ### `src/components/ColumnHeader.tsx`
+
 - Replaced gear button with `PencilIcon` button, hidden when `col.query` is set
 - Uses `btnIconPencil` CSS class for sizing
 
 ### `src/components/ui/PencilIcon.tsx` (new)
+
 - Shared SVG pencil icon component used in both the query bar and column header
 
 ### `src/components/Column.module.css`
+
 - `.colQueryText` — `cursor: default`, underline + color on hover
 - `.colQueryPencil` — fades in on hover (`opacity: 0` → `0.8`), `1.1em` size
 - `.colQueryInput` — transparent, borderless, monospace, accent-color focus outline

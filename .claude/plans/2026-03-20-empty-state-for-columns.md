@@ -13,15 +13,17 @@ Add an inline empty state directly in `BaseColumn.tsx` — no new component file
 Add one conditional block after the error check:
 
 ```tsx
-{!isLoading && !error && data.length === 0 && (
-  <p className={styles.emptyState}>No results</p>
-)}
+{
+  !isLoading && !error && data.length === 0 && <p className={styles.emptyState}>No results</p>;
+}
 ```
 
 Guard the existing `data.map` line:
 
 ```tsx
-{!isLoading && !error && data.length > 0 && data.map((item) => renderCard(item))}
+{
+  !isLoading && !error && data.length > 0 && data.map((item) => renderCard(item));
+}
 ```
 
 ### Column.module.css (`src/components/Column.module.css`)

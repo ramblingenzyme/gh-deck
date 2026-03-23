@@ -9,7 +9,9 @@ The codebase had three modals sharing boilerplate (`<dialog>` + `showModal()`, C
 ## Components extracted
 
 ### 1. `src/components/ui/Icon.tsx` (moved from `src/components/Icon.tsx`)
+
 Moved the file and `Icon.module.css`. Updated imports in:
+
 - `src/components/AddColumnModal.tsx`
 - `src/components/Column.tsx`
 - `src/components/cards/CardParts.tsx`
@@ -21,13 +23,14 @@ Moved the file and `Icon.module.css`. Updated imports in:
 Abstracts the `<dialog>` boilerplate shared by all three modals.
 
 **API:**
+
 ```tsx
 <Modal
   title="Add Column"
   titleId="add-column-modal-title"
   onClose={onClose}
-  onBackdropClick={onClose}   // optional; omit to disable backdrop-click-to-close
-  preventCancel               // optional boolean; calls e.preventDefault() on native cancel (Escape)
+  onBackdropClick={onClose} // optional; omit to disable backdrop-click-to-close
+  preventCancel // optional boolean; calls e.preventDefault() on native cancel (Escape)
 >
   <ModalBody>...</ModalBody>
   <ModalFooter>...</ModalFooter>
@@ -40,17 +43,20 @@ Abstracts the `<dialog>` boilerplate shared by all three modals.
 - Header is rendered by `Modal` itself from `title` + `titleId` props
 
 **Modal.module.css** — styles shared across all modals:
+
 - `.dialog`, `.modal`, `.modalHeader`, `.modalTitle`, `.modalBody`, `.modalFooter`
 - `.btnModal`, `.btnModalPrimary`, `.btnModalDanger`
 - `.fieldInput`
 
 **AddColumnModal.module.css** keeps only its specific styles:
+
 - `.modalTypes`, `.typeBtn`, `.typeBtn.active`, `.colIcon`, `.modalField`, `.modalFieldLabel`
 - `.clearConfirm`, `.clearConfirmText`, `.clearConfirmButtons`
 
 **AuthModal.module.css** unchanged (all styles unique to auth flow).
 
 **Modals refactored:**
+
 - `AddColumnModal.tsx` — uses `Modal`, `ModalBody`, `ModalFooter`; shared CSS from `modalStyles`
 - `ColumnSettingsModal.tsx` — same; no longer imports `AddColumnModal.module.css` for shared classes
 - `AuthModal.tsx` — uses `Modal` with `preventCancel`; keeps its own body HTML
@@ -60,6 +66,7 @@ Abstracts the `<dialog>` boilerplate shared by all three modals.
 Compositional card skeleton used by all five card components.
 
 **Sub-components:**
+
 - `Card` — renders `<article className={cardStyles.card}>` wrapper with internal `CardTop`; accepts `repo`, `age`, optional `className`
 - `CardTitle` — renders `<p className={cardStyles.cardTitle}><a ...>` with `href` and optional `prefix` (e.g. `#123`)
 - `CardMeta` — renders `<footer className={cardStyles.cardMeta}>` (space-between; PR, Issue, CI)
@@ -72,6 +79,7 @@ Compositional card skeleton used by all five card components.
 ---
 
 ## Files created
+
 - `src/components/ui/Modal.tsx`
 - `src/components/ui/Modal.module.css`
 - `src/components/ui/Card.tsx`
@@ -81,6 +89,7 @@ Compositional card skeleton used by all five card components.
 No barrel `index.ts` — imports point directly to the specific file (e.g. `'./ui/Modal'`, `'../ui/Card'`).
 
 ## Files modified
+
 - `src/components/AuthModal.tsx`
 - `src/components/AddColumnModal.tsx`
 - `src/components/AddColumnModal.module.css`
@@ -94,6 +103,7 @@ No barrel `index.ts` — imports point directly to the specific file (e.g. `'./u
 - `src/components/cards/ActivityCard.tsx`
 
 ## Decisions
+
 - No barrel `index.ts` in `ui/` — direct imports preferred.
 - No `Button` component extracted — button styles are too context-specific across the app; modal button styles are already shared via `modalStyles`.
 - `AuthModal` visual shell (modal width, padding) now matches the shared `Modal.module.css` rather than its original bespoke styles, as a consequence of the refactor.

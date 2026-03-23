@@ -44,7 +44,7 @@ import styles from './PRColumn.module.css';
 ### 5. ColumnHeader.tsx and ColumnConfirmDelete.tsx imports updated
 
 ```tsx
-import styles from './BaseColumn.module.css';
+import styles from "./BaseColumn.module.css";
 ```
 
 ### 6. AddColumnModal.tsx updated
@@ -52,7 +52,7 @@ import styles from './BaseColumn.module.css';
 Replaced single `colStyles` import with per-type imports and a lookup map:
 
 ```tsx
-import prStyles from './columns/PRColumn.module.css';
+import prStyles from "./columns/PRColumn.module.css";
 // ... (one per type)
 
 const ACCENT_CLASS: Record<ColumnType, string | undefined> = {

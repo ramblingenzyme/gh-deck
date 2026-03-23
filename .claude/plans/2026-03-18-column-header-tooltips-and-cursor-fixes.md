@@ -3,6 +3,7 @@
 ## Context
 
 The column header had two issues:
+
 1. **Cursor**: Non-interactive text elements (`.colIcon`, `.colTitle`, `.colBadge`, `.lastUpdated`) rendered with a text/I-beam cursor because they contain text. They should show `cursor: default`.
 2. **Tooltips**: All tooltips used the native HTML `title` attribute, which is unstyled, inaccessible on touch/keyboard, and can't be styled. Replaced with a proper styled tooltip component.
 
@@ -11,6 +12,7 @@ The column header had two issues:
 ### `src/components/ui/Tooltip.tsx` + `src/components/ui/Tooltip.module.css` — new files
 
 Styled, accessible tooltip component:
+
 - `role="tooltip"` + `aria-describedby` linkage
 - Shows on hover and `:focus-within` (keyboard accessible)
 - `position` prop: `'above' | 'below'` (default `'above'`)

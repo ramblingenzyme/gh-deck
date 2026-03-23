@@ -11,6 +11,7 @@ The app shipped a single ~101 KB JS chunk with no code splitting or vendor separ
 ### 1. Vendor chunk splitting — `vite.config.ts`
 
 Added `build.rollupOptions.output.manualChunks` that splits:
+
 - `@atlaskit/pragmatic-drag-and-drop` → `dnd` chunk (largest single dep, isolated)
 - All other `node_modules` → `vendor` chunk
 - App code stays in `index` chunk
@@ -32,24 +33,25 @@ Replaced static imports of all 5 column components (`PRColumn`, `IssueColumn`, `
 ### 4. Test updates
 
 Synchronous `getBy*` queries that ran before lazy components resolved were updated to async `findBy*` in:
+
 - `src/components/Column.test.tsx`
 - `src/components/Board.test.tsx`
 - `src/components/App.e2e.test.tsx`
 
 ## Results
 
-| | Before | After |
-|---|---|---|
-| Chunks | 1 JS | index + vendor + dnd + per-column/modal chunks |
-| `vendor` chunk | — | 36.7 KB (cached across deploys) |
-| `dnd` chunk | — | 20.1 KB (cached across deploys) |
-| `index` chunk | ~101 KB | 15.5 KB (only this changes on app deploys) |
+|                | Before  | After                                          |
+| -------------- | ------- | ---------------------------------------------- |
+| Chunks         | 1 JS    | index + vendor + dnd + per-column/modal chunks |
+| `vendor` chunk | —       | 36.7 KB (cached across deploys)                |
+| `dnd` chunk    | —       | 20.1 KB (cached across deploys)                |
+| `index` chunk  | ~101 KB | 15.5 KB (only this changes on app deploys)     |
 
 ## Files changed
 
 - `vite.config.ts` — added `build.rollupOptions.output.manualChunks`
 - `src/components/App.tsx` — lazy modals + Suspense
 - `src/components/Column.tsx` — lazy column types + Suspense
-- `src/components/Column.test.tsx` — async findBy* queries
-- `src/components/Board.test.tsx` — async findBy* queries
-- `src/components/App.e2e.test.tsx` — async findBy* queries
+- `src/components/Column.test.tsx` — async findBy\* queries
+- `src/components/Board.test.tsx` — async findBy\* queries
+- `src/components/App.e2e.test.tsx` — async findBy\* queries

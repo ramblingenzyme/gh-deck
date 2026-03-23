@@ -36,6 +36,7 @@ Each `<dialog>` is an independent document fragment — the first heading inside
 Card ages were previously stored as pre-formatted strings ("2h", "1d"). Changed the `age` field throughout the data layer to ISO 8601 strings so `<time dateTime={age}>` works correctly. `formatAge(isoString)` is called at render time for display.
 
 **Files changed:**
+
 - `src/store/githubMappers.ts` — all `age: formatAge(...)` → `age: item.updated_at` (raw ISO strings)
 - `src/demo/mock.ts` — added `h()`, `d()`, `m()` helpers; replaced hardcoded strings with dynamic ISO calls
 - `src/components/cards/CardParts.tsx` — `CardTop` now renders `<time dateTime={age}>{formatAge(age)}</time>`
@@ -47,6 +48,7 @@ Card ages were previously stored as pre-formatted strings ("2h", "1d"). Changed 
 Added a tooltip to the relative-time display so users can see the exact date on hover.
 
 **`src/components/cards/CardParts.tsx`:**
+
 ```tsx
 <Tooltip text={new Date(age).toLocaleString()} position="below">
   <time dateTime={age}>{formatAge(age)}</time>

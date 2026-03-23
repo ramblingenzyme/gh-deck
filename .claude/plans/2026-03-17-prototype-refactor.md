@@ -1,6 +1,7 @@
 # HubDeck — Scaffold & Refactor Plan
 
 ## Context
+
 The prototype is a single `src/index.tsx` file (~600 lines) with no build tooling, no types, all inline styles, and mock data hardcoded alongside components. This plan scaffolds Vite + React + TypeScript tooling and refactors the prototype into a maintainable multi-file structure. No functional changes — mock data is preserved, real API calls and auth are deferred.
 
 ---
@@ -46,6 +47,7 @@ gh-deck/
 ## Config Files
 
 ### `package.json`
+
 ```json
 {
   "name": "hubdeck",
@@ -76,6 +78,7 @@ gh-deck/
 ```
 
 ### `tsconfig.app.json` (strict mode)
+
 ```json
 {
   "compilerOptions": {
@@ -98,6 +101,7 @@ gh-deck/
 ```
 
 ### `oxlint.json`
+
 ```json
 {
   "rules": {
@@ -107,18 +111,20 @@ gh-deck/
 ```
 
 ### `vite.config.ts`
+
 ```ts
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { resolve } from "path";
 
 export default defineConfig({
   plugins: [react()],
-  resolve: { alias: { '@': resolve(__dirname, './src') } },
-})
+  resolve: { alias: { "@": resolve(__dirname, "./src") } },
+});
 ```
 
 ### `index.html`
+
 Move Google Fonts `<link>` tags here (from the injected `<style>` in the prototype). Mount point `<div id="root">`.
 
 ---
@@ -126,17 +132,65 @@ Move Google Fonts `<link>` tags here (from the injected `<style>` in the prototy
 ## Types — `src/types/index.ts`
 
 ```ts
-export type ColumnType = 'prs' | 'issues' | 'ci' | 'notifications' | 'activity';
-export type CIStatus = 'success' | 'failure' | 'running';
-export type NotifType = 'review_requested' | 'mention' | 'assigned' | 'approved' | 'comment';
-export type ActivityType = 'commit' | 'comment' | 'pr_opened' | 'review' | 'issue_closed';
+export type ColumnType = "prs" | "issues" | "ci" | "notifications" | "activity";
+export type CIStatus = "success" | "failure" | "running";
+export type NotifType = "review_requested" | "mention" | "assigned" | "approved" | "comment";
+export type ActivityType = "commit" | "comment" | "pr_opened" | "review" | "issue_closed";
 
-export interface ColumnConfig { id: number; type: ColumnType; title: string; }
-export interface PRItem { id: number; title: string; repo: string; author: string; number: number; reviews: { approved: number; requested: number }; comments: number; draft: boolean; age: string; labels: string[]; }
-export interface IssueItem { id: number; title: string; repo: string; number: number; labels: string[]; assignee: string | null; comments: number; age: string; state: 'open' | 'closed'; }
-export interface CIItem { id: number; name: string; repo: string; branch: string; status: CIStatus; duration: string; age: string; triggered: 'push' | 'pull_request' | 'release'; }
-export interface NotifItem { id: number; type: NotifType; text: string; repo: string; ref: string; age: string; }
-export interface ActivityItem { id: number; type: ActivityType; text: string; repo: string; age: string; sha?: string; }
+export interface ColumnConfig {
+  id: number;
+  type: ColumnType;
+  title: string;
+}
+export interface PRItem {
+  id: number;
+  title: string;
+  repo: string;
+  author: string;
+  number: number;
+  reviews: { approved: number; requested: number };
+  comments: number;
+  draft: boolean;
+  age: string;
+  labels: string[];
+}
+export interface IssueItem {
+  id: number;
+  title: string;
+  repo: string;
+  number: number;
+  labels: string[];
+  assignee: string | null;
+  comments: number;
+  age: string;
+  state: "open" | "closed";
+}
+export interface CIItem {
+  id: number;
+  name: string;
+  repo: string;
+  branch: string;
+  status: CIStatus;
+  duration: string;
+  age: string;
+  triggered: "push" | "pull_request" | "release";
+}
+export interface NotifItem {
+  id: number;
+  type: NotifType;
+  text: string;
+  repo: string;
+  ref: string;
+  age: string;
+}
+export interface ActivityItem {
+  id: number;
+  type: ActivityType;
+  text: string;
+  repo: string;
+  age: string;
+  sha?: string;
+}
 ```
 
 ---
@@ -146,6 +200,7 @@ export interface ActivityItem { id: number; type: ActivityType; text: string; re
 Typed versions of `LABEL_COLORS`, `CI_STATUS`, `NOTIF_ICONS`, `ACTIVITY_ICONS`, `COLUMN_TYPES`, `DEFAULT_COLUMNS`.
 
 Key additions:
+
 - `LABEL_FALLBACK: { bg: string; text: string }` — used as `LABEL_COLORS[label] ?? LABEL_FALLBACK` to satisfy `noUncheckedIndexedAccess`
 - `mkId(): number` — ID generator for new columns
 
@@ -154,6 +209,7 @@ Key additions:
 ## CSS Architecture — `src/globals.css`
 
 Three sections:
+
 1. **Design tokens at `:root`**: `--bg-root`, `--bg-topbar`, `--bg-column`, `--bg-card`, `--border-structural`, `--border-card`, text scale, accent per column type, CI status colors, font families
 2. **Global resets**: box-sizing, scrollbar (4px, dark), `.btn { all: unset; box-sizing: border-box; cursor: pointer; font-family: var(--font-mono); }`, `.btn-icon`, `.type-btn`, `.field-input`
 3. **Layout/component classes**: `.app-root`, `.topbar`, `.board`, `.column`, `.col-header`, `.col-body`, `.col-title`, `.card`, `.card-top`, `.card-title`, `.card-meta`, `.card-repo`, `.card-age`, `.label-list`, `.label`, `.ci-card`, `.draft-badge`, `.modal-overlay`, `.modal`, `.board-empty`
@@ -168,16 +224,17 @@ Three sections:
 
 ## Component Responsibilities
 
-| Component | State | Notes |
-|---|---|---|
-| `App.tsx` | `columns`, `showModal` | Mounts `useColumns`, renders Topbar + Board + Modal |
-| `Topbar.tsx` | none | Props: `onAddColumn` |
-| `Board.tsx` | none | Props: columns + handlers; renders scroll container + empty state |
-| `Column.tsx` | `confirming` | Sets `--color-accent`; dispatches to card components by type |
-| `AddColumnModal.tsx` | `type`, `title` | Props: `onAdd`, `onClose`, `existing` (unused now, needed later) |
-| `cards/*.tsx` | none | Pure presentational; each typed to its item interface |
+| Component            | State                  | Notes                                                             |
+| -------------------- | ---------------------- | ----------------------------------------------------------------- |
+| `App.tsx`            | `columns`, `showModal` | Mounts `useColumns`, renders Topbar + Board + Modal               |
+| `Topbar.tsx`         | none                   | Props: `onAddColumn`                                              |
+| `Board.tsx`          | none                   | Props: columns + handlers; renders scroll container + empty state |
+| `Column.tsx`         | `confirming`           | Sets `--color-accent`; dispatches to card components by type      |
+| `AddColumnModal.tsx` | `type`, `title`        | Props: `onAdd`, `onClose`, `existing` (unused now, needed later)  |
+| `cards/*.tsx`        | none                   | Pure presentational; each typed to its item interface             |
 
 ### `src/hooks/useColumns.ts`
+
 Extracts `addCol`, `removeCol`, `moveLeft`, `moveRight` from App. Returns `{ columns, addCol, removeCol, moveLeft, moveRight }`. Only imports are `useState` and types.
 
 ---
@@ -185,40 +242,24 @@ Extracts `addCol`, `removeCol`, `moveLeft`, `moveRight` from App. Returns `{ col
 ## Implementation Sequence
 
 **Phase 1 — Scaffold**
+
 1. Create `index.html`, `package.json`, `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`, `vite.config.ts`, `oxlint.json`
 2. Create `src/main.tsx` (temporarily mount original export)
 3. Run `npm install`
 
-**Phase 2 — Types & constants**
-4. `src/types/index.ts`
-5. `src/constants/index.ts`
+**Phase 2 — Types & constants** 4. `src/types/index.ts` 5. `src/constants/index.ts`
 
-**Phase 3 — Mock data**
-6. `src/data/mock.ts` — named typed exports (`MOCK_PRS`, `MOCK_ISSUES`, etc.)
+**Phase 3 — Mock data** 6. `src/data/mock.ts` — named typed exports (`MOCK_PRS`, `MOCK_ISSUES`, etc.)
 
-**Phase 4 — CSS**
-7. `src/globals.css` — full token/reset/component class extraction
+**Phase 4 — CSS** 7. `src/globals.css` — full token/reset/component class extraction
 
-**Phase 5 — Card components**
-8. `src/components/cards/PRCard.tsx`
-9. `IssueCard.tsx`, `CICard.tsx`, `NotifCard.tsx`, `ActivityCard.tsx`
+**Phase 5 — Card components** 8. `src/components/cards/PRCard.tsx` 9. `IssueCard.tsx`, `CICard.tsx`, `NotifCard.tsx`, `ActivityCard.tsx`
 
-**Phase 6 — Column, modal, hook**
-10. `src/hooks/useColumns.ts`
-11. `src/components/Column.tsx`
-12. `src/components/AddColumnModal.tsx`
+**Phase 6 — Column, modal, hook** 10. `src/hooks/useColumns.ts` 11. `src/components/Column.tsx` 12. `src/components/AddColumnModal.tsx`
 
-**Phase 7 — App shell**
-13. `src/components/Topbar.tsx`
-14. `src/components/Board.tsx`
-15. `src/components/App.tsx`
-16. Update `main.tsx` to import from `@/components/App`
-17. Delete `src/index.tsx`
+**Phase 7 — App shell** 13. `src/components/Topbar.tsx` 14. `src/components/Board.tsx` 15. `src/components/App.tsx` 16. Update `main.tsx` to import from `@/components/App` 17. Delete `src/index.tsx`
 
-**Phase 8 — Validate**
-18. `tsc -b && vite build` — zero type errors
-19. `oxlint src` + `oxfmt src`
-20. `npm run dev` — visual check against original prototype
+**Phase 8 — Validate** 18. `tsc -b && vite build` — zero type errors 19. `oxlint src` + `oxfmt src` 20. `npm run dev` — visual check against original prototype
 
 ---
 

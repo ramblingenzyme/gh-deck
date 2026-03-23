@@ -261,7 +261,10 @@ describe("useGetReleases", () => {
     useGetReleases(["owner/repo1", "owner/repo2"], "tok");
     expect(capturedKey).toEqual(["releases", ["owner/repo1", "owner/repo2"], "tok"]);
 
-    const result = (await capturedFetcher!()) as { items: Array<{ id: number }>; fetchErrors: string[] };
+    const result = (await capturedFetcher!()) as {
+      items: Array<{ id: number }>;
+      fetchErrors: string[];
+    };
     expect(result.items).toHaveLength(2);
   });
 
@@ -322,7 +325,10 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce(mockOk([successStatus])); // statuses for deployment 1
 
     useGetDeployments(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as { items: Array<{ status: string }>; fetchErrors: string[] };
+    const result = (await capturedFetcher!()) as {
+      items: Array<{ status: string }>;
+      fetchErrors: string[];
+    };
     expect(result.items).toHaveLength(1);
     expect(result.items[0]!.status).toBe("success");
   });
@@ -333,7 +339,10 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce(mockOk([{ state: "inactive" } as GHDeploymentStatus]));
 
     useGetDeployments(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as { items: Array<{ status: string }>; fetchErrors: string[] };
+    const result = (await capturedFetcher!()) as {
+      items: Array<{ status: string }>;
+      fetchErrors: string[];
+    };
     expect(result.items[0]!.status).toBe("pending");
   });
 
@@ -343,7 +352,10 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce({ ok: false, status: 404, statusText: "Not Found" } as Response);
 
     useGetDeployments(["owner/repo"], "tok");
-    const result = (await capturedFetcher!()) as { items: Array<{ status: string }>; fetchErrors: string[] };
+    const result = (await capturedFetcher!()) as {
+      items: Array<{ status: string }>;
+      fetchErrors: string[];
+    };
     expect(result.items[0]!.status).toBe("unknown");
   });
 

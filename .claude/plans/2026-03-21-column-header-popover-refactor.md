@@ -15,11 +15,11 @@ The column header dropdown menu (added in the column settings modal plan) was in
 
 ### Why conditional Tooltip rendering is still needed
 
-`Tooltip` uses `popover="hint"`, which *should* be auto-dismissed when a `popover="auto"` opens. However, `popover="hint"` support is not yet complete in Firefox, so the tooltip must be suppressed manually via `menuOpen` state for now. A `TODO` comment in `ColumnHeader.tsx` explains this — once Firefox catches up, the `onToggle` handler and conditional render can be removed.
+`Tooltip` uses `popover="hint"`, which _should_ be auto-dismissed when a `popover="auto"` opens. However, `popover="hint"` support is not yet complete in Firefox, so the tooltip must be suppressed manually via `menuOpen` state for now. A `TODO` comment in `ColumnHeader.tsx` explains this — once Firefox catches up, the `onToggle` handler and conditional render can be removed.
 
 ## Files Modified
 
-| File | Change |
-|------|--------|
-| `src/components/ColumnHeader.tsx` | Popover API wiring; CSS anchor positioning; `onToggle` for tooltip suppression |
+| File                                     | Change                                                                                     |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `src/components/ColumnHeader.tsx`        | Popover API wiring; CSS anchor positioning; `onToggle` for tooltip suppression             |
 | `src/components/ColumnHeader.module.css` | Removed `.handleWrap`; `.dropMenu` uses `position: absolute` with `anchor()` for placement |

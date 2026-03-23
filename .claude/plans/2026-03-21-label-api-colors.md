@@ -54,11 +54,18 @@ const { h, s, l: lum } = rgbToHsl(r, g, b);
   --perceived-lightness: calc(
     (var(--label-r) * 0.2126 + var(--label-g) * 0.7152 + var(--label-b) * 0.0722) / 255
   );
-  --lightness-switch: max(0, min(calc(1 / (var(--lightness-threshold) - var(--perceived-lightness))), 1));
+  --lightness-switch: max(
+    0,
+    min(calc(1 / (var(--lightness-threshold) - var(--perceived-lightness))), 1)
+  );
   --lighten-by: calc(
     (var(--lightness-threshold) - var(--perceived-lightness)) * 100 * var(--lightness-switch)
   );
-  color: hsl(var(--label-h), calc(var(--label-s) * 1%), calc(var(--label-l) * 1% + var(--lighten-by) * 1%));
+  color: hsl(
+    var(--label-h),
+    calc(var(--label-s) * 1%),
+    calc(var(--label-l) * 1% + var(--lighten-by) * 1%)
+  );
   background-color: rgba(var(--label-r), var(--label-g), var(--label-b), 0.18);
   border: 1px solid rgba(var(--label-r), var(--label-g), var(--label-b), 0.3);
 }
