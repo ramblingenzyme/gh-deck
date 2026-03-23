@@ -1,4 +1,4 @@
-function b64url(buf: ArrayBuffer): string {
+export function b64url(buf: ArrayBuffer): string {
   return btoa(String.fromCharCode(...new Uint8Array(buf)))
     .replace(/\+/g, '-')
     .replace(/\//g, '_')

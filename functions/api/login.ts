@@ -1,16 +1,9 @@
-import { encrypt } from './_crypto';
+import { encrypt, b64url } from './_crypto';
 
 interface Env {
   GITHUB_CLIENT_ID: string;
   SESSION_CRYPTO_KEY: string;
   ALLOWED_ORIGIN: string;
-}
-
-function b64url(buf: ArrayBuffer): string {
-  return btoa(String.fromCharCode(...new Uint8Array(buf)))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
 }
 
 export const onRequestGet = async ({ request, env }: { request: Request; env: Env }): Promise<Response> => {

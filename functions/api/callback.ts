@@ -1,4 +1,4 @@
-import { encrypt, decrypt, parseCookie } from './_crypto';
+import { encrypt, decrypt, parseCookie, b64url } from './_crypto';
 
 interface Env {
   GITHUB_CLIENT_ID: string;
@@ -62,6 +62,7 @@ export const onRequestGet = async ({ request, env }: { request: Request; env: En
   }
 
   const expiresAt = Date.now() + (data['expires_in'] as number) * 1000;
+  const csrfToken = b64url(crypto.getRandomValues(new Uint8Array(16)).buffer);
   const session = await encrypt(
     {
       accessToken: data['access_token'],
@@ -75,14 +76,9 @@ export const onRequestGet = async ({ request, env }: { request: Request; env: En
     status: 302,
     headers: new Headers([
       ['Location', `${env.ALLOWED_ORIGIN}/?authed=1`],
-      [
-        'Set-Cookie',
-        `__Host-pkce=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0`,
-      ],
-      [
-        'Set-Cookie',
-        `__Host-session=${session}; HttpOnly; Secure; SameSite=Strict; Path=/`,
-      ],
+      ['Set-Cookie', `__Host-pkce=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0`],
+      ['Set-Cookie', `__Host-session=${session}; HttpOnly; Secure; SameSite=Strict; Path=/`],
+      ['Set-Cookie', `__Host-csrf=${csrfToken}; Secure; SameSite=Strict; Path=/`],
     ]),
   });
 };

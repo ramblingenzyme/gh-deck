@@ -1,4 +1,4 @@
-import { encrypt, decrypt, parseCookie } from './_crypto';
+import { encrypt, decrypt, parseCookie, b64url } from './_crypto';
 import { checkCsrf } from './_csrf';
 
 interface Env {
@@ -50,6 +50,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
   }
 
   const expiresAt = Date.now() + (data['expires_in'] as number) * 1000;
+  const csrfToken = b64url(crypto.getRandomValues(new Uint8Array(16)).buffer);
   const newSession = await encrypt(
     {
       accessToken: data['access_token'],
@@ -62,10 +63,11 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
   return Response.json(
     { accessToken: data['access_token'], expiresAt },
     {
-      headers: {
-        'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN,
-        'Set-Cookie': `__Host-session=${newSession}; HttpOnly; Secure; SameSite=Strict; Path=/`,
-      },
+      headers: new Headers([
+        ['Access-Control-Allow-Origin', env.ALLOWED_ORIGIN],
+        ['Set-Cookie', `__Host-session=${newSession}; HttpOnly; Secure; SameSite=Strict; Path=/`],
+        ['Set-Cookie', `__Host-csrf=${csrfToken}; Secure; SameSite=Strict; Path=/`],
+      ]),
     },
   );
 };

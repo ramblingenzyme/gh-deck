@@ -26,6 +26,10 @@ export const onRequestGet = async ({ request, env }: { request: Request; env: En
     return new Response('Invalid session', { status: 401 });
   }
 
+  if (session.expiresAt < Date.now()) {
+    return new Response('Session expired', { status: 401 });
+  }
+
   return Response.json(
     { accessToken: session.accessToken, expiresAt: session.expiresAt },
     { headers: { 'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN } },

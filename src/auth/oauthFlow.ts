@@ -7,9 +7,16 @@ export function redirectToGitHub(): void {
   window.location.href = "/api/login";
 }
 
+function getCSRFHeaderValue() {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("__Host-csrf"))
+    ?.split("=")[1];
+}
+
 export async function fetchSession(): Promise<TokenSet> {
   const res = await fetch("/api/session", {
-    headers: { "X-GitHub-App-CSRF": "1" },
+    headers: { "X-GitHub-App-CSRF": getCSRFHeaderValue() },
   });
   if (!res.ok) throw new Error(`Session fetch failed: ${res.status}`);
   return res.json() as Promise<TokenSet>;
@@ -18,7 +25,7 @@ export async function fetchSession(): Promise<TokenSet> {
 export async function refreshSession(): Promise<TokenSet> {
   const res = await fetch("/api/refresh", {
     method: "POST",
-    headers: { "X-GitHub-App-CSRF": "1" },
+    headers: { "X-GitHub-App-CSRF": getCSRFHeaderValue() },
   });
   if (!res.ok) throw new Error(`Refresh failed: ${res.status}`);
   return res.json() as Promise<TokenSet>;
