@@ -1,0 +1,12 @@
+- [ ] Review code as a human
+- [ ] Investigate/remove broken security alerts column
+- [ ] Drag and Drop doesn't work for all column types? CI/CD
+- [ ] Repo selector in add column modal when column supports it
+- [ ] Empty state for columns that require repo selection
+- [ ] Persistent focus border on edit query input
+- [ ] Polish up multi select component
+- [ ] Reassess filter queries for non issue/PR columns
+- [ ] Reassess automatically detected accessibility issues from Firefox Devtools
+- [ ] Refactor demo out as a separate page
+- [ ] Landing page
+- [ ] Polish README.md
