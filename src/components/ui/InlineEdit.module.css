@@ -48,9 +48,9 @@
     resize: none;
     field-sizing: content;
 
+    outline: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
     outline-offset: 2px;
     border-radius: 2px;
-    /* TODO: add a faded outline even when not focused */
 
     &:focus {
       outline: 1px solid var(--color-accent);

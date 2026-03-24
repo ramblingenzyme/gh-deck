@@ -89,23 +89,89 @@ export interface GHDependabotAlert {
   };
 }
 
-// TODO: refactor into a union of specific event types
-export interface GHEvent {
+interface GHEventBase {
   id: string;
-  type: string;
   repo: { name: string };
+  created_at: string;
+}
+
+export interface GHPushEvent extends GHEventBase {
+  type: "PushEvent";
   payload: {
-    action?: string;
     ref?: string;
     head?: string;
     commits?: Array<{ sha: string; message: string }>;
-    pull_request?: { number: number; title: string; html_url: string };
-    issue?: { number: number; title: string; html_url: string };
-    comment?: { body: string; html_url: string };
     size?: number;
     distinct_size?: number;
-    ref_type?: string;
-    forkee?: { full_name: string; html_url: string };
   };
-  created_at: string;
 }
+
+export interface GHPullRequestEvent extends GHEventBase {
+  type: "PullRequestEvent";
+  payload: {
+    action: string;
+    pull_request: { number: number; title: string; html_url: string };
+  };
+}
+
+export interface GHIssueCommentEvent extends GHEventBase {
+  type: "IssueCommentEvent";
+  payload: {
+    issue: { number: number; title: string; html_url: string };
+    comment: { body: string; html_url: string };
+  };
+}
+
+export interface GHPRReviewCommentEvent extends GHEventBase {
+  type: "PullRequestReviewCommentEvent";
+  payload: {
+    comment: { body: string; html_url: string };
+    issue?: { number: number; title: string; html_url: string };
+  };
+}
+
+export interface GHPRReviewEvent extends GHEventBase {
+  type: "PullRequestReviewEvent";
+  payload: {
+    pull_request: { number: number; title: string; html_url: string };
+  };
+}
+
+export interface GHIssuesEvent extends GHEventBase {
+  type: "IssuesEvent";
+  payload: {
+    action: string;
+    issue: { number: number; title: string; html_url: string };
+  };
+}
+
+export interface GHCreateEvent extends GHEventBase {
+  type: "CreateEvent";
+  payload: {
+    ref_type: string;
+    ref?: string;
+  };
+}
+
+export interface GHForkEvent extends GHEventBase {
+  type: "ForkEvent";
+  payload: {
+    forkee: { full_name: string; html_url: string };
+  };
+}
+
+export interface GHWatchEvent extends GHEventBase {
+  type: "WatchEvent";
+  payload: Record<string, never>;
+}
+
+export type GHEvent =
+  | GHPushEvent
+  | GHPullRequestEvent
+  | GHIssueCommentEvent
+  | GHPRReviewCommentEvent
+  | GHPRReviewEvent
+  | GHIssuesEvent
+  | GHCreateEvent
+  | GHForkEvent
+  | GHWatchEvent;

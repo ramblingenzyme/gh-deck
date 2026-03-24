@@ -7,29 +7,6 @@ export type ColumnType =
   | "deployments"
   | "security";
 
-// TODO: refactor to be defined in SvgIcon and derived from ICON_MAP
-export type IconName =
-  | "check"
-  | "x"
-  | "refresh"
-  | "circleDot"
-  | "at"
-  | "arrowRight"
-  | "grip"
-  | "comment"
-  | "bell"
-  | "gitMerge"
-  | "gitCommit"
-  | "eye"
-  | "play"
-  | "issueOpen"
-  | "tag"
-  | "gitBranch"
-  | "gitFork"
-  | "star"
-  | "deploy"
-  | "shield"
-  | "pencil";
 export type CIStatus = "success" | "failure" | "running";
 export type IssueState = "open" | "closed";
 export type CITrigger = "push" | "pull_request" | "release";
@@ -148,9 +125,11 @@ export type KnownItem =
   | ReleaseItem
   | DeploymentItem
   | SecurityItem;
+
 export type AnyItem = KnownItem | FallbackItem;
 
 export interface FallbackItem {
+  type: "fallback";
   id: number;
   title: string;
   repo: string;

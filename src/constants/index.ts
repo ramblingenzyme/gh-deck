@@ -3,10 +3,10 @@ import type {
   CIStatus,
   ActivityType,
   ColumnConfig,
-  IconName,
   DeploymentStatus,
   AlertSeverity,
 } from "@/types";
+import type { IconName } from "@/components/ui/SvgIcon";
 
 export const CI_STATUS: Record<CIStatus, { label: string; icon: IconName }> = {
   success: { label: "PASS", icon: "check" },

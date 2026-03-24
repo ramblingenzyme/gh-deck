@@ -193,19 +193,20 @@ describe("useGetCIRuns", () => {
 });
 
 describe("useGetActivity", () => {
-  const makeEvent = (type: string): GHEvent => ({
-    id: "1",
-    type,
-    repo: { name: "owner/repo" },
-    payload: {
-      pull_request: {
-        number: 1,
-        title: "PR title",
-        html_url: "https://github.com/owner/repo/pull/1",
+  const makeEvent = (type: string): GHEvent =>
+    ({
+      id: "1",
+      type,
+      repo: { name: "owner/repo" },
+      payload: {
+        pull_request: {
+          number: 1,
+          title: "PR title",
+          html_url: "https://github.com/owner/repo/pull/1",
+        },
       },
-    },
-    created_at: "2024-01-01T00:00:00Z",
-  });
+      created_at: "2024-01-01T00:00:00Z",
+    }) as unknown as GHEvent;
 
   it("key is null when token is null", () => {
     useGetActivity("alice", null);

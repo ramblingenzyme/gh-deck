@@ -1,6 +1,7 @@
-import type { ColumnConfig, ActivityItem } from "@/types";
+import type { ColumnConfig, ActivityItem, FallbackItem } from "@/types";
 import { BaseColumn } from "@/components/BaseColumn";
 import { ActivityCard } from "@/components/cards/ActivityCard";
+import { FallbackCard } from "@/components/cards/FallbackCard";
 import styles from "./ActivityColumn.module.css";
 
 interface ColumnProps {
@@ -13,6 +14,13 @@ export const ActivityColumn = ({ col, onRemove }: ColumnProps) => (
     accentClass={styles.accent}
     col={col}
     onRemove={onRemove}
-    renderCard={(item) => <ActivityCard key={item.id} item={item as ActivityItem} />}
+    renderCard={(item) => {
+      const i = item as ActivityItem | FallbackItem;
+      return i.type === "fallback" ? (
+        <FallbackCard key={i.id} item={i} />
+      ) : (
+        <ActivityCard key={i.id} item={i} />
+      );
+    }}
   />
 );

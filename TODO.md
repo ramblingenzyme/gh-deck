@@ -2,6 +2,7 @@
 
 - [ ] Review code as a human
 - [x] Fix card link hover color
+- [ ] Integrate TS check into lint-staged
 - [ ] Fix "Find References" for imports via '@' in VSCode
 - [x] Setup knip & investigate how to detect dead CSS styling
 - [ ] Integrate knip into lint-staged

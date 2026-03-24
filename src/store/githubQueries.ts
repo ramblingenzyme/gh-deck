@@ -5,6 +5,7 @@ import type {
   IssueItem,
   CIItem,
   ActivityItem,
+  FallbackItem,
   ReleaseItem,
   DeploymentItem,
   SecurityItem,
@@ -245,7 +246,7 @@ export function useGetUserRepos(sessionId: string | null) {
 }
 
 export function useGetActivity(login: string, sessionId: string | null) {
-  return useSWR<ActivityItem[]>(
+  return useSWR<(ActivityItem | FallbackItem)[]>(
     sessionId && login ? ["activity", login, sessionId] : null,
     async () => {
       const res = await githubFetch(`/users/${login}/events?per_page=30`);

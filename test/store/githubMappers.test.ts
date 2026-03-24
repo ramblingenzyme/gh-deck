@@ -152,14 +152,14 @@ describe("mapWorkflowRun", () => {
   });
 });
 
-function makeEvent(type: string, payload: GHEvent["payload"] = {}): GHEvent {
+function makeEvent(type: string, payload: Record<string, unknown> = {}): GHEvent {
   return {
     id: "55555",
     type,
     repo: { name: "owner/repo" },
     created_at: "2024-01-01T00:00:00Z",
     payload,
-  };
+  } as unknown as GHEvent;
 }
 
 describe("mapEvent", () => {
@@ -168,8 +168,8 @@ describe("mapEvent", () => {
       size: 2,
       commits: [{ sha: "abc1234def", message: "fix" }],
       ref: "refs/heads/feature",
-    } as GHEvent["payload"] & { ref?: string });
-    const item = mapEvent(e as GHEvent);
+    });
+    const item = mapEvent(e);
     expect(item).not.toBeNull();
     expect(item!.type).toBe("commit");
     expect(item!.text).toBe("Pushed 2 commits to feature");
@@ -193,7 +193,16 @@ describe("mapEvent", () => {
   });
 
   it("returns null for PullRequestEvent non-opened", () => {
-    const item = mapEvent(makeEvent("PullRequestEvent", { action: "closed" }));
+    const item = mapEvent(
+      makeEvent("PullRequestEvent", {
+        action: "closed",
+        pull_request: {
+          number: 1,
+          title: "Fix bug",
+          html_url: "https://github.com/owner/repo/pull/1",
+        },
+      }),
+    );
     expect(item).toBeNull();
   });
 
@@ -281,8 +290,10 @@ describe("mapEvent", () => {
     expect(item).toBeNull();
   });
 
-  it("returns null for unsupported event types", () => {
-    expect(mapEvent(makeEvent("UnsupportedEvent"))).toBeNull();
+  it("returns a FallbackItem for unsupported event types", () => {
+    const item = mapEvent(makeEvent("UnsupportedEvent"));
+    expect(item).not.toBeNull();
+    expect(item).toMatchObject({ title: "UnsupportedEvent", repo: "owner/repo" });
   });
 
   it("produces stable id for non-numeric event id", () => {

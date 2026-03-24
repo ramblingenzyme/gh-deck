@@ -1,5 +1,3 @@
-// TODO: determine if there's a good way to make it so that users don't load icons that don't get used at runtime
-import type { IconName } from "@/types";
 import styles from "./SvgIcon.module.css";
 import { CheckIcon } from "./icons/CheckIcon";
 import { XIcon } from "./icons/XIcon";
@@ -46,6 +44,8 @@ const ICON_MAP = {
   shield: ShieldIcon,
   pencil: PencilIcon,
 } as const;
+
+export type IconName = keyof typeof ICON_MAP;
 
 export const SvgIcon = ({ name, className }: { name: IconName; className?: string }) => {
   const Comp = ICON_MAP[name];

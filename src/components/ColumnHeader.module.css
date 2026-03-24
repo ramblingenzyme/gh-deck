@@ -93,6 +93,35 @@
   }
 }
 
+.colHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.colIcon {
+  font-size: var(--text-lg);
+  color: var(--color-accent);
+  cursor: default;
+}
+
+.colControls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.lastUpdated {
+  font-size: var(--text-xs, 11px);
+  color: var(--text-ghost);
+  white-space: nowrap;
+  padding-right: 2px;
+  cursor: default;
+}
+
 .btnIcon {
   color: var(--text-ghost);
   font-size: var(--text-md);

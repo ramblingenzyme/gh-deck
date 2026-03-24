@@ -1,12 +1,10 @@
 import { useId, useState } from "preact/hooks";
 import type { CSSProperties, RefObject } from "preact";
-import type { ColumnConfig, IconName } from "@/types";
+import type { ColumnConfig } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
-import { SvgIcon } from "./ui/SvgIcon";
+import { SvgIcon, type IconName } from "./ui/SvgIcon";
 import { Tooltip } from "./ui/Tooltip";
-// TODO: finish migration of column header specific CSS into ColumnHeader.module.css
-import styles from "./BaseColumn.module.css";
-import headerStyles from "./ColumnHeader.module.css";
+import styles from "./ColumnHeader.module.css";
 
 interface ColumnHeaderProps {
   col: ColumnConfig;
@@ -67,7 +65,7 @@ export const ColumnHeader = ({
     <button
       ref={handleRef}
       type="button"
-      className={headerStyles.dragHandle}
+      className={styles.dragHandle}
       aria-label="Column options"
       aria-haspopup="menu"
       aria-expanded={menuOpen}
@@ -84,7 +82,7 @@ export const ColumnHeader = ({
         id={menuId}
         popover="auto"
         onToggle={(e) => setMenuOpen((e as ToggleEvent).newState === "open")}
-        className={headerStyles.dropMenu}
+        className={styles.dropMenu}
         style={{ positionAnchor: anchorName } as CSSProperties}
         role="menu"
       >
@@ -92,7 +90,7 @@ export const ColumnHeader = ({
           <button
             type="button"
             role="menuitem"
-            className={headerStyles.dropMenuItem}
+            className={styles.dropMenuItem}
             onClick={() => {
               (document.getElementById(menuId) as any)?.hidePopover();
               onOpenSettings();
@@ -102,7 +100,7 @@ export const ColumnHeader = ({
           </button>
         </li>
       </menu>
-      <header className={headerStyles.colHeader}>
+      <header className={styles.colHeader}>
         {/* TODO: once Firefox fully supports popover="hint", the onToggle + menuOpen state
           can be removed — the browser will auto-dismiss hint popovers when a popover="auto"
           opens, making the conditional Tooltip unnecessary. */}

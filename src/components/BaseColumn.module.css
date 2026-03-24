@@ -15,35 +15,6 @@
   opacity: 0.5;
 }
 
-.colHeaderLeft {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-}
-
-.colIcon {
-  font-size: var(--text-lg);
-  color: var(--color-accent);
-  cursor: default;
-}
-
-.colControls {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: 8px;
-}
-
-.lastUpdated {
-  font-size: var(--text-xs, 11px);
-  color: var(--text-ghost);
-  white-space: nowrap;
-  padding-right: 2px;
-  cursor: default;
-}
-
 .colBody {
   overflow-y: auto;
   flex: 1;
@@ -71,41 +42,6 @@
 .colConfirmationButtons {
   display: flex;
   gap: 4px;
-}
-
-.btnIcon {
-  color: var(--text-ghost);
-  font-size: var(--text-md);
-  padding: 3px 5px;
-  border-radius: var(--radius-sm);
-  line-height: 1;
-  transition:
-    color 0.15s,
-    background 0.15s;
-
-  &:hover {
-    color: var(--text-primary);
-    background: var(--border-mid);
-  }
-}
-
-.btnIconSpinning {
-  color: var(--color-accent);
-
-  &:hover {
-    color: var(--color-accent);
-  }
-
-  & > * {
-    display: inline-block;
-    animation: spin 0.8s linear infinite;
-  }
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .colQuery {
