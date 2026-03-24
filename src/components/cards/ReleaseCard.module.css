@@ -4,6 +4,6 @@
 
 .prereleaseBadge {
   composes: cardBadge from "../ui/Card.module.css";
-  background: color-mix(in srgb, var(--status-warning) 12%, transparent);
+  background: oklch(from var(--status-warning) l c h / 0.12);
   color: var(--status-warning);
 }

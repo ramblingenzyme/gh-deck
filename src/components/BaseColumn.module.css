@@ -46,11 +46,11 @@
 
 .colQuery {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 6px;
   padding: 4px 10px;
-  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 15%, transparent);
+  background: oklch(from var(--color-accent) l c h / 0.12);
+  border-bottom: 1px solid oklch(from var(--color-accent) l c h / 0.25);
   min-width: 0;
 }
 
@@ -73,8 +73,8 @@
 .repoCount {
   font-size: var(--text-sm);
   color: var(--color-accent);
-  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
+  background: oklch(from var(--color-accent) l c h / 0.12);
+  border: 1px solid oklch(from var(--color-accent) l c h / 0.25);
   border-radius: var(--radius-sm);
   padding: 1px 5px;
   white-space: nowrap;
@@ -111,14 +111,14 @@
   color: var(--status-danger);
   padding: 3px 8px;
   border-radius: var(--radius-sm);
-  border: 1px solid color-mix(in srgb, var(--status-danger) 30%, transparent);
+  border: 1px solid oklch(from var(--status-danger) l c h / 0.3);
   transition:
     border-color 0.15s,
     background 0.15s;
 
   &:hover {
     border-color: var(--status-danger);
-    background: color-mix(in srgb, var(--status-danger) 10%, transparent);
+    background: oklch(from var(--status-danger) l c h / 0.1);
   }
 }
 
@@ -152,8 +152,8 @@
   padding: 8px 12px;
   font-size: var(--text-md);
   color: var(--status-warning);
-  background: color-mix(in srgb, var(--status-warning) 8%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--status-warning) 20%, transparent);
+  background: oklch(from var(--status-warning) l c h / 0.08);
+  border-bottom: 1px solid oklch(from var(--status-warning) l c h / 0.2);
 
   button {
     background: none;
@@ -175,9 +175,9 @@
   padding: 12px;
   font-size: var(--text-md);
   color: var(--status-danger);
-  background: color-mix(in srgb, var(--status-danger) 8%, transparent);
+  background: oklch(from var(--status-danger) l c h / 0.08);
   border-radius: var(--radius-md);
-  border: 1px solid color-mix(in srgb, var(--status-danger) 20%, transparent);
+  border: 1px solid oklch(from var(--status-danger) l c h / 0.2);
   text-align: center;
 }
 

@@ -20,6 +20,6 @@
 
   &.fallback {
     color: #9ca3af;
-    background: color-mix(in srgb, #9ca3af 12%, transparent);
+    background: oklch(from #9ca3af l c h / 0.12);
   }
 }

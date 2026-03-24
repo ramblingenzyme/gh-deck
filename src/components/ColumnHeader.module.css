@@ -7,7 +7,7 @@
   background: var(--bg-topbar);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   flex-shrink: 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 13%, transparent);
+  border-bottom: 1px solid oklch(from var(--color-accent) l c h / 0.2);
 
   &:hover .dragHandle {
     opacity: 0.5;

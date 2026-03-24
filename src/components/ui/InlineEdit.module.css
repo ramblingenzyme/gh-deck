@@ -47,7 +47,7 @@
     resize: none;
     field-sizing: content;
 
-    outline: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
+    outline: 1px solid oklch(from var(--color-accent) l c h / 0.25);
     outline-offset: 2px;
     border-radius: 2px;
 

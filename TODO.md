@@ -16,7 +16,7 @@
 
 # Agent tasks
 
-- [ ] Review usage of opacity, particulary for hover styling, and determine if this is the right approach
+- [x] Review usage of opacity, particulary for hover styling, and determine if this is the right approach
 - [x] Implement fetching of review counts for PR cards
 - [ ] Investigate/remove broken security alerts column
 - [ ] Empty state for columns that require repo selection
