@@ -1,3 +1,4 @@
+import { type ReviewCount } from "@/types";
 import { formatAge } from "@/utils/relativeTime";
 import { Tooltip } from "../ui/Tooltip";
 import { SvgIcon, type IconName } from "../ui/SvgIcon";
@@ -11,7 +12,7 @@ const statVariantClass = {
 
 interface CardStatProps {
   icon: IconName;
-  count: number;
+  count: ReviewCount;
   tooltip?: string;
   variant?: keyof typeof statVariantClass;
 }

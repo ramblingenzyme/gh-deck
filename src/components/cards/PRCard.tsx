@@ -1,4 +1,4 @@
-import type { PRItem } from "@/types";
+import { type PRItem, REVIEW_COUNT_UNKNOWN } from "@/types";
 import { Card, CardTitle, CardFooter } from "../ui/Card";
 import { LabelList } from "./LabelList";
 import { CardStat } from "./CardParts";
@@ -24,9 +24,13 @@ export const PRCard = ({ item }: PRCardProps) => {
             icon="check"
             count={item.reviews.approved}
             tooltip={`${item.reviews.approved} approvals`}
-            variant={item.reviews.approved > 0 ? "approved" : "default"}
+            variant={
+              item.reviews.approved !== REVIEW_COUNT_UNKNOWN && item.reviews.approved > 0
+                ? "approved"
+                : "default"
+            }
           />
-          {item.reviews.requested > 0 && (
+          {item.reviews.requested !== REVIEW_COUNT_UNKNOWN && item.reviews.requested > 0 && (
             <CardStat
               icon="refresh"
               count={item.reviews.requested}

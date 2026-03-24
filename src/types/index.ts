@@ -29,13 +29,16 @@ export interface ColumnConfig {
   query?: string;
 }
 
+export const REVIEW_COUNT_UNKNOWN = "?" as const;
+export type ReviewCount = number | typeof REVIEW_COUNT_UNKNOWN;
+
 export interface PRItem {
   id: number;
   title: string;
   repo: string;
   author: string;
   number: number;
-  reviews: { approved: number; requested: number };
+  reviews: { approved: ReviewCount; requested: ReviewCount };
   comments: number;
   draft: boolean;
   age: string;

@@ -89,6 +89,17 @@ export interface GHDependabotAlert {
   };
 }
 
+export interface GHPRReview {
+  id: number;
+  state: string;
+  user: { login: string };
+}
+
+export interface GHPRRequestedReviewers {
+  users: Array<{ login: string }>;
+  teams: Array<{ slug: string }>;
+}
+
 interface GHEventBase {
   id: string;
   repo: { name: string };

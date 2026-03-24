@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { REVIEW_COUNT_UNKNOWN } from "@/types";
 import {
   mapSearchItemToPR,
   mapSearchItemToIssue,
@@ -60,9 +61,9 @@ describe("mapSearchItemToPR", () => {
     expect(pr.draft).toBe(true);
   });
 
-  it("initializes reviews to zero", () => {
+  it("initializes reviews to REVIEW_COUNT_UNKNOWN until enriched", () => {
     const pr = mapSearchItemToPR(baseItem);
-    expect(pr.reviews).toEqual({ approved: 0, requested: 0 });
+    expect(pr.reviews).toEqual({ approved: REVIEW_COUNT_UNKNOWN, requested: REVIEW_COUNT_UNKNOWN });
   });
 });
 

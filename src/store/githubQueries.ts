@@ -1,15 +1,17 @@
 import useSWR from "swr";
 import { githubFetch, UnauthorizedError } from "@/auth/token";
-import type {
-  PRItem,
-  IssueItem,
-  CIItem,
-  ActivityItem,
-  FallbackItem,
-  ReleaseItem,
-  DeploymentItem,
-  SecurityItem,
-  DeploymentStatus,
+import {
+  type PRItem,
+  type IssueItem,
+  type CIItem,
+  type ActivityItem,
+  type FallbackItem,
+  type ReleaseItem,
+  type DeploymentItem,
+  type SecurityItem,
+  type DeploymentStatus,
+  type ReviewCount,
+  REVIEW_COUNT_UNKNOWN,
 } from "@/types";
 
 const DEPLOYMENT_STATE_MAP: Record<string, DeploymentStatus> = {
@@ -31,6 +33,8 @@ import type {
   GHDeployment,
   GHDeploymentStatus,
   GHDependabotAlert,
+  GHPRReview,
+  GHPRRequestedReviewers,
 } from "@/types/github";
 import {
   mapSearchItemToPR,
@@ -68,6 +72,27 @@ export function useGetUser(sessionId: string | null) {
   );
 }
 
+async function enrichPRWithReviews(pr: PRItem): Promise<PRItem> {
+  const [reviewsResult, requestedResult] = await Promise.allSettled([
+    githubFetch(`/repos/${pr.repo}/pulls/${pr.number}/reviews`),
+    githubFetch(`/repos/${pr.repo}/pulls/${pr.number}/requested_reviewers`),
+  ]);
+
+  let approved: ReviewCount = REVIEW_COUNT_UNKNOWN;
+  if (reviewsResult.status === "fulfilled" && reviewsResult.value.ok) {
+    const reviews = (await reviewsResult.value.json()) as GHPRReview[];
+    approved = reviews.filter((r) => r.state === "APPROVED").length;
+  }
+
+  let requested: ReviewCount = REVIEW_COUNT_UNKNOWN;
+  if (requestedResult.status === "fulfilled" && requestedResult.value.ok) {
+    const rr = (await requestedResult.value.json()) as GHPRRequestedReviewers;
+    requested = rr.users.length + rr.teams.length;
+  }
+
+  return { ...pr, reviews: { approved, requested } };
+}
+
 export function useGetPRs(q: string, sessionId: string | null) {
   return useSWR<PRItem[]>(
     sessionId ? ["prs", q, sessionId] : null,
@@ -77,7 +102,9 @@ export function useGetPRs(q: string, sessionId: string | null) {
       );
       checkOk(res);
       const raw = (await res.json()) as GHSearchResult;
-      return raw.items.map(mapSearchItemToPR);
+      const prs = raw.items.map(mapSearchItemToPR);
+      const settled = await Promise.allSettled(prs.map(enrichPRWithReviews));
+      return settled.map((result, i) => (result.status === "fulfilled" ? result.value : prs[i]!));
     },
     { refreshInterval: POLL },
   );

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { REVIEW_COUNT_UNKNOWN, type ReviewCount } from "@/types";
 import type {
   GHUser,
   GHSearchItem,
@@ -8,6 +9,8 @@ import type {
   GHDeployment,
   GHDeploymentStatus,
   GHDependabotAlert,
+  GHPRReview,
+  GHPRRequestedReviewers,
 } from "@/types/github";
 
 vi.mock("@/auth/token", async (importOriginal) => {
@@ -86,21 +89,67 @@ describe("useGetUser", () => {
   });
 });
 
+const mockReviews: GHPRReview[] = [
+  { id: 1, state: "APPROVED", user: { login: "bob" } },
+  { id: 2, state: "CHANGES_REQUESTED", user: { login: "carol" } },
+];
+
+const mockRequestedReviewers: GHPRRequestedReviewers = {
+  users: [{ login: "dave" }],
+  teams: [{ slug: "team-x" }],
+};
+
 describe("useGetPRs", () => {
   it("key is null when token is null", () => {
     useGetPRs("repo:owner/repo", null);
     expect(capturedKey).toBeNull();
   });
 
-  it("fetcher encodes query and maps items", async () => {
-    mockFetch.mockResolvedValueOnce(mockOk({ total_count: 1, items: [baseItem] }));
+  it("fetcher encodes query and enriches with review counts", async () => {
+    mockFetch
+      .mockResolvedValueOnce(mockOk({ total_count: 1, items: [baseItem] }))
+      .mockResolvedValueOnce(mockOk(mockReviews))
+      .mockResolvedValueOnce(mockOk(mockRequestedReviewers));
 
     useGetPRs("repo:owner/repo", "tok");
     expect(capturedKey).toEqual(["prs", "repo:owner/repo", "tok"]);
 
-    const result = (await capturedFetcher!()) as Array<{ id: number }>;
+    const result = (await capturedFetcher!()) as Array<{
+      id: number;
+      reviews: { approved: ReviewCount; requested: ReviewCount };
+    }>;
     expect(result).toHaveLength(1);
     expect(result[0]!.id).toBe(1);
+    expect(result[0]!.reviews.approved).toBe(1);
+    expect(result[0]!.reviews.requested).toBe(2);
+  });
+
+  it("falls back to REVIEW_COUNT_UNKNOWN when reviews fetch is rejected", async () => {
+    mockFetch
+      .mockResolvedValueOnce(mockOk({ total_count: 1, items: [baseItem] }))
+      .mockRejectedValueOnce(new Error("Network error"))
+      .mockResolvedValueOnce(mockOk(mockRequestedReviewers));
+
+    useGetPRs("repo:owner/repo", "tok");
+    const result = (await capturedFetcher!()) as Array<{
+      reviews: { approved: ReviewCount; requested: ReviewCount };
+    }>;
+    expect(result[0]!.reviews.approved).toBe(REVIEW_COUNT_UNKNOWN);
+    expect(result[0]!.reviews.requested).toBe(2);
+  });
+
+  it("falls back to REVIEW_COUNT_UNKNOWN when requested_reviewers fetch returns non-ok", async () => {
+    mockFetch
+      .mockResolvedValueOnce(mockOk({ total_count: 1, items: [baseItem] }))
+      .mockResolvedValueOnce(mockOk(mockReviews))
+      .mockResolvedValueOnce({ ok: false, status: 404, statusText: "Not Found" } as Response);
+
+    useGetPRs("repo:owner/repo", "tok");
+    const result = (await capturedFetcher!()) as Array<{
+      reviews: { approved: ReviewCount; requested: ReviewCount };
+    }>;
+    expect(result[0]!.reviews.approved).toBe(1);
+    expect(result[0]!.reviews.requested).toBe(REVIEW_COUNT_UNKNOWN);
   });
 });
 
