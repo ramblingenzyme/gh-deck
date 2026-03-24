@@ -9,9 +9,10 @@ interface BoardProps {
   columns: ColumnConfig[];
   onAddColumn: () => void;
   onRemove: (id: string) => void;
+  loading?: boolean;
 }
 
-export const Board = ({ columns, onAddColumn, onRemove }: BoardProps) => {
+export const Board = ({ columns, onAddColumn, onRemove, loading }: BoardProps) => {
   const reorder = useLayoutStore((s) => s.reorder);
 
   useEffect(() => {
@@ -29,6 +30,15 @@ export const Board = ({ columns, onAddColumn, onRemove }: BoardProps) => {
       },
     });
   }, [columns, reorder]);
+
+  if (loading) {
+    return (
+      <main className={styles.boardLoading} tabIndex={-1}>
+        <div className={styles.spinner} aria-hidden="true" />
+        <p>Connecting…</p>
+      </main>
+    );
+  }
 
   if (columns.length === 0) {
     return (

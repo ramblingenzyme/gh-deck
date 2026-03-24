@@ -55,11 +55,7 @@ export const Topbar = ({ onAddColumn, onSignIn, onSignOut }: TopbarProps) => {
               Sign in
             </button>
           </>
-        ) : (
-          <button className={styles.btnSignIn} onClick={onSignIn}>
-            Sign in
-          </button>
-        )}
+        ) : null}
       </div>
     </header>
   );

@@ -20,7 +20,7 @@
 - [ ] Implement fetching of review counts for PR cards
 - [ ] Investigate/remove broken security alerts column
 - [ ] Empty state for columns that require repo selection
-- [ ] Fix auth modal flash on load when logged in
+- [x] Fix auth modal flash on load when logged in
 - [x] Extract user link for card footers
 - [x] Fix deployments footer to link users & refs
 - [x] Persistent focus border on edit query input

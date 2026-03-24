@@ -57,6 +57,12 @@ Prefer native platform capabilities over JS implementations. Reach for JS only w
 - No CSS-in-JS, no inline styles
 - Per-column accent color set via `--color-accent` CSS variable
 
+### Explicit over implicit
+
+Prefer code that is correct by construction over code that relies on implicit guarantees that aren't visible at the call site. For example:
+
+- **State resets**: when an action resets state, explicitly set every field to its reset value — don't rely on fields already being at their default. The action should be self-contained and correct regardless of what state preceded it.
+
 ### Fetch wrappers
 
 Keep fetch wrappers thin — they should return `Response` directly and not throw on non-2xx status codes. Callers are responsible for checking `res.ok` and handling error cases themselves. Do not add a wrapper that re-centralises error throwing, as this defeats the purpose.

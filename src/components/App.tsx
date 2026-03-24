@@ -1,12 +1,8 @@
-import { useEffect } from "preact/hooks";
 import { SWRConfig } from "swr";
 import { useModal } from "@/hooks/useModal";
+import { useAuth } from "@/hooks/useAuth";
 import type { ColumnType } from "@/types";
 import { useLayoutStore } from "@/store/layoutStore";
-import { useAuthStore } from "@/store/authStore";
-import { UnauthorizedError, setToken } from "@/auth/token";
-import { fetchSession } from "@/auth/oauthFlow";
-import { isDemoMode } from "@/env";
 import { Topbar } from "./Topbar";
 import { Board } from "./Board";
 import { AddColumnModal } from "./AddColumnModal";
@@ -18,70 +14,32 @@ export const App = () => {
   const removeColumn = useLayoutStore((s) => s.removeColumn);
   const addColumnModal = useModal();
 
-  const authStatus = useAuthStore((s) => s.status);
-  const authSuccess = useAuthStore((s) => s.authSuccess);
-  const logOut = useAuthStore((s) => s.logOut);
-  const authModal = useModal(!isDemoMode && authStatus === "idle");
-
-  // Bootstrap session from the HttpOnly session cookie on mount.
-  // Also fires after the /api/callback redirect lands on /?authed=1.
-  useEffect(() => {
-    if (isDemoMode) return;
-    // Clean up the ?authed=1 query param without a navigation.
-    if (new URLSearchParams(window.location.search).has("authed")) {
-      window.history.replaceState({}, "", "/");
-    }
-    fetchSession()
-      .then((t) => {
-        setToken(t.accessToken, t.expiresAt);
-        authSuccess();
-      })
-      .catch(() => {
-        // No active session — auth modal will show.
-      });
-  }, [authSuccess]);
+  const auth = useAuth();
 
   const handleAddColumn = (type: ColumnType, title: string, query?: string) => {
     addColumn(type, title, query);
     addColumnModal.close();
   };
 
-  const handleSignOut = () => {
-    logOut();
-    authModal.open();
-  };
-
   return (
-    <SWRConfig
-      value={{
-        onError: (err: unknown) => {
-          if (err instanceof UnauthorizedError) {
-            logOut();
-            authModal.open();
-          }
-        },
-      }}
-    >
+    <SWRConfig value={{ onError: auth.onSWRError }}>
       <Topbar
         onAddColumn={() => addColumnModal.open()}
-        onSignIn={() => authModal.open()}
-        onSignOut={handleSignOut}
+        onSignIn={auth.onSignIn}
+        onSignOut={auth.onSignOut}
       />
       <Board
         columns={columns}
         onAddColumn={() => addColumnModal.open()}
         onRemove={(id) => removeColumn(id)}
+        loading={auth.isLoading}
       />
       <AddColumnModal
         open={addColumnModal.isOpen}
         onAdd={handleAddColumn}
         onClose={() => addColumnModal.close()}
       />
-      <AuthModal
-        open={authModal.isOpen && authStatus !== "authed"}
-        onDemoMode={() => authModal.close()}
-        onClose={() => authModal.close()}
-      />
+      <AuthModal open={auth.modalOpen} onDemoMode={auth.onDemoMode} onClose={auth.onModalClose} />
     </SWRConfig>
   );
 };
