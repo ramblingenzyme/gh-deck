@@ -1,4 +1,3 @@
-import { lazy, Suspense } from "preact/compat";
 import { useEffect } from "preact/hooks";
 import { SWRConfig } from "swr";
 import { useModal } from "@/hooks/useModal";
@@ -10,11 +9,8 @@ import { fetchSession } from "@/auth/oauthFlow";
 import { isDemoMode } from "@/env";
 import { Topbar } from "./Topbar";
 import { Board } from "./Board";
-
-const AddColumnModal = lazy(() =>
-  import("./AddColumnModal").then((m) => ({ default: m.AddColumnModal })),
-);
-const AuthModal = lazy(() => import("./AuthModal").then((m) => ({ default: m.AuthModal })));
+import { AddColumnModal } from "./AddColumnModal";
+import { AuthModal } from "./AuthModal";
 
 export const App = () => {
   const columns = useLayoutStore((s) => s.columns);
@@ -76,20 +72,16 @@ export const App = () => {
         onAddColumn={() => addColumnModal.open()}
         onRemove={(id) => removeColumn(id)}
       />
-      <Suspense fallback={null}>
-        <AddColumnModal
-          open={addColumnModal.isOpen}
-          onAdd={handleAddColumn}
-          onClose={() => addColumnModal.close()}
-        />
-      </Suspense>
-      <Suspense fallback={null}>
-        <AuthModal
-          open={authModal.isOpen && authStatus !== "authed"}
-          onDemoMode={() => authModal.close()}
-          onClose={() => authModal.close()}
-        />
-      </Suspense>
+      <AddColumnModal
+        open={addColumnModal.isOpen}
+        onAdd={handleAddColumn}
+        onClose={() => addColumnModal.close()}
+      />
+      <AuthModal
+        open={authModal.isOpen && authStatus !== "authed"}
+        onDemoMode={() => authModal.close()}
+        onClose={() => authModal.close()}
+      />
     </SWRConfig>
   );
 };
