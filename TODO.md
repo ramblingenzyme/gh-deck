@@ -13,6 +13,7 @@
 - [ ] Polish up multi select component
 - [x] Review code splitting boundaries
 - [ ] Integrate @cloudflare/vite-plugin wrangler to simplify dev tooling
+- [x] Align min query heights across columns with repo count badges and without
 
 # Agent tasks
 
