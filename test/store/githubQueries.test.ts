@@ -383,10 +383,23 @@ describe("useGetDeployments", () => {
     expect(result.items[0]!.status).toBe("success");
   });
 
-  it("maps unknown status state to pending", async () => {
+  it("maps inactive status state to success", async () => {
     mockFetch
       .mockResolvedValueOnce(mockOk([makeDeployment(1)]))
       .mockResolvedValueOnce(mockOk([{ state: "inactive" } as GHDeploymentStatus]));
+
+    useGetDeployments(["owner/repo"], "tok");
+    const result = (await capturedFetcher!()) as {
+      items: Array<{ status: string }>;
+      fetchErrors: string[];
+    };
+    expect(result.items[0]!.status).toBe("success");
+  });
+
+  it("maps unknown status state to pending", async () => {
+    mockFetch
+      .mockResolvedValueOnce(mockOk([makeDeployment(1)]))
+      .mockResolvedValueOnce(mockOk([{ state: "custom-status" } as GHDeploymentStatus]));
 
     useGetDeployments(["owner/repo"], "tok");
     const result = (await capturedFetcher!()) as {

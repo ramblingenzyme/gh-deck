@@ -4,6 +4,7 @@ import type { ColumnConfig } from "@/types";
 import { COLUMN_TYPES } from "@/constants";
 import { SvgIcon, type IconName } from "./ui/SvgIcon";
 import { Tooltip } from "./ui/Tooltip";
+import { cleanId } from "@/utils/id";
 import styles from "./ColumnHeader.module.css";
 
 interface ColumnHeaderProps {
@@ -58,7 +59,7 @@ export const ColumnHeader = ({
   const itemLabel = itemCount === 1 ? cfg.itemLabel : `${cfg.itemLabel}s`;
   const [menuOpen, setMenuOpen] = useState(false);
   const menuId = useId();
-  const anchorName = `--col-menu-${menuId.replace(/:/g, "")}`;
+  const anchorName = `--col-menu-${cleanId(menuId)}`;
 
   const dragButton = (
     <button

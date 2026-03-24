@@ -16,6 +16,7 @@ import {
 
 const DEPLOYMENT_STATE_MAP: Record<string, DeploymentStatus> = {
   success: "success",
+  inactive: "success",
   failure: "failure",
   error: "failure",
   pending: "pending",

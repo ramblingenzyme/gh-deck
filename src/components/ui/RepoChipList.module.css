@@ -1,4 +1,5 @@
 .chipArea {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -6,12 +7,24 @@
   background: var(--bg-card);
   border: 1px solid var(--border-card);
   border-radius: var(--radius-md);
-  padding: 6px 10px;
+  padding: 6px 28px 6px 10px;
   min-height: 38px;
 
-  &:focus-within {
+  &:focus-within,
+  &[data-open] {
     border-color: var(--accent-ui);
   }
+
+  &[data-open] {
+    border-bottom: none;
+    padding-bottom: 7px;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+}
+
+.chip,
+.suggestion {
+  user-select: none;
 }
 
 .chip {
@@ -19,9 +32,9 @@
   align-items: stretch;
   gap: 4px;
   background: var(--bg-hover);
-  border: 1px solid var(--border-mid);
+  border: 1px solid var(--border-ghost);
   border-radius: var(--radius-sm);
-  padding: 2px 2px 2px 6px;
+  padding: 0 0 0 8px;
   font-size: var(--text-sm);
   color: var(--text-primary);
   list-style: none;
@@ -30,6 +43,7 @@
 .chip span {
   display: flex;
   align-items: center;
+  padding: 2px 0;
 }
 
 .chipRemove {
@@ -39,13 +53,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1;
-  border-radius: var(--radius-sm);
+  min-width: 1.4em;
+  border-radius: 0 calc(var(--radius-sm) - 1px) calc(var(--radius-sm) - 1px) 0;
 
   &:hover {
     color: var(--status-danger);
     background: oklch(from var(--status-danger) l c h / 0.12);
   }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.chip:has(:focus-visible) {
+  border-color: var(--accent-ui);
 }
 
 .chipList {
@@ -60,28 +82,67 @@
   font-size: var(--text-md);
 
   &::placeholder {
-    color: var(--text-muted);
+    color: var(--text-ghost);
+  }
+}
+
+.chevron {
+  all: unset;
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+
+  & svg {
+    width: 12px;
+    height: 12px;
   }
 }
 
 .suggestions {
   /* Reset popover defaults */
   inset: auto;
-  margin: 4px 0 0;
+  margin: 0;
 
-  /* Anchor positioning — below the input, aligned to its left edge */
-  top: anchor(bottom);
+  /* Anchor positioning — flush below the chip area, overlapping the removed bottom border */
+  top: calc(anchor(bottom) - 1px);
   left: anchor(left);
   width: anchor-size(width);
 
-  background: var(--bg-column);
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--accent-ui);
+  border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
   padding: 4px;
   list-style: none;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   max-height: 180px;
   overflow-y: auto;
+
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  &:popover-open {
+    opacity: 1;
+  }
+
+  @starting-style {
+    &:popover-open {
+      opacity: 0;
+    }
+  }
+}
+
+.emptyState {
+  padding: 6px 10px;
+  font-size: var(--text-md);
+  color: var(--text-ghost);
+  text-align: center;
 }
 
 .suggestion {
@@ -99,7 +160,8 @@
     color 0.1s;
 
   &:hover,
-  &:focus {
+  &:focus,
+  &[aria-selected="true"] {
     background: var(--border-mid);
     color: var(--text-primary);
     outline: none;

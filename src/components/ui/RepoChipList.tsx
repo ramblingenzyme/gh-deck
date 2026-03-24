@@ -1,4 +1,9 @@
-import { useId, useRef, useState, useEffect } from "preact/hooks";
+import { useId, useRef, useState } from "preact/hooks";
+import { SvgIcon } from "./SvgIcon";
+import { usePopoverToggle } from "./usePopoverToggle";
+import { useChipKeyNav } from "./useChipKeyNav";
+import { FOCUSABLE_SELECTOR } from "@/utils/focus";
+import { cleanId } from "@/utils/id";
 import styles from "./RepoChipList.module.css";
 
 interface RepoChipListProps {
@@ -10,77 +15,83 @@ interface RepoChipListProps {
 
 export const RepoChipList = ({ repos, suggestions = [], onAdd, onRemove }: RepoChipListProps) => {
   const id = useId();
-  const anchorName = `--repo-input-${id.replace(/:/g, "")}`;
-  const menuId = `repo-menu-${id.replace(/:/g, "")}`;
+  const anchorName = `--repo-input-${cleanId(id)}`;
+  const menuId = `repo-menu-${cleanId(id)}`;
   const menuRef = useRef<HTMLMenuElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chipAreaRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState("");
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   const filtered = suggestions.filter(
     (s) => s.toLowerCase().includes(filter.toLowerCase()) && !repos.includes(s),
   );
 
-  const showMenu = () => (menuRef.current as any)?.showPopover?.();
-  const hideMenu = () => (menuRef.current as any)?.hidePopover?.();
+  // Show a "create" entry when the typed value looks like owner/repo but isn't an exact suggestion
+  const trimmedFilter = filter.trim();
+  const createEntry =
+    trimmedFilter.length > 0 && !repos.includes(trimmedFilter) && !filtered.includes(trimmedFilter)
+      ? trimmedFilter
+      : null;
 
-  // Close when clicking outside both the input and the menu
-  useEffect(() => {
-    const handlePointerDown = (e: PointerEvent) => {
-      if (
-        !menuRef.current?.contains(e.target as Node) &&
-        !inputRef.current?.contains(e.target as Node)
-      ) {
-        hideMenu();
-      }
-    };
-    // Intercept Escape in capture phase before the dialog's native cancel handler fires
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && menuRef.current?.matches(":popover-open")) {
-        e.stopPropagation();
-        e.preventDefault();
-        hideMenu();
-        inputRef.current?.focus();
-      }
-    };
-    document.addEventListener("pointerdown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown, true);
-    return () => {
-      document.removeEventListener("pointerdown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown, true);
-    };
-  }, []);
+  const allOptions = createEntry ? [...filtered, createEntry] : filtered;
+  const showEmptyState = trimmedFilter.length > 0 && allOptions.length === 0;
 
-  // Show/hide based on filter + available suggestions
-  useEffect(() => {
-    if (filtered.length > 0) {
-      showMenu();
-    } else {
-      hideMenu();
+  const { isOpen, open, close, justClosedRef } = usePopoverToggle({
+    menuRef,
+    anchorRef: chipAreaRef,
+    inputRef,
+    filteredCount: showEmptyState ? 1 : allOptions.length,
+  });
+
+  const openMenu = () => {
+    open();
+    if (!isOpen) {
+      requestAnimationFrame(() => {
+        menuRef.current?.querySelectorAll<HTMLElement>("button")[0]?.focus();
+      });
     }
-  }, [filter, filtered.length]);
+  };
+  const closeMenu = () => {
+    close();
+    setActiveIndex(-1);
+  };
+
+  const { handleInputNavKeys, handleChipRemoveKeyDown } = useChipKeyNav({
+    repoCount: repos.length,
+    onRemove,
+    inputRef,
+    chipAreaRef,
+    onLeaveField: closeMenu,
+  });
 
   const handleInput = (e: Event) => {
-    setFilter((e.target as HTMLInputElement).value);
+    const value = (e.target as HTMLInputElement).value;
+    setFilter(value);
+    // This is like the default, there should always be something visually selected even if it's not focused
+    setActiveIndex(0);
+    if (!isOpen) openMenu();
   };
 
   const handleFocus = () => {
-    if (filtered.length > 0) showMenu();
+    if (!justClosedRef.current && allOptions.length > 0) openMenu();
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      (menuRef.current?.querySelector("button") as HTMLElement)?.focus();
+    if (handleInputNavKeys(e)) return;
+    if (e.key === "Tab" && !e.shiftKey) {
+      closeMenu();
       return;
     }
-    if (e.key !== "Enter") return;
-    e.preventDefault();
-    const input = e.target as HTMLInputElement;
-    const value = input.value.trim();
-    if (value.includes("/") && !repos.includes(value)) {
-      onAdd(value);
-      input.value = "";
-      setFilter("");
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (!isOpen) openMenu();
+      menuRef.current?.querySelectorAll<HTMLElement>("button")[0]?.focus();
+      return;
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (isOpen && allOptions.length > 0) selectRepo(allOptions[0]);
     }
   };
 
@@ -88,31 +99,57 @@ export const RepoChipList = ({ repos, suggestions = [], onAdd, onRemove }: RepoC
     onAdd(repo);
     setFilter("");
     if (inputRef.current) inputRef.current.value = "";
-    hideMenu();
+    closeMenu();
     inputRef.current?.focus();
   };
 
-  const handleOptionKeyDown = (e: KeyboardEvent) => {
+  const handleOptionKeyDown = (e: KeyboardEvent, index: number) => {
+    if (e.key === "Tab" && !e.shiftKey) {
+      e.preventDefault();
+      closeMenu();
+      const focusable = Array.from(document.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+      const inputIdx = focusable.indexOf(inputRef.current!);
+      focusable[inputIdx + 1]?.focus();
+      return;
+    }
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      (
-        (e.currentTarget as HTMLElement).parentElement?.nextElementSibling?.querySelector(
-          "button",
-        ) as HTMLElement
-      )?.focus();
+      const next = (index + 1) % allOptions.length;
+      menuRef.current?.querySelectorAll<HTMLElement>("button")[next]?.focus();
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      const prev = (
-        e.currentTarget as HTMLElement
-      ).parentElement?.previousElementSibling?.querySelector("button") as HTMLElement | null;
-      if (prev) prev.focus();
-      else inputRef.current?.focus();
+      const prev = (index - 1 + allOptions.length) % allOptions.length;
+      menuRef.current?.querySelectorAll<HTMLElement>("button")[prev]?.focus();
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      selectRepo(allOptions[index]);
+    } else if (!e.metaKey && !e.ctrlKey) {
+      e.preventDefault();
+      if (inputRef.current) {
+        if (e.key === "Backspace") {
+          inputRef.current.value = inputRef.current.value.slice(0, -1);
+        } else if (e.key.length === 1) {
+          inputRef.current.value += e.key;
+        }
+        setFilter(inputRef.current.value);
+      }
+      inputRef.current?.focus();
     }
   };
 
   return (
     <>
-      <div className={styles.chipArea} role="group" style={{ anchorName } as React.CSSProperties}>
+      <div
+        ref={chipAreaRef}
+        className={styles.chipArea}
+        role="group"
+        style={{ anchorName } as React.CSSProperties}
+        data-open={isOpen || undefined}
+        onPointerDown={() => {
+          if (isOpen) closeMenu();
+          else openMenu();
+        }}
+      >
         <ul className={styles.chipList} aria-label="Repositories">
           {repos.map((repo) => (
             <li key={repo} className={styles.chip}>
@@ -120,8 +157,10 @@ export const RepoChipList = ({ repos, suggestions = [], onAdd, onRemove }: RepoC
               <button
                 type="button"
                 className={styles.chipRemove}
+                tabIndex={-1}
                 aria-label={`Remove ${repo}`}
                 onClick={() => onRemove(repo)}
+                onKeyDown={(e) => handleChipRemoveKeyDown(e, repo)}
               >
                 ×
               </button>
@@ -135,33 +174,61 @@ export const RepoChipList = ({ repos, suggestions = [], onAdd, onRemove }: RepoC
           onKeyDown={handleKeyDown}
           onInput={handleInput}
           onFocus={handleFocus}
-          placeholder={repos.length === 0 ? "owner/repo" : "Add another…"}
+          placeholder={repos.length === 0 ? "owner/repo" : ""}
           aria-label="Add repository"
           aria-autocomplete="list"
           aria-controls={menuId}
+          aria-expanded={isOpen}
         />
+        <button
+          type="button"
+          className={styles.chevron}
+          tabIndex={-1}
+          aria-hidden="true"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={() => {
+            if (isOpen) closeMenu();
+            else openMenu();
+          }}
+          data-open={isOpen || undefined}
+        >
+          <SvgIcon name="chevronDown" />
+        </button>
       </div>
       <menu
         ref={menuRef}
         id={menuId}
         popover="manual"
+        tabIndex={-1}
         className={styles.suggestions}
         style={{ positionAnchor: anchorName } as React.CSSProperties}
         role="listbox"
       >
-        {filtered.map((s) => (
-          <li key={s} role="none">
-            <button
-              type="button"
-              role="option"
-              className={styles.suggestion}
-              onClick={() => selectRepo(s)}
-              onKeyDown={handleOptionKeyDown}
-            >
-              {s}
-            </button>
-          </li>
-        ))}
+        {showEmptyState ? (
+          <p className={styles.emptyState}>No options</p>
+        ) : (
+          allOptions.map((s, i) => (
+            <li key={s} role="none">
+              <button
+                type="button"
+                role="option"
+                aria-selected={activeIndex === i}
+                className={styles.suggestion}
+                onClick={() => selectRepo(s)}
+                onMouseEnter={(e) =>
+                  (e.currentTarget as HTMLElement).focus({ preventScroll: true })
+                }
+                onFocus={() => setActiveIndex(i)}
+                onBlur={(e) => {
+                  if (!menuRef.current?.contains(e.relatedTarget as Node)) setActiveIndex(-1);
+                }}
+                onKeyDown={(e) => handleOptionKeyDown(e, i)}
+              >
+                {s === createEntry ? `Create "${s}"` : s}
+              </button>
+            </li>
+          ))
+        )}
       </menu>
     </>
   );

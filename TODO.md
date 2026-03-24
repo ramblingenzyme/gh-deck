@@ -8,9 +8,7 @@
 - [ ] Integrate knip into lint-staged
 - [x] Check if review/comments on PR cards are implemented
 - [x] Fix broken ref rendering in activity cards
-- [ ] Repo selector in add column modal when column supports it
 - [ ] Fix query multiline growing
-- [ ] Polish up multi select component
 - [x] Review code splitting boundaries
 - [ ] Integrate @cloudflare/vite-plugin wrangler to simplify dev tooling
 - [x] Align min query heights across columns with repo count badges and without
@@ -21,6 +19,8 @@
 - [x] Implement fetching of review counts for PR cards
 - [ ] Investigate/remove broken security alerts column
 - [ ] Empty state for columns that require repo selection
+- [ ] Repo selector in add column modal when column supports it
+- [x] Polish up multi select component
 - [x] Fix auth modal flash on load when logged in
 - [x] Extract user link for card footers
 - [x] Fix deployments footer to link users & refs

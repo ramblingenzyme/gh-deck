@@ -1,4 +1,5 @@
 import { useId, useRef } from "preact/hooks";
+import { cleanId } from "@/utils/id";
 import styles from "./Tooltip.module.css";
 import { cloneElement, toChildArray, VNode } from "preact";
 
@@ -19,7 +20,7 @@ export const Tooltip = ({
 }: TooltipProps) => {
   const id = useId();
   const popoverRef = useRef<HTMLSpanElement>(null);
-  const anchorName = `--tooltip-${id.replace(/:/g, "")}`;
+  const anchorName = `--tooltip-${cleanId(id)}`;
 
   const show = () => popoverRef.current?.showPopover?.();
   const hide = () => popoverRef.current?.hidePopover?.();

@@ -1,5 +1,7 @@
 /* ── Design Tokens ────────────────────────────────────────────────────────── */
 :root {
+  interpolate-size: allow-keywords;
+
   --bg-root: #13131a;
   --bg-topbar: #1a1f2e;
   --bg-column: #16161f;

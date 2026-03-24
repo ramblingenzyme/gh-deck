@@ -20,6 +20,7 @@ import { StarIcon } from "./icons/StarIcon";
 import { DeployIcon } from "./icons/DeployIcon";
 import { ShieldIcon } from "./icons/ShieldIcon";
 import { PencilIcon } from "./icons/PencilIcon";
+import { ChevronDownIcon } from "./icons/ChevronDownIcon";
 
 const ICON_MAP = {
   check: CheckIcon,
@@ -43,6 +44,7 @@ const ICON_MAP = {
   deploy: DeployIcon,
   shield: ShieldIcon,
   pencil: PencilIcon,
+  chevronDown: ChevronDownIcon,
 } as const;
 
 export type IconName = keyof typeof ICON_MAP;
