@@ -25,7 +25,7 @@
 - [x] Extract user link for card footers
 - [x] Fix deployments footer to link users & refs
 - [x] Persistent focus border on edit query input
-- [ ] Fix modal being tab selectable
+- [x] Fix modal being tab selectable
 - [x] Figure out which UI elements should be selectable vs not
 - [x] Custom text selection color
 - [ ] Reassess filter queries for non issue/PR columns

@@ -33,6 +33,7 @@ export const Modal = ({
     <dialog
       ref={dialogRef}
       className={styles.dialog}
+      tabIndex={-1}
       onClose={onClose}
       onCancel={
         preventCancel
