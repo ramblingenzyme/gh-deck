@@ -61,7 +61,7 @@ describe("RepoChipList", () => {
     const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner/repo");
     const options = screen.getAllByRole("option");
-    expect(options[options.length - 1].textContent).toMatch(/create "owner\/repo"/i);
+    expect(options[options.length - 1]!.textContent).toMatch(/create "owner\/repo"/i);
   });
 
   it("shows a create entry even for values without a slash", async () => {
@@ -477,12 +477,12 @@ describe("RepoChipList", () => {
     // After typing, handleInput sets activeIndex=0 so options[0] is pre-selected
     await user.type(input, "owner");
     const options = screen.getAllByRole("option");
-    expect(options[0].getAttribute("aria-selected")).toBe("true");
-    expect(options[1].getAttribute("aria-selected")).toBe("false");
+    expect(options[0]!.getAttribute("aria-selected")).toBe("true");
+    expect(options[1]!.getAttribute("aria-selected")).toBe("false");
     // ArrowDown from input → owner/foo (index 0, no change to selection); second → owner/bar
     await user.keyboard("{ArrowDown}{ArrowDown}");
-    expect(options[0].getAttribute("aria-selected")).toBe("false");
-    expect(options[1].getAttribute("aria-selected")).toBe("true");
+    expect(options[0]!.getAttribute("aria-selected")).toBe("false");
+    expect(options[1]!.getAttribute("aria-selected")).toBe("true");
   });
 
   it("ArrowDown from input when menu is closed opens it", async () => {
@@ -564,10 +564,10 @@ describe("RepoChipList", () => {
     const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner");
     const options = screen.getAllByRole("option");
-    await user.hover(options[1]);
+    await user.hover(options[1]!);
     expect(document.activeElement).toBe(options[1]);
-    expect(options[1].getAttribute("aria-selected")).toBe("true");
-    expect(options[0].getAttribute("aria-selected")).toBe("false");
+    expect(options[1]!.getAttribute("aria-selected")).toBe("true");
+    expect(options[0]!.getAttribute("aria-selected")).toBe("false");
   });
 
   it("input has role combobox", () => {
@@ -612,7 +612,7 @@ describe("RepoChipList", () => {
     );
     const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner");
-    const firstOption = screen.getAllByRole("option")[0];
+    const firstOption = screen.getAllByRole("option")[0]!;
     expect(input).toHaveAttribute("aria-activedescendant", firstOption.id);
   });
 
@@ -630,7 +630,7 @@ describe("RepoChipList", () => {
     await user.type(input, "owner");
     await user.keyboard("{ArrowDown}{ArrowDown}");
     const options = screen.getAllByRole("option");
-    expect(input).toHaveAttribute("aria-activedescendant", options[1].id);
+    expect(input).toHaveAttribute("aria-activedescendant", options[1]!.id);
   });
 
   it("aria-activedescendant is cleared when the menu closes", async () => {

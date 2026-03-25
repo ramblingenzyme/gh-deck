@@ -51,17 +51,17 @@ export const useChipKeyNav = ({
         const idx = Array.from(buttons ?? []).indexOf(e.currentTarget as HTMLElement);
         if (!e.shiftKey) {
           if (buttons && idx < buttons.length - 1) {
-            buttons[idx + 1].focus();
+            buttons[idx + 1]?.focus();
           } else {
             inputRef.current?.focus();
           }
         } else if (idx > 0) {
-          buttons![idx - 1].focus();
+          buttons![idx - 1]?.focus();
         } else {
           onLeaveField();
           const focusable = Array.from(document.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
           const chipAreaIdx = focusable.findIndex((el) => chipAreaRef.current?.contains(el));
-          if (chipAreaIdx > 0) focusable[chipAreaIdx - 1].focus();
+          if (chipAreaIdx > 0) focusable[chipAreaIdx - 1]?.focus();
         }
       } else if (e.key === "Backspace" || e.key === "Delete") {
         e.preventDefault();

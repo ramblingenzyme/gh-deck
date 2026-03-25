@@ -14,9 +14,13 @@ npm test         # Run tests (vitest)
 npm run test:watch  # Run tests in watch mode
 ```
 
+## Tech Stack
+
+This project uses TypeScript, CSS Modules, and OKLCH color space for design tokens. When working with colors, use oklch relative color syntax with alpha — not color-mix or solid oklch mixing which produces washed-out results.
+
 ## Architecture
 
-**Octodeck** is a TweetDeck-style GitHub dashboard (prototype with mock data). React 19 + TypeScript + Vite, state via Redux Toolkit.
+**Octodeck** is a TweetDeck-style GitHub dashboard (prototype with mock data). React 19 + TypeScript + Vite, state via Zustand.
 
 ### Key data flow
 
@@ -75,6 +79,18 @@ Keep fetch wrappers thin — they should return `Response` directly and not thro
 
 `@/` maps to `src/` (configured in `vite.config.ts`).
 
+## Code Style
+
+Do not introduce new abstractions, helpers, or wrappers unless explicitly asked. When simplifying code, remove complexity — don't replace it with different complexity. If a user asks to remove a pattern, do not reintroduce an equivalent pattern under a different name.
+
+## UI & Styling
+
+When making UI/styling changes, make minimal targeted fixes. Do not over-engineer solutions (e.g., adding truncation when wrapping was fine). If something was working before, preserve that behavior unless explicitly told to change it.
+
+## Debugging
+
+When fixing bugs, identify the actual root cause before implementing a fix. Do not cycle through wrong hypotheses — read the error context carefully, check permissions/scopes, and verify assumptions before proposing solutions.
+
 ## Plans
 
 Persist plans to `.claude/plans/YYYY-MM-DD-<description>.md`.
@@ -96,3 +112,7 @@ Tests live in `test/` mirroring `src/` structure (e.g. `src/utils/foo.ts` → `t
 - **After changes**: always run `npm test` to check for failures; update existing tests that break due to interface changes and write new tests for new behaviour
 
 Run a single test file: `npm test -- test/utils/queryFilter.test.ts`
+
+## Working With Me
+
+When the user gives feedback or a correction, apply it precisely to the thing they're referencing. Do not generalize the feedback to other parts of the code or make additional unrequested changes. Ask for clarification if the scope is ambiguous.

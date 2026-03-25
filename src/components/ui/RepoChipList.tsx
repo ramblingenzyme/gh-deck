@@ -91,7 +91,8 @@ export const RepoChipList = ({ repos, suggestions = [], onAdd, onRemove }: RepoC
     }
     if (e.key === "Enter") {
       e.preventDefault();
-      if (isOpen && allOptions.length > 0) selectRepo(allOptions[0]);
+      const first = allOptions[0];
+      if (isOpen && first !== undefined) selectRepo(first);
     }
   };
 
@@ -122,7 +123,8 @@ export const RepoChipList = ({ repos, suggestions = [], onAdd, onRemove }: RepoC
       menuRef.current?.querySelectorAll<HTMLElement>("button")[prev]?.focus();
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      selectRepo(allOptions[index]);
+      const opt = allOptions[index];
+      if (opt !== undefined) selectRepo(opt);
     } else if (!e.metaKey && !e.ctrlKey) {
       e.preventDefault();
       if (inputRef.current) {
