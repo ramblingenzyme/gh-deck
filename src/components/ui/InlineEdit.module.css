@@ -4,12 +4,14 @@
 
 .display {
   flex: 1;
+  min-width: 0;
   font-size: var(--text-xs, 11px);
   color: var(--text-secondary);
   font-family: monospace;
   overflow-wrap: break-word;
   cursor: default;
   text-align: left;
+  min-height: calc(28px - 2 * var(--col-query-padding-y));
 
   &:hover {
     color: var(--text-secondary);
@@ -33,9 +35,15 @@
 }
 
 .editRow {
-  display: contents;
+  display: flex;
+  flex: 1;
+  align-items: start;
+  gap: 6px;
+  min-width: 0;
+  min-height: calc(28px - 2 * var(--col-query-padding-y));
 
   & textarea {
+    align-self: center;
     flex: 1;
     font-size: var(--text-xs, 11px);
     font-family: monospace;
@@ -43,9 +51,7 @@
     background: transparent;
     border: none;
     min-width: 0;
-    padding: 0;
     resize: none;
-    field-sizing: content;
 
     outline: 1px solid oklch(from var(--color-accent) l c h / 0.25);
     outline-offset: 2px;

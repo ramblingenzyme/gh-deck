@@ -19,7 +19,7 @@
 - [x] Investigate/remove broken security alerts column
 - [x] Empty state for columns that require repo selection
 - [x] Repo selector in add column modal when column supports it
-- [ ] Fix query multiline growing
+- [x] Fix query multiline growing
 - [x] Polish up multi select component
 - [x] Fix auth modal flash on load when logged in
 - [x] Extract user link for card footers

@@ -36,8 +36,17 @@ export const InlineEdit = ({
     onCancel?.();
   };
 
+  const autoResize = () => {
+    const el = textareaRef.current;
+    if (el) {
+      el.style.height = "auto";
+      el.style.height = `${el.scrollHeight}px`;
+    }
+  };
+
   useLayoutEffect(() => {
-    if (textareaRef.current) {
+    if (editing && textareaRef.current) {
+      autoResize();
       textareaRef.current.focus();
       textareaRef.current.setSelectionRange(-1, -1);
     }
@@ -48,7 +57,9 @@ export const InlineEdit = ({
       <div className={styles.editRow}>
         <textarea
           ref={textareaRef}
+          rows={1}
           defaultValue={value}
+          onInput={autoResize}
           onKeyDown={(e) => {
             if (e.key === "Enter") commit();
           }}
