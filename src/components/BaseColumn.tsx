@@ -19,9 +19,16 @@ interface BaseColumnProps {
   onRemove: (id: string) => void;
   renderCard: (item: AnyItem) => ReactNode;
   accentClass?: string;
+  emptyState?: (onOpenSettings: () => void) => ReactNode;
 }
 
-export const BaseColumn = ({ col, onRemove, renderCard, accentClass }: BaseColumnProps) => {
+export const BaseColumn = ({
+  col,
+  onRemove,
+  renderCard,
+  accentClass,
+  emptyState,
+}: BaseColumnProps) => {
   const { isConfirming: confirming, startConfirm, cancelConfirm } = useConfirmation();
   const updateColumnQuery = useLayoutStore((s) => s.updateColumnQuery);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -125,9 +132,14 @@ export const BaseColumn = ({ col, onRemove, renderCard, accentClass }: BaseColum
               {error}
             </div>
           )}
-          {!isLoading && !error && data.length === 0 && (
-            <p className={styles.emptyState}>No results</p>
-          )}
+          {!isLoading &&
+            !error &&
+            data.length === 0 &&
+            (emptyState ? (
+              emptyState(() => setSettingsOpen(true))
+            ) : (
+              <p className={styles.emptyState}>No results</p>
+            ))}
           {!isLoading && !error && data.length > 0 && data.map((item) => renderCard(item))}
         </div>
       </section>

@@ -1,6 +1,7 @@
 import type { ColumnConfig, DeploymentItem } from "@/types";
 import { BaseColumn } from "@/components/BaseColumn";
 import { DeploymentCard } from "@/components/cards/DeploymentCard";
+import { RepoRequiredEmptyState } from "@/components/RepoRequiredEmptyState";
 import styles from "./DeploymentsColumn.module.css";
 
 interface ColumnProps {
@@ -14,5 +15,10 @@ export const DeploymentsColumn = ({ col, onRemove }: ColumnProps) => (
     col={col}
     onRemove={onRemove}
     renderCard={(item) => <DeploymentCard key={item.id} item={item as DeploymentItem} />}
+    emptyState={
+      !col.repos?.length
+        ? (openSettings) => <RepoRequiredEmptyState onOpenSettings={openSettings} />
+        : undefined
+    }
   />
 );

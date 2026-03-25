@@ -1,6 +1,7 @@
 import type { ColumnConfig, SecurityItem } from "@/types";
 import { BaseColumn } from "@/components/BaseColumn";
 import { SecurityCard } from "@/components/cards/SecurityCard";
+import { RepoRequiredEmptyState } from "@/components/RepoRequiredEmptyState";
 import styles from "./SecurityColumn.module.css";
 
 interface ColumnProps {
@@ -14,5 +15,10 @@ export const SecurityColumn = ({ col, onRemove }: ColumnProps) => (
     col={col}
     onRemove={onRemove}
     renderCard={(item) => <SecurityCard key={item.id} item={item as SecurityItem} />}
+    emptyState={
+      !col.repos?.length
+        ? (openSettings) => <RepoRequiredEmptyState onOpenSettings={openSettings} />
+        : undefined
+    }
   />
 );

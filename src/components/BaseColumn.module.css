@@ -190,6 +190,36 @@
   margin: 0;
 }
 
+.emptyStatePrompt {
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font-size: var(--text-md);
+    color: var(--text-ghost);
+  }
+
+  button {
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    background: oklch(from var(--color-accent) l c h / 0.12);
+    border: 1px solid oklch(from var(--color-accent) l c h / 0.25);
+    border-radius: var(--radius-sm);
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: oklch(from var(--color-accent) l c h / 0.2);
+    }
+  }
+}
+
 .dropLeft {
   &::before {
     content: "";
