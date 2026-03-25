@@ -151,7 +151,6 @@ function mapPushEvent(event: GHPushEvent): ActivityItem {
 
 function mapPullRequestEvent(event: GHPullRequestEvent): ActivityItem | null {
   const repo = event.repo.name;
-  const ghBase = `https://github.com/${repo}`;
   const prNum = event.payload.pull_request.number;
   const prUrl = event.payload.pull_request.html_url;
   if (event.payload.action === "opened") {

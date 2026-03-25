@@ -53,6 +53,10 @@
   background: oklch(from var(--color-accent) l c h / 0.12);
   border-bottom: 1px solid oklch(from var(--color-accent) l c h / 0.25);
   min-width: 0;
+
+  & ::selection {
+    background-color: oklch(from var(--color-accent) l c h / 0.25);
+  }
 }
 
 .repoList {
