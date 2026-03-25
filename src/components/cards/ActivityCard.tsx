@@ -9,7 +9,7 @@ interface ActivityCardProps {
 }
 
 export const ActivityCard = ({ item }: ActivityCardProps) => {
-  const icon = ACTIVITY_ICONS[item.type];
+  const icon = ACTIVITY_ICONS[item.kind];
 
   return (
     <Card repo={item.repo} age={item.age}>

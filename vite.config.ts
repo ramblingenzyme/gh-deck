@@ -27,7 +27,7 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       include: ["src/**/*.{ts,tsx}"],
-      exclude: ["src/**/*.d.ts"],
+      exclude: ["src/**/*.d.ts", "src/components/ui/icons/**"],
       reporter: ["text", "html"],
     },
   },

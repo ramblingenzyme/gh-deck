@@ -1,16 +1,19 @@
 import { describe, it, expect } from "vitest";
 import { parseQuery, matchesTokens } from "@/utils/queryFilter";
-import type { PRItem, IssueItem, CIItem } from "@/types";
+import type { PRItem, IssueItem, CIItem, ActivityItem, ReleaseItem, DeploymentItem } from "@/types";
 
 const basePR: PRItem = {
+  type: "pr",
   id: 1,
   title: "Add feature",
   repo: "acme/api",
   author: "alice",
+  assignee: null,
   number: 42,
   reviews: { approved: 1, requested: 0 },
   comments: 2,
   draft: false,
+  state: "open",
   age: "1h",
   labels: [
     { name: "bug", color: "d73a4a" },
@@ -20,6 +23,7 @@ const basePR: PRItem = {
 };
 
 const baseIssue: IssueItem = {
+  type: "issue",
   id: 2,
   title: "Fix crash",
   repo: "acme/web",
@@ -33,6 +37,7 @@ const baseIssue: IssueItem = {
 };
 
 const baseCI: CIItem = {
+  type: "ci",
   id: 3,
   name: "CI",
   repo: "acme/api",
@@ -42,6 +47,40 @@ const baseCI: CIItem = {
   age: "30m",
   triggered: "push",
   url: "https://github.com/acme/api/actions/runs/3",
+};
+
+const baseActivity: ActivityItem = {
+  type: "activity",
+  id: 4,
+  kind: "commit",
+  text: "Pushed 2 commits to main",
+  repo: "acme/api",
+  age: "1h",
+  ref: "abc1234",
+  url: "https://github.com/acme/api/commit/abc1234",
+};
+
+const baseRelease: ReleaseItem = {
+  type: "release",
+  id: 5,
+  repo: "acme/api",
+  tag: "v1.2.0",
+  name: "Release 1.2.0",
+  prerelease: false,
+  age: "1d",
+  url: "https://github.com/acme/api/releases/tag/v1.2.0",
+};
+
+const baseDeployment: DeploymentItem = {
+  type: "deployment",
+  id: 6,
+  repo: "acme/api",
+  environment: "production",
+  status: "success",
+  ref: "main",
+  creator: "carol",
+  age: "2h",
+  url: "https://github.com/acme/api/deployments",
 };
 
 function tokens(query: string) {
@@ -131,9 +170,9 @@ describe("matchesTokens — empty query", () => {
   });
 });
 
-describe("matchesTokens — is: unknown value passes through", () => {
-  it("is:unknown returns true (unknown is: values pass through)", () => {
-    expect(matches(basePR, "is:unknown")).toBe(true);
+describe("matchesTokens — is: unknown value", () => {
+  it("is:unknown returns false (unrecognised is: values do not pass through)", () => {
+    expect(matches(basePR, "is:unknown")).toBe(false);
   });
 });
 
@@ -152,14 +191,14 @@ describe("matchesTokens — is:issue", () => {
 });
 
 describe("matchesTokens — branch: partial match", () => {
-  const featureCI: CIItem = { ...baseCI, branch: "feature/foo" };
+  const featureCI: CIItem = { ...baseCI, branch: "feature/foo", type: "ci" };
   it("substring match on branch", () => expect(matches(featureCI, "branch:feature")).toBe(true));
   it("no match for non-matching substring", () =>
     expect(matches(featureCI, "branch:hotfix")).toBe(false));
 });
 
 describe("matchesTokens — assignee: null", () => {
-  const issueNoAssignee: IssueItem = { ...baseIssue, assignee: null };
+  const issueNoAssignee: IssueItem = { ...baseIssue, assignee: null, type: "issue" };
   it("does not match when assignee is null", () =>
     expect(matches(issueNoAssignee, "assignee:bob")).toBe(false));
 });
@@ -173,4 +212,129 @@ describe("parseQuery", () => {
   it("empty string returns []", () => expect(parseQuery("")).toEqual([]));
   it("leading/trailing spaces are trimmed", () =>
     expect(parseQuery("  repo:acme/api  ")).toEqual([{ key: "repo", value: "acme/api" }]));
+});
+
+// ─── PRItem new filters ───────────────────────────────────────────────────────
+
+describe("matchesTokens — PR assignee:", () => {
+  it("matches PR with assignee", () =>
+    expect(matches({ ...basePR, assignee: "carol" }, "assignee:carol")).toBe(true));
+  it("no match when assignee differs", () =>
+    expect(matches({ ...basePR, assignee: "carol" }, "assignee:alice")).toBe(false));
+  it("no match when PR has no assignee", () =>
+    expect(matches(basePR, "assignee:alice")).toBe(false));
+});
+
+describe("matchesTokens — PR is:open / is:closed", () => {
+  it("is:open matches open PR", () => expect(matches(basePR, "is:open")).toBe(true));
+  it("is:closed matches closed PR", () =>
+    expect(matches({ ...basePR, state: "closed" }, "is:closed")).toBe(true));
+  it("is:open does not match closed PR", () =>
+    expect(matches({ ...basePR, state: "closed" }, "is:open")).toBe(false));
+});
+
+// ─── CIItem triggered: ────────────────────────────────────────────────────────
+
+describe("matchesTokens — triggered:", () => {
+  it("matches CI trigger", () => expect(matches(baseCI, "triggered:push")).toBe(true));
+  it("no match on wrong trigger", () => expect(matches(baseCI, "triggered:release")).toBe(false));
+});
+
+// ─── ActivityItem ─────────────────────────────────────────────────────────────
+
+describe("matchesTokens — activity ref:", () => {
+  it("substring match on ref", () => expect(matches(baseActivity, "ref:abc")).toBe(true));
+  it("no match for non-matching ref", () => expect(matches(baseActivity, "ref:xyz")).toBe(false));
+  it("no match when ref is absent", () =>
+    expect(matches({ ...baseActivity, ref: undefined }, "ref:abc")).toBe(false));
+});
+
+describe("matchesTokens — activity type:", () => {
+  it("matches activity kind", () => expect(matches(baseActivity, "type:commit")).toBe(true));
+  it("no match on wrong kind", () => expect(matches(baseActivity, "type:review")).toBe(false));
+});
+
+// ─── ReleaseItem ──────────────────────────────────────────────────────────────
+
+describe("matchesTokens — tag:", () => {
+  it("exact match on tag", () => expect(matches(baseRelease, "tag:v1.2.0")).toBe(true));
+  it("no match on wrong tag", () => expect(matches(baseRelease, "tag:v1.0.0")).toBe(false));
+});
+
+describe("matchesTokens — is:prerelease", () => {
+  it("is:prerelease matches prerelease", () =>
+    expect(matches({ ...baseRelease, prerelease: true }, "is:prerelease")).toBe(true));
+  it("is:prerelease does not match stable release", () =>
+    expect(matches(baseRelease, "is:prerelease")).toBe(false));
+});
+
+// ─── DeploymentItem ───────────────────────────────────────────────────────────
+
+describe("matchesTokens — environment:", () => {
+  it("exact match on environment", () =>
+    expect(matches(baseDeployment, "environment:production")).toBe(true));
+  it("no match on wrong environment", () =>
+    expect(matches(baseDeployment, "environment:staging")).toBe(false));
+});
+
+describe("matchesTokens — creator:", () => {
+  it("matches creator", () => expect(matches(baseDeployment, "creator:carol")).toBe(true));
+  it("no match on wrong creator", () =>
+    expect(matches(baseDeployment, "creator:alice")).toBe(false));
+});
+
+describe("matchesTokens — deployment ref:", () => {
+  it("substring match on deployment ref", () =>
+    expect(matches(baseDeployment, "ref:mai")).toBe(true));
+  it("no match for non-matching ref", () =>
+    expect(matches(baseDeployment, "ref:feature")).toBe(false));
+});
+
+describe("matchesTokens — deployment status:", () => {
+  it("matches deployment status", () =>
+    expect(matches(baseDeployment, "status:success")).toBe(true));
+  it("no match on wrong status", () =>
+    expect(matches(baseDeployment, "status:failure")).toBe(false));
+});
+
+describe("matchesTokens — deployment repo:", () => {
+  it("matches repo on deployment", () =>
+    expect(matches(baseDeployment, "repo:acme/api")).toBe(true));
+  it("unknown key on deployment returns false", () =>
+    expect(matches(baseDeployment, "xyz:foo")).toBe(false));
+});
+
+describe("matchesTokens — release is: and unknown key", () => {
+  it("is:unknown returns false for release", () =>
+    expect(matches(baseRelease, "is:unknown")).toBe(false));
+  it("unknown key on release returns false", () =>
+    expect(matches(baseRelease, "xyz:foo")).toBe(false));
+  it("repo: matches release", () => expect(matches(baseRelease, "repo:acme/api")).toBe(true));
+});
+
+describe("matchesTokens — issue repo: and label:", () => {
+  it("repo: matches issue", () => expect(matches(baseIssue, "repo:acme/web")).toBe(true));
+  it("label: matches issue label", () => expect(matches(baseIssue, "label:bug")).toBe(true));
+  it("unknown key on issue returns false", () => expect(matches(baseIssue, "xyz:foo")).toBe(false));
+});
+
+describe("matchesTokens — CI repo:", () => {
+  it("repo: matches CI item", () => expect(matches(baseCI, "repo:acme/api")).toBe(true));
+  it("unknown key on CI returns false", () => expect(matches(baseCI, "xyz:foo")).toBe(false));
+});
+
+describe("matchesTokens — activity repo: and unknown key", () => {
+  it("repo: matches activity item", () =>
+    expect(matches(baseActivity, "repo:acme/api")).toBe(true));
+  it("unknown key on activity returns false", () =>
+    expect(matches(baseActivity, "xyz:foo")).toBe(false));
+});
+
+describe("matchesTokens — bare text search on non-PR types", () => {
+  it("bare text matches issue title", () => expect(matches(baseIssue, "crash")).toBe(true));
+  it("bare text matches CI name", () => expect(matches(baseCI, "ci")).toBe(true));
+  it("bare text matches activity text", () => expect(matches(baseActivity, "commits")).toBe(true));
+  it("bare text matches release tag", () => expect(matches(baseRelease, "v1.2.0")).toBe(true));
+  it("bare text matches deployment environment", () =>
+    expect(matches(baseDeployment, "production")).toBe(true));
 });

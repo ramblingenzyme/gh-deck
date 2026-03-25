@@ -3,20 +3,24 @@ import { getItemDisplayText } from "@/utils/getItemDisplayText";
 import type { PRItem, IssueItem, CIItem, ActivityItem, ReleaseItem, DeploymentItem } from "@/types";
 
 const prItem: PRItem = {
+  type: "pr",
   id: 1,
   title: "Add new feature",
   repo: "org/repo",
   author: "alice",
+  assignee: null,
   number: 42,
   reviews: { approved: 1, requested: 0 },
   comments: 3,
   draft: false,
+  state: "open",
   age: "2h",
   labels: [],
   url: "https://github.com/org/repo/pull/42",
 };
 
 const issueItem: IssueItem = {
+  type: "issue",
   id: 2,
   title: "Fix the bug",
   repo: "org/repo",
@@ -30,6 +34,7 @@ const issueItem: IssueItem = {
 };
 
 const ciItem: CIItem = {
+  type: "ci",
   id: 3,
   name: "CI / build",
   repo: "org/repo",
@@ -42,8 +47,9 @@ const ciItem: CIItem = {
 };
 
 const activityItem: ActivityItem = {
+  type: "activity",
   id: 5,
-  type: "commit",
+  kind: "commit",
   text: "alice pushed 2 commits to main",
   repo: "org/repo",
   age: "1h",
@@ -69,6 +75,7 @@ describe("getItemDisplayText", () => {
 
   it("returns tag for ReleaseItem", () => {
     const releaseItem: ReleaseItem = {
+      type: "release",
       id: 6,
       repo: "org/repo",
       tag: "v2.0.0",
@@ -82,6 +89,7 @@ describe("getItemDisplayText", () => {
 
   it("returns environment for DeploymentItem", () => {
     const deploymentItem: DeploymentItem = {
+      type: "deployment",
       id: 7,
       repo: "org/repo",
       environment: "production",

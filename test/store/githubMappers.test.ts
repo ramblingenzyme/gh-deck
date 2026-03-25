@@ -164,7 +164,7 @@ describe("mapEvent", () => {
     });
     const item = mapEvent(e);
     expect(item).not.toBeNull();
-    expect(item!.type).toBe("commit");
+    expect(item!.kind).toBe("commit");
     expect(item!.text).toBe("Pushed 2 commits to feature");
     expect(item!.ref).toBe("abc1234");
   });
@@ -181,7 +181,7 @@ describe("mapEvent", () => {
       }),
     );
     expect(item).not.toBeNull();
-    expect(item!.type).toBe("pr_opened");
+    expect(item!.kind).toBe("pr_opened");
     expect(item!.text).toBe("Opened PR #7");
   });
 
@@ -211,7 +211,7 @@ describe("mapEvent", () => {
       }),
     );
     expect(item).not.toBeNull();
-    expect(item!.type).toBe("pr_merged");
+    expect(item!.kind).toBe("pr_merged");
     expect(item!.text).toBe("Merged PR #12");
   });
 
@@ -220,7 +220,7 @@ describe("mapEvent", () => {
       makeEvent("CreateEvent", { ref_type: "branch", ref: "feature/new-thing" }),
     );
     expect(item).not.toBeNull();
-    expect(item!.type).toBe("branch_created");
+    expect(item!.kind).toBe("branch_created");
     expect(item!.text).toBe("Created branch feature/new-thing");
   });
 
@@ -235,14 +235,14 @@ describe("mapEvent", () => {
       }),
     );
     expect(item).not.toBeNull();
-    expect(item!.type).toBe("fork");
+    expect(item!.kind).toBe("fork");
     expect(item!.text).toBe("Forked owner/repo");
   });
 
   it("maps WatchEvent (star)", () => {
     const item = mapEvent(makeEvent("WatchEvent", { action: "started" }));
     expect(item).not.toBeNull();
-    expect(item!.type).toBe("star");
+    expect(item!.kind).toBe("star");
     expect(item!.text).toBe("Starred owner/repo");
   });
 
@@ -254,7 +254,7 @@ describe("mapEvent", () => {
       }),
     );
     expect(item).not.toBeNull();
-    expect(item!.type).toBe("comment");
+    expect(item!.kind).toBe("comment");
   });
 
   it("maps PullRequestReviewEvent", () => {
@@ -264,7 +264,7 @@ describe("mapEvent", () => {
       }),
     );
     expect(item).not.toBeNull();
-    expect(item!.type).toBe("review");
+    expect(item!.kind).toBe("review");
   });
 
   it("maps IssuesEvent closed", () => {
@@ -275,7 +275,7 @@ describe("mapEvent", () => {
       }),
     );
     expect(item).not.toBeNull();
-    expect(item!.type).toBe("issue_closed");
+    expect(item!.kind).toBe("issue_closed");
   });
 
   it("returns null for IssuesEvent non-closed", () => {

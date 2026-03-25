@@ -6,14 +6,17 @@ const m = (n: number) => new Date(Date.now() - n * 60_000).toISOString();
 
 export const MOCK_PRS: PRItem[] = [
   {
+    type: "pr",
     id: 1,
     title: "feat: add streaming support to inference pipeline",
     repo: "acme/ml-core",
     author: "sarahk",
+    assignee: null,
     number: 847,
     reviews: { approved: 2, requested: 1 },
     comments: 14,
     draft: false,
+    state: "open",
     age: h(2),
     labels: [
       { name: "enhancement", color: "0075ca" },
@@ -22,14 +25,17 @@ export const MOCK_PRS: PRItem[] = [
     url: "https://github.com/acme/ml-core/pull/847",
   },
   {
+    type: "pr",
     id: 2,
     title: "fix: race condition in job queue processor",
     repo: "acme/worker",
     author: "themarcus",
+    assignee: null,
     number: 231,
     reviews: { approved: 0, requested: 2 },
     comments: 6,
     draft: false,
+    state: "open",
     age: h(5),
     labels: [
       { name: "bug", color: "d73a4a" },
@@ -38,40 +44,49 @@ export const MOCK_PRS: PRItem[] = [
     url: "https://github.com/acme/worker/pull/231",
   },
   {
+    type: "pr",
     id: 3,
     title: "refactor: migrate from REST to tRPC",
     repo: "acme/api",
     author: "jliu",
+    assignee: null,
     number: 419,
     reviews: { approved: 1, requested: 0 },
     comments: 23,
     draft: true,
+    state: "open",
     age: d(1),
     labels: [{ name: "refactor", color: "a78bfa" }],
     url: "https://github.com/acme/api/pull/419",
   },
   {
+    type: "pr",
     id: 4,
     title: "chore: bump all dependencies to latest",
     repo: "acme/frontend",
     author: "bot[renovate]",
+    assignee: null,
     number: 1102,
     reviews: { approved: 0, requested: 0 },
     comments: 0,
     draft: false,
+    state: "open",
     age: h(3),
     labels: [{ name: "dependencies", color: "9ca3af" }],
     url: "https://github.com/acme/frontend/pull/1102",
   },
   {
+    type: "pr",
     id: 5,
     title: "docs: update contributing guide with new branch conventions",
     repo: "acme/ml-core",
     author: "priya_d",
+    assignee: null,
     number: 848,
     reviews: { approved: 3, requested: 0 },
     comments: 2,
     draft: false,
+    state: "open",
     age: h(6),
     labels: [{ name: "documentation", color: "86efac" }],
     url: "https://github.com/acme/ml-core/pull/848",
@@ -80,6 +95,7 @@ export const MOCK_PRS: PRItem[] = [
 
 export const MOCK_ISSUES: IssueItem[] = [
   {
+    type: "issue",
     id: 1,
     title: "Memory leak in long-running inference jobs",
     repo: "acme/ml-core",
@@ -95,6 +111,7 @@ export const MOCK_ISSUES: IssueItem[] = [
     url: "https://github.com/acme/ml-core/issues/901",
   },
   {
+    type: "issue",
     id: 2,
     title: "Support batching for embedding requests",
     repo: "acme/api",
@@ -107,6 +124,7 @@ export const MOCK_ISSUES: IssueItem[] = [
     url: "https://github.com/acme/api/issues/503",
   },
   {
+    type: "issue",
     id: 3,
     title: "CLI --watch flag breaks on Windows paths",
     repo: "acme/cli",
@@ -122,6 +140,7 @@ export const MOCK_ISSUES: IssueItem[] = [
     url: "https://github.com/acme/cli/issues/78",
   },
   {
+    type: "issue",
     id: 4,
     title: "Add Prometheus metrics endpoint",
     repo: "acme/worker",
@@ -137,6 +156,7 @@ export const MOCK_ISSUES: IssueItem[] = [
     url: "https://github.com/acme/worker/issues/245",
   },
   {
+    type: "issue",
     id: 5,
     title: "Rate limiter doesn't respect burst parameter",
     repo: "acme/api",
@@ -152,6 +172,7 @@ export const MOCK_ISSUES: IssueItem[] = [
 
 export const MOCK_CI: CIItem[] = [
   {
+    type: "ci",
     id: 1,
     name: "CI / test (ubuntu, node 20)",
     repo: "acme/ml-core",
@@ -163,6 +184,7 @@ export const MOCK_CI: CIItem[] = [
     url: "https://github.com/acme/ml-core/actions/runs/1001",
   },
   {
+    type: "ci",
     id: 2,
     name: "CI / test (ubuntu, node 18)",
     repo: "acme/api",
@@ -174,6 +196,7 @@ export const MOCK_CI: CIItem[] = [
     url: "https://github.com/acme/api/actions/runs/1002",
   },
   {
+    type: "ci",
     id: 3,
     name: "Deploy / staging",
     repo: "acme/frontend",
@@ -185,6 +208,7 @@ export const MOCK_CI: CIItem[] = [
     url: "https://github.com/acme/frontend/actions/runs/1003",
   },
   {
+    type: "ci",
     id: 4,
     name: "CI / lint",
     repo: "acme/worker",
@@ -196,6 +220,7 @@ export const MOCK_CI: CIItem[] = [
     url: "https://github.com/acme/worker/actions/runs/1004",
   },
   {
+    type: "ci",
     id: 5,
     name: "Deploy / production",
     repo: "acme/api",
@@ -207,6 +232,7 @@ export const MOCK_CI: CIItem[] = [
     url: "https://github.com/acme/api/actions/runs/1005",
   },
   {
+    type: "ci",
     id: 6,
     name: "CI / type-check",
     repo: "acme/frontend",
@@ -221,6 +247,7 @@ export const MOCK_CI: CIItem[] = [
 
 export const MOCK_RELEASES: ReleaseItem[] = [
   {
+    type: "release",
     id: 1,
     repo: "acme/api",
     tag: "v2.4.1",
@@ -230,6 +257,7 @@ export const MOCK_RELEASES: ReleaseItem[] = [
     url: "https://github.com/acme/api/releases/tag/v2.4.1",
   },
   {
+    type: "release",
     id: 2,
     repo: "acme/ml-core",
     tag: "v1.9.0",
@@ -239,6 +267,7 @@ export const MOCK_RELEASES: ReleaseItem[] = [
     url: "https://github.com/acme/ml-core/releases/tag/v1.9.0",
   },
   {
+    type: "release",
     id: 3,
     repo: "acme/frontend",
     tag: "v3.0.0-rc.1",
@@ -248,6 +277,7 @@ export const MOCK_RELEASES: ReleaseItem[] = [
     url: "https://github.com/acme/frontend/releases/tag/v3.0.0-rc.1",
   },
   {
+    type: "release",
     id: 4,
     repo: "acme/cli",
     tag: "v0.12.0",
@@ -260,6 +290,7 @@ export const MOCK_RELEASES: ReleaseItem[] = [
 
 export const MOCK_DEPLOYMENTS: DeploymentItem[] = [
   {
+    type: "deployment",
     id: 1,
     repo: "acme/api",
     environment: "production",
@@ -270,6 +301,7 @@ export const MOCK_DEPLOYMENTS: DeploymentItem[] = [
     url: "https://github.com/acme/api/deployments",
   },
   {
+    type: "deployment",
     id: 2,
     repo: "acme/frontend",
     environment: "staging",
@@ -280,6 +312,7 @@ export const MOCK_DEPLOYMENTS: DeploymentItem[] = [
     url: "https://github.com/acme/frontend/deployments",
   },
   {
+    type: "deployment",
     id: 3,
     repo: "acme/worker",
     environment: "production",
@@ -290,6 +323,7 @@ export const MOCK_DEPLOYMENTS: DeploymentItem[] = [
     url: "https://github.com/acme/worker/deployments",
   },
   {
+    type: "deployment",
     id: 4,
     repo: "acme/ml-core",
     environment: "staging",
@@ -303,8 +337,9 @@ export const MOCK_DEPLOYMENTS: DeploymentItem[] = [
 
 export const MOCK_ACTIVITY: ActivityItem[] = [
   {
+    type: "activity",
     id: 1,
-    type: "commit",
+    kind: "commit",
     text: "Pushed 3 commits to feat/streaming",
     repo: "acme/ml-core",
     age: h(2),
@@ -312,8 +347,9 @@ export const MOCK_ACTIVITY: ActivityItem[] = [
     url: "https://github.com/acme/ml-core/commit/a3f9c12",
   },
   {
+    type: "activity",
     id: 2,
-    type: "comment",
+    kind: "comment",
     text: "Commented on Issue #901",
     repo: "acme/ml-core",
     age: h(3),
@@ -321,8 +357,9 @@ export const MOCK_ACTIVITY: ActivityItem[] = [
     url: "https://github.com/acme/ml-core/issues/901",
   },
   {
+    type: "activity",
     id: 3,
-    type: "pr_opened",
+    kind: "pr_opened",
     text: "Opened PR #848",
     repo: "acme/ml-core",
     age: h(6),
@@ -330,8 +367,9 @@ export const MOCK_ACTIVITY: ActivityItem[] = [
     url: "https://github.com/acme/ml-core/pull/848",
   },
   {
+    type: "activity",
     id: 4,
-    type: "review",
+    kind: "review",
     text: "Reviewed PR #231 — requested changes",
     repo: "acme/worker",
     age: h(5),
@@ -339,8 +377,9 @@ export const MOCK_ACTIVITY: ActivityItem[] = [
     url: "https://github.com/acme/worker/pull/231",
   },
   {
+    type: "activity",
     id: 5,
-    type: "commit",
+    kind: "commit",
     text: "Pushed 1 commit to main",
     repo: "acme/api",
     age: d(1),
@@ -348,8 +387,9 @@ export const MOCK_ACTIVITY: ActivityItem[] = [
     url: "https://github.com/acme/api/commit/7bd2e41",
   },
   {
+    type: "activity",
     id: 6,
-    type: "issue_closed",
+    kind: "issue_closed",
     text: "Closed Issue #497",
     repo: "acme/api",
     age: d(1),

@@ -2,7 +2,7 @@ export type ColumnType = "prs" | "issues" | "ci" | "activity" | "releases" | "de
 
 export type CIStatus = "success" | "failure" | "running";
 export type IssueState = "open" | "closed";
-export type CITrigger = "push" | "pull_request" | "release";
+export type CITrigger = string;
 export type ActivityType =
   | "commit"
   | "comment"
@@ -26,20 +26,24 @@ export const REVIEW_COUNT_UNKNOWN = "?" as const;
 export type ReviewCount = number | typeof REVIEW_COUNT_UNKNOWN;
 
 export interface PRItem {
+  type: "pr";
   id: number;
   title: string;
   repo: string;
   author: string;
+  assignee: string | null;
   number: number;
   reviews: { approved: ReviewCount; requested: ReviewCount };
   comments: number;
   draft: boolean;
+  state: IssueState;
   age: string;
   labels: Label[];
   url: string;
 }
 
 export interface IssueItem {
+  type: "issue";
   id: number;
   title: string;
   repo: string;
@@ -53,6 +57,7 @@ export interface IssueItem {
 }
 
 export interface CIItem {
+  type: "ci";
   id: number;
   name: string;
   repo: string;
@@ -65,8 +70,9 @@ export interface CIItem {
 }
 
 export interface ActivityItem {
+  type: "activity";
   id: number;
-  type: ActivityType;
+  kind: ActivityType;
   text: string;
   repo: string;
   age: string;
@@ -82,6 +88,7 @@ export interface Label {
 export type DeploymentStatus = "success" | "failure" | "pending" | "in_progress" | "unknown";
 
 export interface ReleaseItem {
+  type: "release";
   id: number;
   repo: string;
   tag: string;
@@ -92,6 +99,7 @@ export interface ReleaseItem {
 }
 
 export interface DeploymentItem {
+  type: "deployment";
   id: number;
   repo: string;
   environment: string;

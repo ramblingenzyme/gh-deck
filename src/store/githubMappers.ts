@@ -35,14 +35,17 @@ function repoFromUrl(url: string): string {
 
 export function mapSearchItemToPR(item: GHSearchItem): PRItem {
   return {
+    type: "pr",
     id: item.id,
     title: item.title,
     repo: repoFromUrl(item.repository_url),
     author: item.user.login,
+    assignee: item.assignees?.[0]?.login ?? null,
     number: item.number,
     reviews: { approved: REVIEW_COUNT_UNKNOWN, requested: REVIEW_COUNT_UNKNOWN },
     comments: item.comments,
     draft: item.draft ?? false,
+    state: item.state as "open" | "closed",
     age: item.updated_at,
     labels: item.labels.map((l) => ({ name: l.name, color: l.color })),
     url: item.html_url,
@@ -51,6 +54,7 @@ export function mapSearchItemToPR(item: GHSearchItem): PRItem {
 
 export function mapSearchItemToIssue(item: GHSearchItem): IssueItem {
   return {
+    type: "issue",
     id: item.id,
     title: item.title,
     repo: repoFromUrl(item.repository_url),
@@ -83,13 +87,8 @@ export function mapWorkflowRun(run: GHWorkflowRun, repoFullName: string): CIItem
         ? `${durationSecs}s`
         : `${Math.floor(durationSecs / 60)}m ${durationSecs % 60}s`;
 
-  const triggerMap: Record<string, CIItem["triggered"]> = {
-    push: "push",
-    pull_request: "pull_request",
-    release: "release",
-  };
-
   return {
+    type: "ci",
     id: run.id,
     name: run.name ?? "Workflow",
     repo: run.repository?.full_name ?? repoFullName,
@@ -97,13 +96,14 @@ export function mapWorkflowRun(run: GHWorkflowRun, repoFullName: string): CIItem
     status,
     duration,
     age: run.created_at,
-    triggered: triggerMap[run.event] ?? "push",
+    triggered: run.event,
     url: run.html_url,
   };
 }
 
 export function mapRelease(r: GHRelease, repo: string): ReleaseItem {
   return {
+    type: "release",
     id: r.id,
     repo,
     tag: r.tag_name,
@@ -120,6 +120,7 @@ export function mapDeployment(
   repo: string,
 ): DeploymentItem {
   return {
+    type: "deployment",
     id: d.id,
     repo,
     environment: d.environment,
@@ -139,8 +140,9 @@ function mapPushEvent(event: GHPushEvent): ActivityItem {
   const sha = (event.payload.commits?.[0]?.sha ?? event.payload.head)?.slice(0, 7);
   const countText = count != null ? `${count} commit${count !== 1 ? "s" : ""} ` : "";
   return {
+    type: "activity",
     id: parseInt(event.id, 10),
-    type: "commit",
+    kind: "commit",
     text: `Pushed ${countText}to ${branch}`,
     repo,
     age: event.created_at,
@@ -155,8 +157,9 @@ function mapPullRequestEvent(event: GHPullRequestEvent): ActivityItem | null {
   const prUrl = event.payload.pull_request.html_url;
   if (event.payload.action === "opened") {
     return {
+      type: "activity",
       id: parseInt(event.id, 10),
-      type: "pr_opened",
+      kind: "pr_opened",
       text: `Opened PR #${prNum}`,
       repo,
       age: event.created_at,
@@ -166,8 +169,9 @@ function mapPullRequestEvent(event: GHPullRequestEvent): ActivityItem | null {
   }
   if (event.payload.action === "merged") {
     return {
+      type: "activity",
       id: parseInt(event.id, 10),
-      type: "pr_merged",
+      kind: "pr_merged",
       text: `Merged PR #${prNum}`,
       repo,
       age: event.created_at,
@@ -181,8 +185,9 @@ function mapPullRequestEvent(event: GHPullRequestEvent): ActivityItem | null {
 function mapIssueCommentEvent(event: GHIssueCommentEvent): ActivityItem {
   const repo = event.repo.name;
   return {
+    type: "activity",
     id: parseInt(event.id, 10),
-    type: "comment",
+    kind: "comment",
     text: `Commented on Issue #${event.payload.issue.number}`,
     repo,
     age: event.created_at,
@@ -194,8 +199,9 @@ function mapPRReviewCommentEvent(event: GHPRReviewCommentEvent): ActivityItem {
   const repo = event.repo.name;
   const ghBase = `https://github.com/${repo}`;
   return {
+    type: "activity",
     id: parseInt(event.id, 10),
-    type: "comment",
+    kind: "comment",
     text: `Commented on a PR`,
     repo,
     age: event.created_at,
@@ -208,8 +214,9 @@ function mapPRReviewEvent(event: GHPRReviewEvent): ActivityItem {
   const ghBase = `https://github.com/${repo}`;
   const prNum = event.payload.pull_request.number;
   return {
+    type: "activity",
     id: parseInt(event.id, 10),
-    type: "review",
+    kind: "review",
     text: `Reviewed PR #${prNum}`,
     repo,
     age: event.created_at,
@@ -224,8 +231,9 @@ function mapIssuesEvent(event: GHIssuesEvent): ActivityItem | null {
   const ghBase = `https://github.com/${repo}`;
   const issueNum = event.payload.issue.number;
   return {
+    type: "activity",
     id: parseInt(event.id, 10),
-    type: "issue_closed",
+    kind: "issue_closed",
     text: `Closed Issue #${issueNum}`,
     repo,
     age: event.created_at,
@@ -239,8 +247,9 @@ function mapCreateEvent(event: GHCreateEvent): ActivityItem | null {
   const repo = event.repo.name;
   const ghBase = `https://github.com/${repo}`;
   return {
+    type: "activity",
     id: parseInt(event.id, 10),
-    type: "branch_created",
+    kind: "branch_created",
     text: `Created branch ${event.payload.ref ?? "unknown"}`,
     repo,
     age: event.created_at,
@@ -251,8 +260,9 @@ function mapCreateEvent(event: GHCreateEvent): ActivityItem | null {
 function mapForkEvent(event: GHForkEvent): ActivityItem {
   const repo = event.repo.name;
   return {
+    type: "activity",
     id: parseInt(event.id, 10),
-    type: "fork",
+    kind: "fork",
     text: `Forked ${repo}`,
     repo,
     age: event.created_at,
@@ -263,8 +273,9 @@ function mapForkEvent(event: GHForkEvent): ActivityItem {
 function mapWatchEvent(event: GHWatchEvent): ActivityItem {
   const repo = event.repo.name;
   return {
+    type: "activity",
     id: parseInt(event.id, 10),
-    type: "star",
+    kind: "star",
     text: `Starred ${repo}`,
     repo,
     age: event.created_at,

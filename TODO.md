@@ -29,7 +29,7 @@
 - [x] Figure out which UI elements should be selectable vs not
 - [x] Custom text selection color
 - [x] Assess automatically detected accessibility issues from Firefox Devtools
-- [ ] Reassess filter queries for non issue/PR columns
+- [x] Reassess filter queries for non issue/PR columns
 - [ ] Drag and Drop sometimes doesn't work?
 - [x] Create Github App icon
 - [x] Polish up SVG icon
