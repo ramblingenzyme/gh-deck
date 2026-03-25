@@ -61,18 +61,6 @@ export const ColumnSettingsModal = ({ open, col, onClose }: ColumnSettingsModalP
               required
             />
           </div>
-          {isMultiRepo && (
-            <div className={styles.field}>
-              <label>Repositories</label>
-              <RepoChipList
-                key={String(open)}
-                repos={repos}
-                suggestions={repoSuggestions}
-                onAdd={(r) => setRepos((prev) => [...prev, r])}
-                onRemove={(r) => setRepos((prev) => prev.filter((x) => x !== r))}
-              />
-            </div>
-          )}
           <div className={styles.field}>
             <label htmlFor="col-settings-query">Filter Query</label>
             <input
@@ -86,6 +74,18 @@ export const ColumnSettingsModal = ({ open, col, onClose }: ColumnSettingsModalP
               }
             />
           </div>
+          {isMultiRepo && (
+            <div className={styles.field}>
+              <label>Repositories</label>
+              <RepoChipList
+                key={String(open)}
+                repos={repos}
+                suggestions={repoSuggestions}
+                onAdd={(r) => setRepos((prev) => [...prev, r])}
+                onRemove={(r) => setRepos((prev) => prev.filter((x) => x !== r))}
+              />
+            </div>
+          )}
         </ModalBody>
         <ModalFooter>
           <button type="button" onClick={onClose}>
