@@ -39,7 +39,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i }) as HTMLInputElement;
+    const input = screen.getByRole("combobox", { name: /add repository/i }) as HTMLInputElement;
     await user.type(input, "own{Enter}");
     expect(onAdd).toHaveBeenCalledWith("owner/foo");
     expect(input.value).toBe("");
@@ -49,7 +49,7 @@ describe("RepoChipList", () => {
     const user = userEvent.setup();
     const onAdd = vi.fn();
     render(<RepoChipList repos={[]} suggestions={["other/repo"]} onAdd={onAdd} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i }) as HTMLInputElement;
+    const input = screen.getByRole("combobox", { name: /add repository/i }) as HTMLInputElement;
     await user.type(input, "owner/repo{Enter}");
     expect(onAdd).toHaveBeenCalledWith("owner/repo");
     expect(input.value).toBe("");
@@ -58,7 +58,7 @@ describe("RepoChipList", () => {
   it("shows a create entry at the end of the list when the typed value is not an exact suggestion", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/other"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner/repo");
     const options = screen.getAllByRole("option");
     expect(options[options.length - 1].textContent).toMatch(/create "owner\/repo"/i);
@@ -67,7 +67,7 @@ describe("RepoChipList", () => {
   it("shows a create entry even for values without a slash", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "noslash");
     expect(screen.getByRole("option", { name: /create "noslash"/i })).toBeTruthy();
   });
@@ -75,7 +75,7 @@ describe("RepoChipList", () => {
   it("does not show a create entry when the typed value exactly matches a suggestion", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner/repo");
     expect(screen.queryByRole("option", { name: /create/i })).toBeNull();
   });
@@ -83,7 +83,7 @@ describe("RepoChipList", () => {
   it("shows an 'Already added' message when the typed value matches an existing chip", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={["owner/repo"]} suggestions={[]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner/repo");
     expect(screen.getByText(/no options/i)).toBeTruthy();
   });
@@ -91,15 +91,15 @@ describe("RepoChipList", () => {
   it("does not close the menu when the typed value matches an existing chip", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={["owner/repo"]} suggestions={[]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner/repo");
-    expect(input.getAttribute("aria-expanded")).toBe("true");
+    expect(input).toHaveAttribute("aria-expanded", "true");
   });
 
   it("does not show a create entry for a value already added as a chip", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={["owner/repo"]} suggestions={[]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner/repo");
     expect(screen.queryByRole("option", { name: /create/i })).toBeNull();
   });
@@ -108,7 +108,7 @@ describe("RepoChipList", () => {
     const user = userEvent.setup();
     const onAdd = vi.fn();
     render(<RepoChipList repos={[]} onAdd={onAdd} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i }) as HTMLInputElement;
+    const input = screen.getByRole("combobox", { name: /add repository/i }) as HTMLInputElement;
     await user.type(input, "owner/repo{Enter}");
     expect(onAdd).toHaveBeenCalledWith("owner/repo");
     expect(input.value).toBe("");
@@ -118,7 +118,7 @@ describe("RepoChipList", () => {
     const user = userEvent.setup();
     const onAdd = vi.fn();
     render(<RepoChipList repos={["owner/repo"]} onAdd={onAdd} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner/repo{Enter}");
     expect(onAdd).not.toHaveBeenCalled();
   });
@@ -126,14 +126,14 @@ describe("RepoChipList", () => {
   it("input is empty on each mount — partial text does not persist across remounts", async () => {
     const user = userEvent.setup();
     const { unmount } = render(<RepoChipList repos={[]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i }) as HTMLInputElement;
+    const input = screen.getByRole("combobox", { name: /add repository/i }) as HTMLInputElement;
     await user.type(input, "owner/partial");
     expect(input.value).toBe("owner/partial");
 
     unmount();
 
     render(<RepoChipList repos={[]} onAdd={noop} onRemove={noop} />);
-    const freshInput = screen.getByRole("textbox", {
+    const freshInput = screen.getByRole("combobox", {
       name: /add repository/i,
     }) as HTMLInputElement;
     expect(freshInput.value).toBe("");
@@ -149,8 +149,8 @@ describe("RepoChipList", () => {
       />,
     );
     // The datalist/menu options should not contain the already-added repo
-    const options = document.querySelectorAll('[role="option"]');
-    const labels = Array.from(options).map((o) => o.textContent);
+    const options = screen.getAllByRole("option");
+    const labels = options.map((o) => o.textContent);
     expect(labels).not.toContain("owner/already");
     expect(labels).toContain("owner/other");
   });
@@ -159,7 +159,7 @@ describe("RepoChipList", () => {
     const user = userEvent.setup();
     const onRemove = vi.fn();
     render(<RepoChipList repos={["foo/bar", "baz/qux"]} onAdd={noop} onRemove={onRemove} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.click(input);
     await user.keyboard("{Backspace}");
     expect(onRemove).not.toHaveBeenCalled();
@@ -170,7 +170,7 @@ describe("RepoChipList", () => {
     const user = userEvent.setup();
     const onRemove = vi.fn();
     render(<RepoChipList repos={["foo/bar", "baz/qux"]} onAdd={noop} onRemove={onRemove} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.click(input);
     await user.keyboard("{Backspace}{Backspace}");
     expect(onRemove).toHaveBeenCalledWith("baz/qux");
@@ -180,7 +180,7 @@ describe("RepoChipList", () => {
     const user = userEvent.setup();
     const onRemove = vi.fn();
     render(<RepoChipList repos={["foo/bar"]} onAdd={noop} onRemove={onRemove} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "x{Backspace}");
     expect(onRemove).not.toHaveBeenCalled();
   });
@@ -206,9 +206,10 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
+    const input = screen.getByRole("combobox", { name: /add repository/i }) as HTMLInputElement;
+    await user.type(input, "owner");
     await user.click(screen.getByRole("option", { name: "owner/repo" }));
     expect(onAdd).toHaveBeenCalledWith("owner/repo");
-    const input = screen.getByRole("textbox", { name: /add repository/i }) as HTMLInputElement;
     expect(input.value).toBe("");
   });
 
@@ -222,11 +223,9 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "ba");
-    const options = Array.from(document.querySelectorAll('[role="option"]')).map(
-      (o) => o.textContent,
-    );
+    const options = screen.getAllByRole("option").map((o) => o.textContent);
     expect(options).toContain("owner/bar");
     expect(options).toContain("owner/baz");
     expect(options).not.toContain("owner/foo");
@@ -235,10 +234,10 @@ describe("RepoChipList", () => {
   it("aria-expanded on the input reflects menu open state", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
-    expect(input.getAttribute("aria-expanded")).toBe("false");
+    const input = screen.getByRole("combobox", { name: /add repository/i });
+    expect(input).toHaveAttribute("aria-expanded", "false");
     await user.type(input, "o");
-    expect(input.getAttribute("aria-expanded")).toBe("true");
+    expect(input).toHaveAttribute("aria-expanded", "true");
   });
 
   it("Tab from chip remove button returns focus to input", async () => {
@@ -247,13 +246,13 @@ describe("RepoChipList", () => {
     const removeBtn = screen.getByRole("button", { name: /remove foo\/bar/i });
     removeBtn.focus();
     await user.keyboard("{Tab}");
-    expect(document.activeElement).toBe(screen.getByRole("textbox", { name: /add repository/i }));
+    expect(document.activeElement).toBe(screen.getByRole("combobox", { name: /add repository/i }));
   });
 
   it("Shift+Tab from input focuses the last chip remove button", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={["foo/bar", "baz/qux"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     input.focus();
     await user.keyboard("{Shift>}{Tab}{/Shift}");
     expect(document.activeElement).toBe(screen.getByRole("button", { name: /remove baz\/qux/i }));
@@ -266,18 +265,18 @@ describe("RepoChipList", () => {
     const removeBtn = screen.getByRole("button", { name: /remove foo\/bar/i });
     removeBtn.focus();
     await user.keyboard("{Backspace}");
-    expect(document.activeElement).toBe(screen.getByRole("textbox", { name: /add repository/i }));
+    expect(document.activeElement).toBe(screen.getByRole("combobox", { name: /add repository/i }));
   });
 
   it("menu element is not a Tab stop", () => {
     render(<RepoChipList repos={[]} suggestions={["foo/bar"]} onAdd={noop} onRemove={noop} />);
-    const menu = document.querySelector('[role="listbox"]') as HTMLElement;
+    const menu = screen.getByRole("listbox");
     expect(menu.tabIndex).toBe(-1);
   });
 
   it("placeholder is 'owner/repo' when no repos, empty when repos exist", () => {
     const { rerender } = render(<RepoChipList repos={[]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i }) as HTMLInputElement;
+    const input = screen.getByRole("combobox", { name: /add repository/i }) as HTMLInputElement;
     expect(input.placeholder).toBe("owner/repo");
     rerender(<RepoChipList repos={["foo/bar"]} onAdd={noop} onRemove={noop} />);
     expect(input.placeholder).toBe("");
@@ -288,29 +287,27 @@ describe("RepoChipList", () => {
     render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
     const chipArea = screen.getByRole("group");
     expect(chipArea.hasAttribute("data-open")).toBe(false);
-    await user.type(screen.getByRole("textbox", { name: /add repository/i }), "o");
+    await user.type(screen.getByRole("combobox", { name: /add repository/i }), "o");
     expect(chipArea.hasAttribute("data-open")).toBe(true);
   });
 
   it("clicking the chevron opens the menu when closed", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
-    expect(input.getAttribute("aria-expanded")).toBe("false");
-    const chevron = document.querySelector("button[aria-hidden]") as HTMLElement;
-    await user.click(chevron);
-    expect(input.getAttribute("aria-expanded")).toBe("true");
+    const input = screen.getByRole("combobox", { name: /add repository/i });
+    expect(input).toHaveAttribute("aria-expanded", "false");
+    await user.click(screen.getByTestId("chevron"));
+    expect(input).toHaveAttribute("aria-expanded", "true");
   });
 
   it("clicking the chevron closes the menu when open", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "o");
-    expect(input.getAttribute("aria-expanded")).toBe("true");
-    const chevron = document.querySelector("button[aria-hidden]") as HTMLElement;
-    await user.click(chevron);
-    expect(input.getAttribute("aria-expanded")).toBe("false");
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    await user.click(screen.getByTestId("chevron"));
+    expect(input).toHaveAttribute("aria-expanded", "false");
   });
 
   // Option navigation tests open the menu by typing first so that showPopover has been called
@@ -327,7 +324,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     // After typing, focus returns to input. First ArrowDown → owner/foo; second → owner/bar.
     await user.type(input, "owner");
     await user.keyboard("{ArrowDown}");
@@ -346,7 +343,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     // Click opens menu (no typing, so no create entry); rAF focuses buttons[0].
     // ArrowDown on foo→bar (last); ArrowDown wraps back to foo.
     await user.click(input);
@@ -364,7 +361,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     // Click opens menu; rAF focuses buttons[0] (foo). ArrowUp wraps to bar (last).
     await user.click(input);
     await user.keyboard("{ArrowUp}");
@@ -374,20 +371,20 @@ describe("RepoChipList", () => {
   it("Tab from input closes the menu", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "o");
-    expect(input.getAttribute("aria-expanded")).toBe("true");
+    expect(input).toHaveAttribute("aria-expanded", "true");
     await user.keyboard("{Tab}");
-    expect(input.getAttribute("aria-expanded")).toBe("false");
+    expect(input).toHaveAttribute("aria-expanded", "false");
   });
 
   it("Tab from a focused option closes the menu", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/foo"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner");
     await user.keyboard("{ArrowDown}{Tab}");
-    expect(input.getAttribute("aria-expanded")).toBe("false");
+    expect(input).toHaveAttribute("aria-expanded", "false");
     // Exact focus target cannot be verified here: happy-dom doesn't apply the user-agent
     // stylesheet that hides popover="manual" contents, so closed-menu options remain in the
     // querySelectorAll results used to find the next focusable element. In a real browser the
@@ -404,7 +401,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     // After typing: focus on input. ArrowDown×2 → owner/bar. ArrowUp → owner/foo.
     await user.type(input, "owner");
     await user.keyboard("{ArrowDown}{ArrowDown}{ArrowUp}");
@@ -422,7 +419,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     // After typing: focus on input. ArrowDown → owner/foo; Enter selects it.
     await user.type(input, "owner");
     await user.keyboard("{ArrowDown}{Enter}");
@@ -441,7 +438,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     // After typing: focus on input. ArrowDown → owner/foo; Space selects it.
     await user.type(input, "owner");
     await user.keyboard("{ArrowDown}{ }");
@@ -458,7 +455,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i }) as HTMLInputElement;
+    const input = screen.getByRole("combobox", { name: /add repository/i }) as HTMLInputElement;
     // Type "x" to open menu and focus first option via rAF; type "y" to forward to input
     await user.type(input, "x");
     await user.keyboard("y");
@@ -476,7 +473,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     // After typing, handleInput sets activeIndex=0 so options[0] is pre-selected
     await user.type(input, "owner");
     const options = screen.getAllByRole("option");
@@ -494,13 +491,13 @@ describe("RepoChipList", () => {
     const { rerender } = render(
       <RepoChipList repos={[]} suggestions={[]} onAdd={noop} onRemove={noop} />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     input.focus(); // handleFocus: allOptions is empty, menu stays closed
     // Re-render with suggestions — menu remains closed, input retains focus
     rerender(<RepoChipList repos={[]} suggestions={["owner/foo"]} onAdd={noop} onRemove={noop} />);
-    expect(input.getAttribute("aria-expanded")).toBe("false");
+    expect(input).toHaveAttribute("aria-expanded", "false");
     await user.keyboard("{ArrowDown}");
-    expect(input.getAttribute("aria-expanded")).toBe("true");
+    expect(input).toHaveAttribute("aria-expanded", "true");
   });
 
   it("ArrowDown on the last option (via keyboard navigation) wraps to the first", async () => {
@@ -514,7 +511,7 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     // ArrowDown×3 from input: first→foo, second→bar, third→owner (last); fourth wraps to foo
     await user.type(input, "owner");
     await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}");
@@ -526,17 +523,27 @@ describe("RepoChipList", () => {
   it("clicking the chip area when the menu is open closes it", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "o");
-    expect(input.getAttribute("aria-expanded")).toBe("true");
+    expect(input).toHaveAttribute("aria-expanded", "true");
     await user.click(screen.getByRole("group"));
-    expect(input.getAttribute("aria-expanded")).toBe("false");
+    expect(input).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("clicking the input while the menu is open keeps it open", async () => {
+    const user = userEvent.setup();
+    render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
+    const input = screen.getByRole("combobox", { name: /add repository/i });
+    await user.type(input, "o");
+    expect(input).toHaveAttribute("aria-expanded", "true");
+    await user.click(input);
+    expect(input).toHaveAttribute("aria-expanded", "true");
   });
 
   it("pressing a meta/ctrl key combo while an option is focused does not forward to input", async () => {
     const user = userEvent.setup();
     render(<RepoChipList repos={[]} suggestions={["owner/foo"]} onAdd={noop} onRemove={noop} />);
-    const input = screen.getByRole("textbox", { name: /add repository/i }) as HTMLInputElement;
+    const input = screen.getByRole("combobox", { name: /add repository/i }) as HTMLInputElement;
     await user.type(input, "owner");
     await user.keyboard("{ArrowDown}");
     // Meta+A should not append "a" to the input
@@ -554,12 +561,84 @@ describe("RepoChipList", () => {
         onRemove={noop}
       />,
     );
-    const input = screen.getByRole("textbox", { name: /add repository/i });
+    const input = screen.getByRole("combobox", { name: /add repository/i });
     await user.type(input, "owner");
     const options = screen.getAllByRole("option");
     await user.hover(options[1]);
     expect(document.activeElement).toBe(options[1]);
     expect(options[1].getAttribute("aria-selected")).toBe("true");
     expect(options[0].getAttribute("aria-selected")).toBe("false");
+  });
+
+  it("input has role combobox", () => {
+    render(<RepoChipList repos={[]} onAdd={noop} onRemove={noop} />);
+    expect(screen.getByRole("combobox", { name: /add repository/i })).toBeTruthy();
+  });
+
+  it("chip list has accessible label", () => {
+    render(<RepoChipList repos={["foo/bar"]} onAdd={noop} onRemove={noop} />);
+    expect(screen.getByRole("list", { name: /repositories/i })).toBeTruthy();
+  });
+
+  it("clicking the chip area when the menu is closed opens it", async () => {
+    const user = userEvent.setup();
+    render(<RepoChipList repos={[]} suggestions={["owner/repo"]} onAdd={noop} onRemove={noop} />);
+    const input = screen.getByRole("combobox", { name: /add repository/i });
+    expect(input).toHaveAttribute("aria-expanded", "false");
+    await user.click(screen.getByRole("group"));
+    expect(input).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("navigating to the create entry and pressing Enter calls onAdd with the typed value", async () => {
+    const user = userEvent.setup();
+    const onAdd = vi.fn();
+    render(<RepoChipList repos={[]} suggestions={["owner/other"]} onAdd={onAdd} onRemove={noop} />);
+    const input = screen.getByRole("combobox", { name: /add repository/i });
+    // "owner/other" doesn't match "owner/new" so it's filtered out; only the create entry remains
+    await user.type(input, "owner/new");
+    await user.keyboard("{ArrowDown}{Enter}");
+    expect(onAdd).toHaveBeenCalledWith("owner/new");
+  });
+
+  it("aria-activedescendant points to the first option after typing", async () => {
+    const user = userEvent.setup();
+    render(
+      <RepoChipList
+        repos={[]}
+        suggestions={["owner/foo", "owner/bar"]}
+        onAdd={noop}
+        onRemove={noop}
+      />,
+    );
+    const input = screen.getByRole("combobox", { name: /add repository/i });
+    await user.type(input, "owner");
+    const firstOption = screen.getAllByRole("option")[0];
+    expect(input).toHaveAttribute("aria-activedescendant", firstOption.id);
+  });
+
+  it("aria-activedescendant updates as options are navigated with arrow keys", async () => {
+    const user = userEvent.setup();
+    render(
+      <RepoChipList
+        repos={[]}
+        suggestions={["owner/foo", "owner/bar"]}
+        onAdd={noop}
+        onRemove={noop}
+      />,
+    );
+    const input = screen.getByRole("combobox", { name: /add repository/i });
+    await user.type(input, "owner");
+    await user.keyboard("{ArrowDown}{ArrowDown}");
+    const options = screen.getAllByRole("option");
+    expect(input).toHaveAttribute("aria-activedescendant", options[1].id);
+  });
+
+  it("aria-activedescendant is cleared when the menu closes", async () => {
+    const user = userEvent.setup();
+    render(<RepoChipList repos={[]} suggestions={["owner/foo"]} onAdd={noop} onRemove={noop} />);
+    const input = screen.getByRole("combobox", { name: /add repository/i });
+    await user.type(input, "owner");
+    await user.keyboard("{Tab}");
+    expect(input).not.toHaveAttribute("aria-activedescendant");
   });
 });

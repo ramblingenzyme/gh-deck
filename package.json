@@ -26,6 +26,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260317.1",
     "@preact/preset-vite": "^2.10.4",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/preact": "^3.2.4",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^25.5.0",

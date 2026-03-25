@@ -170,21 +170,29 @@ export const RepoChipList = ({ repos, suggestions = [], onAdd, onRemove }: RepoC
         <input
           ref={inputRef}
           className={styles.input}
+          role="combobox"
           type="text"
           onKeyDown={handleKeyDown}
           onInput={handleInput}
           onFocus={handleFocus}
+          onPointerDown={(e) => e.stopPropagation()}
           placeholder={repos.length === 0 ? "owner/repo" : ""}
           aria-label="Add repository"
           aria-autocomplete="list"
           aria-controls={menuId}
           aria-expanded={isOpen}
+          aria-activedescendant={
+            isOpen && activeIndex >= 0 && allOptions[activeIndex]
+              ? `${menuId}-option-${cleanId(allOptions[activeIndex])}`
+              : undefined
+          }
         />
         <button
           type="button"
           className={styles.chevron}
           tabIndex={-1}
           aria-hidden="true"
+          data-testid="chevron"
           onPointerDown={(e) => e.stopPropagation()}
           onClick={() => {
             if (isOpen) closeMenu();
@@ -211,6 +219,7 @@ export const RepoChipList = ({ repos, suggestions = [], onAdd, onRemove }: RepoC
             <li key={s} role="none">
               <button
                 type="button"
+                id={`${menuId}-option-${cleanId(s)}`}
                 role="option"
                 aria-selected={activeIndex === i}
                 className={styles.suggestion}
