@@ -1,20 +1,37 @@
-.modalTypes {
+.modal {
+  width: 580px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 16px;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.typesList {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.modalField label,
+.fieldLabel {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .modalField {
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
-
-.modalField label {
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
 }
 
 .typeBtn {

@@ -16,8 +16,8 @@ export const App = () => {
 
   const auth = useAuth();
 
-  const handleAddColumn = (type: ColumnType, title: string, query?: string) => {
-    addColumn(type, title, query);
+  const handleAddColumn = (type: ColumnType, title: string, query?: string, repos?: string[]) => {
+    addColumn(type, title, query, repos);
     addColumnModal.close();
   };
 

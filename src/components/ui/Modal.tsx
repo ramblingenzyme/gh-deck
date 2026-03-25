@@ -8,6 +8,7 @@ interface ModalProps {
   onClose: () => void;
   onBackdropClick?: () => void;
   preventCancel?: boolean;
+  className?: string;
   children: React.ReactNode;
 }
 
@@ -18,6 +19,7 @@ export const Modal = ({
   onClose,
   onBackdropClick,
   preventCancel,
+  className,
   children,
 }: ModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -51,7 +53,10 @@ export const Modal = ({
       aria-labelledby={titleId}
     >
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- not an interaction point; stopPropagation prevents backdrop-click from firing on modal content clicks */}
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={`${styles.modal}${className ? ` ${className}` : ""}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <header>
           <h1 id={titleId}>{title}</h1>
         </header>

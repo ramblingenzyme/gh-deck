@@ -8,7 +8,6 @@
 - [ ] Integrate knip into lint-staged
 - [x] Check if review/comments on PR cards are implemented
 - [x] Fix broken ref rendering in activity cards
-- [ ] Fix query multiline growing
 - [x] Review code splitting boundaries
 - [ ] Integrate @cloudflare/vite-plugin wrangler to simplify dev tooling
 - [x] Align min query heights across columns with repo count badges and without
@@ -19,12 +18,16 @@
 - [x] Implement fetching of review counts for PR cards
 - [ ] Investigate/remove broken security alerts column
 - [x] Empty state for columns that require repo selection
-- [ ] Repo selector in add column modal when column supports it
+- [x] Repo selector in add column modal when column supports it
+- [ ] Fix query multiline growing
 - [x] Polish up multi select component
 - [x] Fix auth modal flash on load when logged in
 - [x] Extract user link for card footers
 - [x] Fix deployments footer to link users & refs
 - [x] Persistent focus border on edit query input
+- [ ] Fix modal being tab selectable
+- [ ] Figure out which UI elements should be selectable vs not
+- [ ] Custom text selection color
 - [ ] Reassess filter queries for non issue/PR columns
 - [ ] Assess automatically detected accessibility issues from Firefox Devtools
 - [ ] Drag and Drop sometimes doesn't work?

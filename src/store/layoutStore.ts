@@ -13,7 +13,7 @@ import {
 
 interface LayoutState {
   columns: ColumnConfig[];
-  addColumn: (type: ColumnType, title: string, query?: string) => void;
+  addColumn: (type: ColumnType, title: string, query?: string, repos?: string[]) => void;
   removeColumn: (id: string) => void;
   reorder: (from: number, to: number) => void;
   updateColumnQuery: (id: string, query: string) => void;
@@ -29,8 +29,8 @@ export const useLayoutStore = create<LayoutState>((set, get) => {
 
   return {
     columns: loadLayout(),
-    addColumn(type, title, query) {
-      mutate(applyAdd(get().columns, mkId(), type, title, query));
+    addColumn(type, title, query, repos) {
+      mutate(applyAdd(get().columns, mkId(), type, title, query, repos));
     },
     removeColumn(id) {
       mutate(applyRemove(get().columns, id));

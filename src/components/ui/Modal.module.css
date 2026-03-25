@@ -17,7 +17,7 @@
   background: var(--bg-column);
   border: 1px solid var(--border-mid);
   border-radius: var(--radius-lg);
-  width: 380px;
+  min-width: 380px;
   overflow: hidden;
 }
 

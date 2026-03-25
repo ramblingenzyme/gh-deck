@@ -48,6 +48,7 @@ describe("AddColumnModal", () => {
       "prs",
       COLUMN_TYPES["prs"].label,
       COLUMN_TYPES["prs"].defaultQuery,
+      undefined,
     );
   });
 

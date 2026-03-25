@@ -6,8 +6,12 @@ export function applyAdd(
   type: ColumnType,
   title: string,
   query?: string,
+  repos?: string[],
 ): ColumnConfig[] {
-  return [...cols, { id, type, title, ...(query ? { query } : {}) }];
+  return [
+    ...cols,
+    { id, type, title, ...(query ? { query } : {}), ...(repos?.length ? { repos } : {}) },
+  ];
 }
 
 export function applyRemove(cols: ColumnConfig[], id: string): ColumnConfig[] {
