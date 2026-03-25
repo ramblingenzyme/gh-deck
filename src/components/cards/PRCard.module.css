@@ -16,11 +16,6 @@
 .merged,
 .closed {
   --card-border-left: var(--pr-color);
+  --card-title-icon-color: var(--pr-color);
   border-left-width: 3px;
-}
-
-.statusIcon {
-  color: var(--pr-color);
-  margin-right: 3px;
-  vertical-align: -0.1em;
 }

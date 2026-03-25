@@ -5,6 +5,7 @@ import type {
   ColumnConfig,
   DeploymentStatus,
   PRStatus,
+  IssueState,
 } from "@/types";
 import type { IconName } from "@/components/ui/SvgIcon";
 
@@ -14,16 +15,16 @@ export const CI_STATUS: Record<CIStatus, { label: string; icon: IconName }> = {
   running: { label: "RUN", icon: "circleDot" },
 };
 
-export const ACTIVITY_ICONS: Record<ActivityType, IconName> = {
-  commit: "gitCommit",
-  comment: "comment",
-  pr_opened: "gitMerge",
-  pr_merged: "gitMerge",
-  review: "eye",
-  issue_closed: "x",
-  branch_created: "gitBranch",
-  fork: "gitFork",
-  star: "star",
+export const ACTIVITY_KINDS: Record<ActivityType, { icon: IconName; label: string }> = {
+  commit: { icon: "gitCommit", label: "Commit" },
+  comment: { icon: "comment", label: "Comment" },
+  pr_opened: { icon: "gitMerge", label: "PR Opened" },
+  pr_merged: { icon: "gitMerge", label: "PR Merged" },
+  review: { icon: "eye", label: "Review" },
+  issue_closed: { icon: "x", label: "Issue Closed" },
+  branch_created: { icon: "gitBranch", label: "Branch" },
+  fork: { icon: "gitFork", label: "Fork" },
+  star: { icon: "star", label: "Starred" },
 };
 
 export const COLUMN_TYPES: Record<
@@ -52,6 +53,11 @@ export const PR_STATUS: Record<PRStatus, { icon: IconName }> = {
   open: { icon: "circleDot" },
   draft: { icon: "pencil" },
   merged: { icon: "gitMerge" },
+  closed: { icon: "x" },
+};
+
+export const ISSUE_STATUS: Record<IssueState, { icon: IconName }> = {
+  open: { icon: "issueOpen" },
   closed: { icon: "x" },
 };
 

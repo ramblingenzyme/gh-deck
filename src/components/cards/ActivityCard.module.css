@@ -1,3 +1,45 @@
+.pr_opened {
+  --activity-color: var(--status-success);
+}
+.pr_merged {
+  --activity-color: oklch(0.78 0.15 300);
+}
+.issue_closed {
+  --activity-color: var(--status-danger);
+}
+.star {
+  --activity-color: var(--status-warning);
+}
+.review {
+  --activity-color: oklch(0.78 0.15 30);
+} /* orange */
+.comment {
+  --activity-color: oklch(0.78 0.13 200);
+} /* cyan */
+.commit {
+  --activity-color: oklch(0.78 0.13 160);
+} /* mint */
+.branch_created {
+  --activity-color: oklch(0.78 0.13 260);
+} /* indigo */
+.fork {
+  --activity-color: oklch(0.78 0.15 320);
+} /* pink */
+
+.pr_opened,
+.pr_merged,
+.issue_closed,
+.star,
+.review,
+.comment,
+.commit,
+.branch_created,
+.fork {
+  --card-border-left: var(--activity-color);
+  --card-title-icon-color: var(--activity-color);
+  border-left-width: 3px;
+}
+
 .activityRef {
   color: var(--text-muted);
   font-family: var(--font-mono);

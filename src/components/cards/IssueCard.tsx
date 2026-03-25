@@ -1,4 +1,5 @@
 import type { IssueItem } from "@/types";
+import { ISSUE_STATUS } from "@/constants";
 import { Card, CardTitle, CardFooter } from "../ui/Card";
 import { SvgIcon } from "../ui/SvgIcon";
 import { UserLink } from "../ui/UserLink";
@@ -11,10 +12,12 @@ interface IssueCardProps {
 }
 
 export const IssueCard = ({ item }: IssueCardProps) => {
+  const issueStatus = ISSUE_STATUS[item.state];
+
   return (
-    <Card repo={item.repo} age={item.age}>
-      <CardTitle href={item.url} prefix={`#${item.number}`}>
-        {item.title}
+    <Card repo={item.repo} age={item.age} className={styles[item.state]}>
+      <CardTitle href={item.url} icon={issueStatus.icon} iconTooltip={item.state.toUpperCase()}>
+        #{item.number} {item.title}
       </CardTitle>
       <LabelList labels={item.labels} repo={item.repo} />
       <CardFooter>

@@ -1,31 +1,31 @@
 .success {
   --deploy-color: var(--status-success);
-  border-left: 3px solid var(--deploy-color);
 }
 .failure {
   --deploy-color: var(--status-danger);
-  border-left: 3px solid var(--deploy-color);
 }
 .pending {
   --deploy-color: var(--text-muted);
-  border-left: 3px solid var(--deploy-color);
 }
 .in_progress {
   --deploy-color: var(--status-warning);
-  border-left: 3px solid var(--deploy-color);
 }
 .unknown {
   --deploy-color: var(--text-muted);
-  border-left: 3px solid var(--deploy-color);
+}
+
+.success,
+.failure,
+.pending,
+.in_progress,
+.unknown {
+  --card-border-left: var(--deploy-color);
+  --card-title-icon-color: var(--deploy-color);
+  border-left-width: 3px;
 }
 
 .deployMeta {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-}
-
-.deployBadge {
-  composes: cardBadge from "../ui/Card.module.css";
-  color: var(--deploy-color, var(--text-muted));
 }

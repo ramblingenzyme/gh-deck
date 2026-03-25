@@ -1,9 +1,17 @@
-.subtitle {
-  color: var(--text-muted);
+.stable {
+  --release-color: var(--status-success);
+}
+.prerelease {
+  --release-color: var(--status-warning);
 }
 
-.prereleaseBadge {
-  composes: cardBadge from "../ui/Card.module.css";
-  background: oklch(from var(--status-warning) l c h / 0.12);
-  color: var(--status-warning);
+.stable,
+.prerelease {
+  --card-border-left: var(--release-color);
+  --card-title-icon-color: var(--release-color);
+  border-left-width: 3px;
+}
+
+.subtitle {
+  color: var(--text-muted);
 }

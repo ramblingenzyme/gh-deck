@@ -1,24 +1,21 @@
 .success {
   --ci-color: var(--status-success);
-  --card-border-left: var(--ci-color);
-  border-left-width: 3px;
 }
 .failure {
   --ci-color: var(--status-danger);
-  --card-border-left: var(--ci-color);
-  border-left-width: 3px;
 }
 .running {
   --ci-color: var(--status-warning);
+}
+
+.success,
+.failure,
+.running {
   --card-border-left: var(--ci-color);
+  --card-title-icon-color: var(--ci-color);
   border-left-width: 3px;
 }
 
 .ciBranchMeta {
   color: var(--text-muted);
-}
-
-.ciBadge {
-  composes: cardBadge from "../ui/Card.module.css";
-  color: var(--ci-color, var(--text-muted));
 }

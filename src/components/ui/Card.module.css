@@ -39,9 +39,16 @@
   margin-bottom: 6px;
 
   & a:hover {
-    color: var(--color-accent);
-    text-decoration-color: var(--text-primary);
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--text-muted);
   }
+}
+
+.titleIcon {
+  color: var(--card-title-icon-color, var(--text-muted));
+  vertical-align: -0.1em;
+  margin-right: 3px;
 }
 
 .cardFooter {
