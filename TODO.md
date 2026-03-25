@@ -26,8 +26,8 @@
 - [x] Fix deployments footer to link users & refs
 - [x] Persistent focus border on edit query input
 - [ ] Fix modal being tab selectable
-- [ ] Figure out which UI elements should be selectable vs not
-- [ ] Custom text selection color
+- [x] Figure out which UI elements should be selectable vs not
+- [x] Custom text selection color
 - [ ] Reassess filter queries for non issue/PR columns
 - [ ] Assess automatically detected accessibility issues from Firefox Devtools
 - [ ] Drag and Drop sometimes doesn't work?

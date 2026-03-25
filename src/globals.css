@@ -38,6 +38,11 @@
   --border-hover: #7a7a9a;
 }
 
+::selection {
+  background-color: oklch(0.7 0.16 265 / 0.35);
+  color: var(--text-primary);
+}
+
 /* ── Reset ────────────────────────────────────────────────────────────────── */
 *,
 *::before,
@@ -53,6 +58,7 @@ button {
   all: unset;
   box-sizing: border-box;
   cursor: pointer;
+  user-select: none;
 }
 button:disabled {
   opacity: 0.25;

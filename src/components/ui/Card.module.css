@@ -11,12 +11,14 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 5px;
+    user-select: none;
   }
 
   & footer {
     display: flex;
     font-size: var(--text-md);
     align-items: center;
+    user-select: none;
 
     & a {
       color: var(--text-muted);
@@ -37,6 +39,7 @@
 
   & a:hover {
     color: var(--color-accent);
+    text-decoration-color: var(--border-mid);
   }
 }
 

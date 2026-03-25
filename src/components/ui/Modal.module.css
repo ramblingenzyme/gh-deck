@@ -22,6 +22,7 @@
 }
 
 .modal > header {
+  user-select: none;
   padding: 16px;
   background: var(--bg-topbar);
   border-bottom: 1px solid var(--border-structural);
@@ -40,6 +41,15 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.modal label,
+.fieldLabel {
+  user-select: none;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .modal footer {

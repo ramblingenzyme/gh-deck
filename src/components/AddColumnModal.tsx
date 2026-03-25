@@ -83,7 +83,7 @@ export const AddColumnModal = ({ open, onAdd, onClose }: AddColumnModalProps) =>
         <ModalBody>
           <div className={styles.layout}>
             <div className={styles.typesList}>
-              <span className={styles.fieldLabel}>Column Type</span>
+              <span className={modalStyles.fieldLabel}>Column Type</span>
               {columnTypeButtons}
             </div>
             <div className={styles.fields}>

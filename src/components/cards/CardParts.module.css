@@ -1,4 +1,5 @@
 .cardRepo {
+  user-select: none;
   color: var(--text-ghost);
   font-size: var(--text-sm);
   letter-spacing: 0.03em;

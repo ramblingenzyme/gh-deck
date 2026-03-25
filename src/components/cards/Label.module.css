@@ -8,6 +8,7 @@
 }
 
 .label {
+  user-select: none;
   font-size: var(--text-sm);
   padding: 2px 6px;
   border-radius: var(--radius-sm);

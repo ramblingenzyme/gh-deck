@@ -116,3 +116,5 @@ Run a single test file: `npm test -- test/utils/queryFilter.test.ts`
 ## Working With Me
 
 When the user gives feedback or a correction, apply it precisely to the thing they're referencing. Do not generalize the feedback to other parts of the code or make additional unrequested changes. Ask for clarification if the scope is ambiguous.
+
+Don't assume that changes made inbetween messages are from the linter. They are almost certainly changes made by the user.

@@ -20,14 +20,6 @@
   gap: 8px;
 }
 
-.modalField label,
-.fieldLabel {
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
 .modalField {
   display: flex;
   flex-direction: column;
