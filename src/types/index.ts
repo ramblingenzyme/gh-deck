@@ -1,6 +1,7 @@
 export type ColumnType = "prs" | "issues" | "ci" | "activity" | "releases" | "deployments";
 
 export type CIStatus = "success" | "failure" | "running";
+export type PRStatus = "open" | "draft" | "merged" | "closed";
 export type IssueState = "open" | "closed";
 export type CITrigger = string;
 export type ActivityType =
@@ -35,8 +36,7 @@ export interface PRItem {
   number: number;
   reviews: { approved: ReviewCount; requested: ReviewCount };
   comments: number;
-  draft: boolean;
-  state: IssueState;
+  status: PRStatus;
   age: string;
   labels: Label[];
   url: string;

@@ -1,9 +1,26 @@
-.draftBadge {
-  background: var(--border-card);
-  color: var(--text-muted);
-  font-size: var(--text-sm);
-  padding: 1px 5px;
-  border-radius: var(--radius-sm);
-  letter-spacing: 0.03em;
-  display: inline-block;
+.open {
+  --pr-color: var(--status-success);
+}
+.draft {
+  --pr-color: var(--text-muted);
+}
+.merged {
+  --pr-color: oklch(0.78 0.15 300);
+}
+.closed {
+  --pr-color: var(--status-danger);
+}
+
+.open,
+.draft,
+.merged,
+.closed {
+  --card-border-left: var(--pr-color);
+  border-left-width: 3px;
+}
+
+.statusIcon {
+  color: var(--pr-color);
+  margin-right: 3px;
+  vertical-align: -0.1em;
 }

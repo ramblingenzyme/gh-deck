@@ -1,4 +1,11 @@
-import type { ColumnType, CIStatus, ActivityType, ColumnConfig, DeploymentStatus } from "@/types";
+import type {
+  ColumnType,
+  CIStatus,
+  ActivityType,
+  ColumnConfig,
+  DeploymentStatus,
+  PRStatus,
+} from "@/types";
 import type { IconName } from "@/components/ui/SvgIcon";
 
 export const CI_STATUS: Record<CIStatus, { label: string; icon: IconName }> = {
@@ -39,6 +46,13 @@ export const COLUMN_TYPES: Record<
   activity: { label: "Activity", icon: "gitCommit", itemLabel: "event", defaultQuery: "" },
   releases: { label: "Releases", icon: "tag", itemLabel: "release", defaultQuery: "" },
   deployments: { label: "Deployments", icon: "deploy", itemLabel: "deployment", defaultQuery: "" },
+};
+
+export const PR_STATUS: Record<PRStatus, { icon: IconName }> = {
+  open: { icon: "circleDot" },
+  draft: { icon: "pencil" },
+  merged: { icon: "gitMerge" },
+  closed: { icon: "x" },
 };
 
 export const DEPLOYMENT_STATUS: Record<DeploymentStatus, { label: string; icon: IconName }> = {

@@ -12,8 +12,7 @@ const basePR: PRItem = {
   number: 42,
   reviews: { approved: 1, requested: 0 },
   comments: 2,
-  draft: false,
-  state: "open",
+  status: "open",
   age: "1h",
   labels: [
     { name: "bug", color: "d73a4a" },
@@ -139,7 +138,7 @@ describe("matchesTokens — label:", () => {
 
 describe("matchesTokens — is:", () => {
   it("is:draft matches draft PR", () =>
-    expect(matches({ ...basePR, draft: true }, "is:draft")).toBe(true));
+    expect(matches({ ...basePR, status: "draft" }, "is:draft")).toBe(true));
   it("is:draft does not match non-draft", () => expect(matches(basePR, "is:draft")).toBe(false));
   it("is:open matches open issue", () => expect(matches(baseIssue, "is:open")).toBe(true));
   it("is:closed matches closed issue", () =>
@@ -228,9 +227,9 @@ describe("matchesTokens — PR assignee:", () => {
 describe("matchesTokens — PR is:open / is:closed", () => {
   it("is:open matches open PR", () => expect(matches(basePR, "is:open")).toBe(true));
   it("is:closed matches closed PR", () =>
-    expect(matches({ ...basePR, state: "closed" }, "is:closed")).toBe(true));
+    expect(matches({ ...basePR, status: "closed" }, "is:closed")).toBe(true));
   it("is:open does not match closed PR", () =>
-    expect(matches({ ...basePR, state: "closed" }, "is:open")).toBe(false));
+    expect(matches({ ...basePR, status: "closed" }, "is:open")).toBe(false));
 });
 
 // ─── CIItem triggered: ────────────────────────────────────────────────────────

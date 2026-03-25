@@ -5,6 +5,7 @@ import {
   type ActivityItem,
   type FallbackItem,
   type CIStatus,
+  type PRStatus,
   type ReleaseItem,
   type DeploymentItem,
   type DeploymentStatus,
@@ -33,6 +34,14 @@ function repoFromUrl(url: string): string {
   return match ? match[1]! : url;
 }
 
+function prStatus(item: GHSearchItem): PRStatus {
+  // This is a static priority
+  if (item.pull_request?.merged_at != null) return "merged";
+  if (item.state === "closed") return "closed";
+  if (item.draft) return "draft";
+  return "open";
+}
+
 export function mapSearchItemToPR(item: GHSearchItem): PRItem {
   return {
     type: "pr",
@@ -44,8 +53,7 @@ export function mapSearchItemToPR(item: GHSearchItem): PRItem {
     number: item.number,
     reviews: { approved: REVIEW_COUNT_UNKNOWN, requested: REVIEW_COUNT_UNKNOWN },
     comments: item.comments,
-    draft: item.draft ?? false,
-    state: item.state as "open" | "closed",
+    status: prStatus(item),
     age: item.updated_at,
     labels: item.labels.map((l) => ({ name: l.name, color: l.color })),
     url: item.html_url,

@@ -46,9 +46,8 @@ function matchesPR(item: PRItem, tokens: Tokens): boolean {
       case "label":
         return item.labels.some((l) => l.name.toLowerCase() === value);
       case "is":
-        if (value === "draft") return item.draft === true;
-        if (value === "open") return item.state === "open";
-        if (value === "closed") return item.state === "closed";
+        if (value === "draft" || value === "open" || value === "closed" || value === "merged")
+          return item.status === value;
         if (value === "pr" || value === "pull-request") return true;
         return false;
       default:

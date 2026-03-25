@@ -9,8 +9,15 @@ interface CICardProps {
   item: CIItem;
 }
 
+const TRIGGER_LABELS: Record<string, string> = {
+  push: "push",
+  pull_request: "PR",
+  release: "release",
+};
+
 export const CICard = ({ item }: CICardProps) => {
   const status = CI_STATUS[item.status];
+  const triggerLabel = TRIGGER_LABELS[item.triggered] ?? item.triggered;
 
   return (
     <Card repo={item.repo} age={item.age} className={styles[item.status]}>
@@ -20,6 +27,8 @@ export const CICard = ({ item }: CICardProps) => {
           <RefLink repo={item.repo} gitRef={item.branch} />
           {" · "}
           {item.duration}
+          {" · "}
+          {triggerLabel}
         </span>
         <span className={styles.ciBadge}>
           <SvgIcon name={status.icon} /> {status.label}

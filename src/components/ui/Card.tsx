@@ -17,14 +17,14 @@ export const Card = ({ repo, age, className, children }: CardProps) => (
 
 interface CardTitleProps {
   href: string;
-  prefix?: string;
+  prefix?: React.ReactNode;
   children: React.ReactNode;
 }
 
 export const CardTitle = ({ href, prefix, children }: CardTitleProps) => (
   <p className={cardStyles.cardTitle}>
     <a href={href} target="_blank" rel="noreferrer">
-      {prefix ? `${prefix} ` : ""}
+      {prefix != null && <>{prefix} </>}
       {children}
     </a>
   </p>

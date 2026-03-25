@@ -43,19 +43,66 @@ describe("mapSearchItemToPR", () => {
     expect(pr.url).toBe("https://github.com/owner/repo/pull/42");
   });
 
-  it("defaults draft to false when missing", () => {
-    const pr = mapSearchItemToPR({ ...baseItem, draft: undefined });
-    expect(pr.draft).toBe(false);
-  });
-
-  it("sets draft to true when present", () => {
-    const pr = mapSearchItemToPR({ ...baseItem, draft: true });
-    expect(pr.draft).toBe(true);
-  });
-
   it("initializes reviews to REVIEW_COUNT_UNKNOWN until enriched", () => {
     const pr = mapSearchItemToPR(baseItem);
     expect(pr.reviews).toEqual({ approved: REVIEW_COUNT_UNKNOWN, requested: REVIEW_COUNT_UNKNOWN });
+  });
+
+  it("status is open for a normal open PR", () => {
+    const pr = mapSearchItemToPR(baseItem);
+    expect(pr.status).toBe("open");
+  });
+
+  it("status is draft when draft is true", () => {
+    const pr = mapSearchItemToPR({ ...baseItem, draft: true });
+    expect(pr.status).toBe("draft");
+  });
+
+  it("status is merged when merged_at is present", () => {
+    const pr = mapSearchItemToPR({
+      ...baseItem,
+      state: "closed",
+      pull_request: { merged_at: "2024-01-03T00:00:00Z" },
+    });
+    expect(pr.status).toBe("merged");
+  });
+
+  it("status is closed when state is closed and not merged", () => {
+    const pr = mapSearchItemToPR({
+      ...baseItem,
+      state: "closed",
+      pull_request: { merged_at: null },
+    });
+    expect(pr.status).toBe("closed");
+  });
+
+  it("merged takes priority over draft", () => {
+    const pr = mapSearchItemToPR({
+      ...baseItem,
+      draft: true,
+      state: "closed",
+      pull_request: { merged_at: "2024-01-03T00:00:00Z" },
+    });
+    expect(pr.status).toBe("merged");
+  });
+
+  it("merged takes priority over closed", () => {
+    const pr = mapSearchItemToPR({
+      ...baseItem,
+      state: "closed",
+      pull_request: { merged_at: "2024-01-03T00:00:00Z" },
+    });
+    expect(pr.status).toBe("merged");
+  });
+
+  it("closed takes priority over draft", () => {
+    const pr = mapSearchItemToPR({
+      ...baseItem,
+      draft: true,
+      state: "closed",
+      pull_request: { merged_at: null },
+    });
+    expect(pr.status).toBe("closed");
   });
 });
 
