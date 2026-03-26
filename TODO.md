@@ -1,7 +1,7 @@
 # Human tasks
 
 - [ ] Review code as a human
-- [ ] Integrate TS check into lint-staged
+- [x] Integrate TS check into lint-staged
 - [ ] Integrate knip into lint-staged
 - [ ] Integrate @cloudflare/vite-plugin wrangler to simplify dev tooling
 - [x] Fix card link hover color
@@ -35,4 +35,4 @@
 - [x] Polish up SVG icon
 - [x] Refactor demo out as a separate page
 - [ ] Landing page
-- [ ] Polish README.md
+- [x] Polish README.md
