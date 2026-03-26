@@ -7,6 +7,7 @@
     "dev": "vite",
     "dev:api": "wrangler pages dev dist --port 8788",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "lint": "oxlint .",
     "format": "oxfmt .",

@@ -6,6 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm run dev      # Start Vite dev server (http://localhost:5173)
+npm run typecheck  # TypeScript type check only (no emit)
 npm run build    # TypeScript check + Vite build
 npm run lint     # Lint with oxlint
 npm run format   # Format with oxfmt (2-space indent, 100-char line width, single quotes)
@@ -109,7 +110,7 @@ Tests live in `test/` mirroring `src/` structure (e.g. `src/utils/foo.ts` → `t
 - **Mocks**: `vi.fn()` for callbacks; prefer `vi.spyOn` over module-level mocks
 - **Assertions**: test via semantic roles (`role="article"`, `role="button"`) not implementation details
 - **Coverage**: `npm test -- --coverage`
-- **After changes**: always run `npm test` to check for failures; update existing tests that break due to interface changes and write new tests for new behaviour
+- **After changes**: always run `npm run typecheck` to check for type errors, then `npm test` to check for failures; update existing tests that break due to interface changes and write new tests for new behaviour
 
 Run a single test file: `npm test -- test/utils/queryFilter.test.ts`
 
