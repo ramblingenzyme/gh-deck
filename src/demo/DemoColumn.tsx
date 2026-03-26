@@ -35,12 +35,12 @@ import releasesStyles from "@/components/columns/ReleasesColumn.module.css";
 import deploymentsStyles from "@/components/columns/DeploymentsColumn.module.css";
 
 const ACCENT: Record<ColumnConfig["type"], string> = {
-  prs: prStyles.accent,
-  issues: issueStyles.accent,
-  ci: ciStyles.accent,
-  activity: activityStyles.accent,
-  releases: releasesStyles.accent,
-  deployments: deploymentsStyles.accent,
+  prs: prStyles.accent!,
+  issues: issueStyles.accent!,
+  ci: ciStyles.accent!,
+  activity: activityStyles.accent!,
+  releases: releasesStyles.accent!,
+  deployments: deploymentsStyles.accent!,
 };
 
 function renderCard(item: AnyItem): ReactNode {

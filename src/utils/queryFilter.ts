@@ -6,6 +6,7 @@ import type {
   ReleaseItem,
   DeploymentItem,
   KnownItem,
+  ColumnType,
 } from "@/types";
 
 /** Parse a GitHub-style query string into key:value tokens and bare terms. */
@@ -137,22 +138,16 @@ const GITHUB_SEARCH_INFO: ServerFilteredInfo = {
   ],
 };
 
-export const PR_FILTERS: FilterMap<PRItem> = {
+export const PR_FILTERS: ServerFilteredMap = {
   name: "Pull Requests",
-  textSearchFields: [],
-  textSearch: () => [],
-  filters: {},
   serverFiltered: GITHUB_SEARCH_INFO,
 };
 
 /**
  * Issue columns use the GitHub Search API for all filtering — no client-side filters.
  */
-export const ISSUE_FILTERS: FilterMap<IssueItem> = {
+export const ISSUE_FILTERS: ServerFilteredMap = {
   name: "Issues",
-  textSearchFields: [],
-  textSearch: () => [],
-  filters: {},
   serverFiltered: GITHUB_SEARCH_INFO,
 };
 
@@ -160,7 +155,7 @@ export const ISSUE_FILTERS: FilterMap<IssueItem> = {
  * Client-side strategies for filtering PR items in demo mode.
  * Only use via matchesDemoTokens — not for production code.
  */
-export const DEMO_PR_FILTERS: FilterMap<PRItem> = {
+export const DEMO_PR_FILTERS: ClientFilterMap<PRItem> = {
   name: "Pull Requests",
   textSearchFields: ["title", "repo", "author", "assignee"],
   textSearch: (item) => [item.title, item.repo, item.author, item.assignee],
@@ -202,7 +197,7 @@ export const DEMO_PR_FILTERS: FilterMap<PRItem> = {
  * Client-side strategies for filtering Issue items in demo mode.
  * Only use via matchesDemoTokens — not for production code.
  */
-export const DEMO_ISSUE_FILTERS: FilterMap<IssueItem> = {
+export const DEMO_ISSUE_FILTERS: ClientFilterMap<IssueItem> = {
   name: "Issues",
   textSearchFields: ["title", "repo", "assignee"],
   textSearch: (item) => [item.title, item.repo, item.assignee],
@@ -235,7 +230,7 @@ export const DEMO_ISSUE_FILTERS: FilterMap<IssueItem> = {
   },
 };
 
-export const CI_FILTERS: FilterMap<CIItem> = {
+export const CI_FILTERS: ClientFilterMap<CIItem> = {
   name: "CI / CD",
   textSearchFields: ["name", "repo", "branch", "status", "triggered"],
   textSearch: (item) => [item.name, item.repo, item.branch, item.status, item.triggered],
@@ -256,7 +251,7 @@ export const CI_FILTERS: FilterMap<CIItem> = {
   },
 };
 
-export const ACTIVITY_FILTERS: FilterMap<ActivityItem> = {
+export const ACTIVITY_FILTERS: ClientFilterMap<ActivityItem> = {
   name: "Activity",
   textSearchFields: ["text", "repo", "kind", "ref"],
   textSearch: (item) => [item.text, item.repo, item.kind, item.ref],
@@ -279,7 +274,7 @@ export const ACTIVITY_FILTERS: FilterMap<ActivityItem> = {
   },
 };
 
-export const RELEASE_FILTERS: FilterMap<ReleaseItem> = {
+export const RELEASE_FILTERS: ClientFilterMap<ReleaseItem> = {
   name: "Releases",
   textSearchFields: ["name", "tag", "repo"],
   textSearch: (item) => [item.name, item.tag, item.repo],
@@ -306,7 +301,7 @@ export const RELEASE_FILTERS: FilterMap<ReleaseItem> = {
   },
 };
 
-export const DEPLOYMENT_FILTERS: FilterMap<DeploymentItem> = {
+export const DEPLOYMENT_FILTERS: ClientFilterMap<DeploymentItem> = {
   name: "Deployments",
   textSearchFields: ["environment", "repo", "status", "creator", "ref"],
   textSearch: (item) => [item.environment, item.repo, item.status, item.creator, item.ref],

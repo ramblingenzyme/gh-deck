@@ -3,8 +3,8 @@ import { render, screen, cleanup, act } from "@testing-library/preact";
 import { useColumnDragDrop } from "@/hooks/useColumnDragDrop";
 
 const { mockDraggable, mockDropTarget } = vi.hoisted(() => ({
-  mockDraggable: vi.fn(() => () => {}),
-  mockDropTarget: vi.fn(() => () => {}),
+  mockDraggable: vi.fn<(opts: Record<string, any>) => () => void>(() => () => {}),
+  mockDropTarget: vi.fn<(opts: Record<string, any>) => () => void>(() => () => {}),
 }));
 
 vi.mock("@atlaskit/pragmatic-drag-and-drop/element/adapter", () => ({
