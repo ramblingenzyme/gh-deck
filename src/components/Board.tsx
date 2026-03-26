@@ -13,6 +13,7 @@ export interface BoardProps {
   onRemove: (id: string) => void;
   loading?: boolean;
   columnComponent?: ComponentType<ColumnProps>;
+  onClick?: preact.JSX.MouseEventHandler<HTMLElement>;
 }
 
 export const Board = ({
@@ -21,6 +22,7 @@ export const Board = ({
   onRemove,
   loading,
   columnComponent: ColumnComponent = Column,
+  onClick,
 }: BoardProps) => {
   const reorder = useLayoutStore((s) => s.reorder);
 
@@ -64,7 +66,7 @@ export const Board = ({
   }
 
   return (
-    <main className={styles.board} tabIndex={-1}>
+    <main className={styles.board} tabIndex={-1} onClick={onClick}>
       {columns.map((col) => (
         <ColumnComponent key={col.id} col={col} onRemove={onRemove} />
       ))}

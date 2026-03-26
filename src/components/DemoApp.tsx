@@ -39,6 +39,9 @@ export const DemoApp = () => {
         onAddColumn={() => addColumnModal.open()}
         onRemove={(id) => removeColumn(id)}
         columnComponent={DemoColumn}
+        onClick={(e) => {
+          if (e.target instanceof HTMLAnchorElement) e.preventDefault();
+        }}
       />
       <AddColumnModal
         open={addColumnModal.isOpen}
