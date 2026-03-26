@@ -2,6 +2,8 @@
 
 **TweetDeck for GitHub.** Monitor pull requests, issues, CI status, notifications, and activity across your repos — all from one configurable dashboard.
 
+![](./demo.png)
+
 **[octodeck.pages.dev](https://octodeck.pages.dev)**
 
 ## What it looks like
