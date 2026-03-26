@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseQuery, matchesTokens } from "@/utils/queryFilter";
+import { parseQuery, matchesTokens, ciTokens, deploymentTokens } from "@/utils/queryFilter";
 import type { PRItem, IssueItem, CIItem, ActivityItem, ReleaseItem, DeploymentItem } from "@/types";
 
 const basePR: PRItem = {
@@ -303,6 +303,15 @@ describe("matchesTokens — deployment repo:", () => {
     expect(matches(baseDeployment, "xyz:foo")).toBe(false));
 });
 
+describe("matchesTokens — deployment sha: and task: (server-side only)", () => {
+  it("sha: passes through client filter — handled server-side", () =>
+    expect(matches(baseDeployment, "sha:abc123")).toBe(true));
+  it("task: passes through client filter — handled server-side", () =>
+    expect(matches(baseDeployment, "task:deploy")).toBe(true));
+  it("sha: combined with status: still applies status check", () =>
+    expect(matches(baseDeployment, "sha:abc123 status:failure")).toBe(false));
+});
+
 describe("matchesTokens — release is: and unknown key", () => {
   it("is:unknown returns false for release", () =>
     expect(matches(baseRelease, "is:unknown")).toBe(false));
@@ -322,6 +331,13 @@ describe("matchesTokens — CI repo:", () => {
   it("unknown key on CI returns false", () => expect(matches(baseCI, "xyz:foo")).toBe(false));
 });
 
+describe("matchesTokens — CI actor: (server-side only)", () => {
+  it("actor: passes through client filter — handled server-side", () =>
+    expect(matches(baseCI, "actor:anyone")).toBe(true));
+  it("actor: combined with repo: still applies repo check", () =>
+    expect(matches(baseCI, "repo:acme/api actor:anyone")).toBe(true));
+});
+
 describe("matchesTokens — activity repo: and unknown key", () => {
   it("repo: matches activity item", () =>
     expect(matches(baseActivity, "repo:acme/api")).toBe(true));
@@ -336,4 +352,69 @@ describe("matchesTokens — bare text search on non-PR types", () => {
   it("bare text matches release tag", () => expect(matches(baseRelease, "v1.2.0")).toBe(true));
   it("bare text matches deployment environment", () =>
     expect(matches(baseDeployment, "production")).toBe(true));
+});
+
+// ─── ciTokens ─────────────────────────────────────────────────────────────────
+
+describe("ciTokens", () => {
+  it("server contains API-accepted keys (branch, status, triggered, actor)", () => {
+    const { server } = ciTokens(parseQuery("branch:main status:success actor:alice repo:acme/api"));
+    expect(server).toEqual([
+      { key: "branch", value: "main" },
+      { key: "status", value: "success" },
+      { key: "actor", value: "alice" },
+    ]);
+  });
+
+  it("client excludes server-only keys (actor) but keeps dual-purpose keys", () => {
+    const { client } = ciTokens(parseQuery("branch:main status:success actor:alice repo:acme/api"));
+    expect(client).toEqual([
+      { key: "branch", value: "main" },
+      { key: "status", value: "success" },
+      { key: "repo", value: "acme/api" },
+    ]);
+  });
+
+  it("bare text goes to client only", () => {
+    const { server, client } = ciTokens(parseQuery("branch:main sometext"));
+    expect(server).toEqual([{ key: "branch", value: "main" }]);
+    expect(client).toEqual([
+      { key: "branch", value: "main" },
+      { key: "", value: "sometext" },
+    ]);
+  });
+
+  it("empty query produces empty server and client", () => {
+    const { server, client } = ciTokens(parseQuery(""));
+    expect(server).toEqual([]);
+    expect(client).toEqual([]);
+  });
+});
+
+// ─── deploymentTokens ─────────────────────────────────────────────────────────
+
+describe("deploymentTokens", () => {
+  it("server contains API-accepted keys (ref, environment, sha, task)", () => {
+    const { server } = deploymentTokens(parseQuery("environment:prod sha:abc status:success"));
+    expect(server).toEqual([
+      { key: "environment", value: "prod" },
+      { key: "sha", value: "abc" },
+    ]);
+  });
+
+  it("client excludes server-only keys (sha, task) but keeps dual-purpose keys", () => {
+    const { client } = deploymentTokens(
+      parseQuery("environment:prod sha:abc status:success task:deploy"),
+    );
+    expect(client).toEqual([
+      { key: "environment", value: "prod" },
+      { key: "status", value: "success" },
+    ]);
+  });
+
+  it("empty query produces empty server and client", () => {
+    const { server, client } = deploymentTokens(parseQuery(""));
+    expect(server).toEqual([]);
+    expect(client).toEqual([]);
+  });
 });

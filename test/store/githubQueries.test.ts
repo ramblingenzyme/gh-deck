@@ -181,12 +181,12 @@ describe("useGetCIRuns", () => {
   });
 
   it("key is null when token is null", () => {
-    useGetCIRuns(["owner/repo"], null);
+    useGetCIRuns(["owner/repo"], null, []);
     expect(capturedKey).toBeNull();
   });
 
   it("key is null when repos is empty", () => {
-    useGetCIRuns([], "tok");
+    useGetCIRuns([], "tok", []);
     expect(capturedKey).toBeNull();
   });
 
@@ -194,7 +194,7 @@ describe("useGetCIRuns", () => {
     const repos = ["r1", "r2", "r3", "r4", "r5", "r6"];
     mockFetch.mockResolvedValue(mockOk({ workflow_runs: [] }));
 
-    useGetCIRuns(repos, "tok");
+    useGetCIRuns(repos, "tok", []);
     await capturedFetcher!();
 
     // 5 fetches (not 6)
@@ -206,7 +206,7 @@ describe("useGetCIRuns", () => {
       .mockResolvedValueOnce(mockOk({ workflow_runs: [makeRun(1)] }))
       .mockRejectedValueOnce(new Error("Network error"));
 
-    useGetCIRuns(["owner/repo1", "owner/repo2"], "tok");
+    useGetCIRuns(["owner/repo1", "owner/repo2"], "tok", []);
     const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
     expect(result.fetchErrors).toHaveLength(1);
     expect(result.fetchErrors[0]).toContain("Network error");
@@ -214,14 +214,14 @@ describe("useGetCIRuns", () => {
 
   it("handles null workflow_runs in API response", async () => {
     mockFetch.mockResolvedValueOnce(mockOk({ workflow_runs: null }));
-    useGetCIRuns(["owner/repo"], "tok");
+    useGetCIRuns(["owner/repo"], "tok", []);
     const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
     expect(result.items).toEqual([]);
   });
 
   it("handles missing workflow_runs property in API response", async () => {
     mockFetch.mockResolvedValueOnce(mockOk({}));
-    useGetCIRuns(["owner/repo"], "tok");
+    useGetCIRuns(["owner/repo"], "tok", []);
     const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
     expect(result.items).toEqual([]);
   });
@@ -233,7 +233,7 @@ describe("useGetCIRuns", () => {
     );
     mockFetch.mockResolvedValueOnce(mockOk({ workflow_runs: runs }));
 
-    useGetCIRuns(["owner/repo"], "tok");
+    useGetCIRuns(["owner/repo"], "tok", []);
     const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
     expect(result.items).toHaveLength(20);
   });
@@ -358,12 +358,12 @@ const successStatus: GHDeploymentStatus = { state: "success" };
 
 describe("useGetDeployments", () => {
   it("key is null when token is null", () => {
-    useGetDeployments(["owner/repo"], null);
+    useGetDeployments(["owner/repo"], null, []);
     expect(capturedKey).toBeNull();
   });
 
   it("key is null when repos is empty", () => {
-    useGetDeployments([], "tok");
+    useGetDeployments([], "tok", []);
     expect(capturedKey).toBeNull();
   });
 
@@ -372,7 +372,7 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce(mockOk([makeDeployment(1)])) // deployments list
       .mockResolvedValueOnce(mockOk([successStatus])); // statuses for deployment 1
 
-    useGetDeployments(["owner/repo"], "tok");
+    useGetDeployments(["owner/repo"], "tok", []);
     const result = (await capturedFetcher!()) as {
       items: Array<{ status: string }>;
       fetchErrors: string[];
@@ -386,7 +386,7 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce(mockOk([makeDeployment(1)]))
       .mockResolvedValueOnce(mockOk([{ state: "inactive" } as GHDeploymentStatus]));
 
-    useGetDeployments(["owner/repo"], "tok");
+    useGetDeployments(["owner/repo"], "tok", []);
     const result = (await capturedFetcher!()) as {
       items: Array<{ status: string }>;
       fetchErrors: string[];
@@ -399,7 +399,7 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce(mockOk([makeDeployment(1)]))
       .mockResolvedValueOnce(mockOk([{ state: "custom-status" } as GHDeploymentStatus]));
 
-    useGetDeployments(["owner/repo"], "tok");
+    useGetDeployments(["owner/repo"], "tok", []);
     const result = (await capturedFetcher!()) as {
       items: Array<{ status: string }>;
       fetchErrors: string[];
@@ -412,7 +412,7 @@ describe("useGetDeployments", () => {
       .mockResolvedValueOnce(mockOk([makeDeployment(1)]))
       .mockResolvedValueOnce({ ok: false, status: 404, statusText: "Not Found" } as Response);
 
-    useGetDeployments(["owner/repo"], "tok");
+    useGetDeployments(["owner/repo"], "tok", []);
     const result = (await capturedFetcher!()) as {
       items: Array<{ status: string }>;
       fetchErrors: string[];
@@ -426,7 +426,7 @@ describe("useGetDeployments", () => {
       .mockRejectedValueOnce(new Error("Network error")) // repo2 deployments (fails)
       .mockResolvedValueOnce(mockOk([successStatus])); // status for repo1's deployment
 
-    useGetDeployments(["owner/repo1", "owner/repo2"], "tok");
+    useGetDeployments(["owner/repo1", "owner/repo2"], "tok", []);
     const result = (await capturedFetcher!()) as { items: unknown[]; fetchErrors: string[] };
     expect(result.fetchErrors).toHaveLength(1);
     expect(result.fetchErrors[0]).toContain("Network error");

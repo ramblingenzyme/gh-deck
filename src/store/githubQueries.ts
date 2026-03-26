@@ -43,6 +43,7 @@ import {
   mapRelease,
   mapDeployment,
 } from "./githubMappers";
+import { ciTokens, deploymentTokens, type Tokens } from "@/utils/queryFilter";
 
 export interface AuthUser {
   login: string;
@@ -138,6 +139,15 @@ function repoFetchError(repo: string, res: Response): Error {
   return new Error(msg);
 }
 
+function buildParams(tokens: Tokens, keyMap: Record<string, string>): URLSearchParams {
+  const params = new URLSearchParams();
+  for (const { key, value } of tokens) {
+    const apiKey = keyMap[key];
+    if (apiKey) params.set(apiKey, value);
+  }
+  return params;
+}
+
 async function fetchPerRepo<T>(
   repos: string[],
   fetcher: (repo: string) => Promise<T[]>,
@@ -155,14 +165,24 @@ async function fetchPerRepo<T>(
   return { raw, fetchErrors };
 }
 
-export function useGetCIRuns(repos: string[], sessionId: string | null) {
+export function useGetCIRuns(repos: string[], sessionId: string | null, tokens: Tokens) {
+  const { server } = ciTokens(tokens);
+  const params = buildParams(server, {
+    branch: "branch",
+    status: "status",
+    triggered: "event",
+    actor: "actor",
+  });
+
   return useSWR<{ items: CIItem[]; fetchErrors: string[] }>(
-    sessionId && repos.length > 0 ? ["ci", repos, sessionId] : null,
+    sessionId && repos.length > 0 ? ["ci", repos, sessionId, params.toString()] : null,
     async () => {
       const { raw, fetchErrors } = await fetchPerRepo<{ run: GHWorkflowRun; repo: string }>(
         repos,
         async (repo) => {
-          const res = await githubFetch(`/repos/${repo}/actions/runs?per_page=10`);
+          const url = new URL(`https://api.github.com/repos/${repo}/actions/runs`);
+          params.forEach((v, k) => url.searchParams.set(k, v));
+          const res = await githubFetch(url.pathname + url.search);
           if (!res.ok) throw repoFetchError(repo, res);
           const data = (await res.json()) as GHWorkflowRunsResult;
           return (data.workflow_runs ?? []).map((run) => ({ run, repo }));
@@ -201,14 +221,24 @@ export function useGetReleases(repos: string[], sessionId: string | null) {
   );
 }
 
-export function useGetDeployments(repos: string[], sessionId: string | null) {
+export function useGetDeployments(repos: string[], sessionId: string | null, tokens: Tokens) {
+  const { server } = deploymentTokens(tokens);
+  const params = buildParams(server, {
+    ref: "ref",
+    environment: "environment",
+    sha: "sha",
+    task: "task",
+  });
+
   return useSWR<{ items: DeploymentItem[]; fetchErrors: string[] }>(
-    sessionId && repos.length > 0 ? ["deployments", repos, sessionId] : null,
+    sessionId && repos.length > 0 ? ["deployments", repos, sessionId, params.toString()] : null,
     async () => {
       const { raw, fetchErrors } = await fetchPerRepo<{ deployment: GHDeployment; repo: string }>(
         repos,
         async (repo) => {
-          const res = await githubFetch(`/repos/${repo}/deployments?per_page=10`);
+          const url = new URL(`https://api.github.com/repos/${repo}/deployments`);
+          params.forEach((v, k) => url.searchParams.set(k, v));
+          const res = await githubFetch(url.pathname + url.search);
           if (!res.ok) throw repoFetchError(repo, res);
           const deployments = (await res.json()) as GHDeployment[];
           return deployments.map((deployment) => ({ deployment, repo }));

@@ -84,13 +84,17 @@ export function useColumnData(col: ColumnConfig): UseColumnDataResult {
   // only the hook matching col.type will ever make a network request.
   const prsResult = useGetPRs(col.query ?? "", col.type !== "prs" ? null : sessionId);
   const issuesResult = useGetIssues(col.query ?? "", col.type !== "issues" ? null : sessionId);
-  const ciResult = useGetCIRuns(repos, col.type !== "ci" ? null : sessionId);
+  const ciResult = useGetCIRuns(repos, col.type !== "ci" ? null : sessionId, tokens);
   const activityResult = useGetActivity(
     login,
     col.type !== "activity" || !login ? null : sessionId,
   );
   const releasesResult = useGetReleases(repos, col.type !== "releases" ? null : sessionId);
-  const deploymentsResult = useGetDeployments(repos, col.type !== "deployments" ? null : sessionId);
+  const deploymentsResult = useGetDeployments(
+    repos,
+    col.type !== "deployments" ? null : sessionId,
+    tokens,
+  );
   const filter = useCallback(
     (items: ColumnData) =>
       tokens.length ? items.filter((item) => matchesTokens(item as KnownItem, tokens)) : items,

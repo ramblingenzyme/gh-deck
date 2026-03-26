@@ -27,10 +27,32 @@ export function parseQuery(query: string): { key: string; value: string }[] {
     });
 }
 
-type Tokens = ReturnType<typeof parseQuery>;
+export type Tokens = ReturnType<typeof parseQuery>;
 
 function bareText(item: KnownItem, value: string): boolean {
   return getItemDisplayText(item).toLowerCase().includes(value);
+}
+
+// Keys accepted by the GitHub API for each column type
+const CI_API_KEYS = new Set(["branch", "status", "triggered", "actor"]);
+const DEPLOYMENT_API_KEYS = new Set(["ref", "environment", "sha", "task"]);
+
+// Keys that are server-side only — no corresponding field on the item to match client-side
+const CI_SERVER_ONLY_KEYS = new Set(["actor"]);
+const DEPLOYMENT_SERVER_ONLY_KEYS = new Set(["sha", "task"]);
+
+export function ciTokens(tokens: Tokens): { server: Tokens; client: Tokens } {
+  return {
+    server: tokens.filter((t) => t.key && CI_API_KEYS.has(t.key)),
+    client: tokens.filter((t) => !t.key || !CI_SERVER_ONLY_KEYS.has(t.key)),
+  };
+}
+
+export function deploymentTokens(tokens: Tokens): { server: Tokens; client: Tokens } {
+  return {
+    server: tokens.filter((t) => t.key && DEPLOYMENT_API_KEYS.has(t.key)),
+    client: tokens.filter((t) => !t.key || !DEPLOYMENT_SERVER_ONLY_KEYS.has(t.key)),
+  };
 }
 
 function matchesPR(item: PRItem, tokens: Tokens): boolean {
@@ -78,7 +100,7 @@ function matchesIssue(item: IssueItem, tokens: Tokens): boolean {
 }
 
 function matchesCI(item: CIItem, tokens: Tokens): boolean {
-  return tokens.every(({ key, value }) => {
+  return ciTokens(tokens).client.every(({ key, value }) => {
     if (!key) return bareText(item, value);
     switch (key) {
       case "repo":
@@ -129,7 +151,7 @@ function matchesRelease(item: ReleaseItem, tokens: Tokens): boolean {
 }
 
 function matchesDeployment(item: DeploymentItem, tokens: Tokens): boolean {
-  return tokens.every(({ key, value }) => {
+  return deploymentTokens(tokens).client.every(({ key, value }) => {
     if (!key) return bareText(item, value);
     switch (key) {
       case "repo":
