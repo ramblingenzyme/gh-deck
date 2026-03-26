@@ -26,10 +26,13 @@ const EMPTY: AnyItem[] = [];
 export function useDemoColumnData(col: ColumnConfig): UseColumnDataResult {
   const tokens = useMemo(() => parseQuery(col.query ?? ""), [col.query]);
   const raw = DEMO_DATA[col.type] ?? EMPTY;
-  const data = useMemo(
-    () =>
-      tokens.length ? raw.filter((item) => matchesDemoTokens(item as KnownItem, tokens)) : raw,
-    [raw, tokens],
-  );
+  const repos = col.repos;
+  const data = useMemo(() => {
+    let items = raw;
+    if (repos && repos.length > 0)
+      items = items.filter((item) => "repo" in item && repos.includes((item as KnownItem).repo));
+    if (tokens.length) items = items.filter((item) => matchesDemoTokens(item as KnownItem, tokens));
+    return items;
+  }, [raw, repos, tokens]);
   return { data, isLoading: false, isFetching: false, error: null, warnings: [], refetch: noop };
 }

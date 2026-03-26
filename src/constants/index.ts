@@ -83,8 +83,26 @@ export const DEFAULT_COLUMNS: ColumnConfig[] = [
 export const DEMO_COLUMNS: ColumnConfig[] = [
   { id: "demo-prs", type: "prs", title: "Pull Requests", query: "is:open" },
   { id: "demo-issues", type: "issues", title: "Issues", query: "is:open" },
-  { id: "demo-ci", type: "ci", title: "CI / CD", query: "" },
+  {
+    id: "demo-ci",
+    type: "ci",
+    title: "CI / CD",
+    query: "",
+    repos: ["acme/ml-core", "acme/api", "acme/frontend", "acme/worker"],
+  },
   { id: "demo-activity", type: "activity", title: "Activity", query: "" },
-  { id: "demo-releases", type: "releases", title: "Releases", query: "" },
-  { id: "demo-deployments", type: "deployments", title: "Deployments", query: "" },
+  {
+    id: "demo-releases",
+    type: "releases",
+    title: "Releases",
+    query: "",
+    repos: ["acme/api", "acme/ml-core", "acme/frontend", "acme/cli"],
+  },
+  {
+    id: "demo-deployments",
+    type: "deployments",
+    title: "Deployments",
+    query: "",
+    repos: ["acme/api", "acme/frontend", "acme/worker", "acme/ml-core"],
+  },
 ];

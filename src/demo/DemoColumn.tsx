@@ -14,10 +14,13 @@ import type {
 import { useLayoutStore } from "@/store/layoutStore";
 import { useConfirmation } from "@/hooks/useConfirmation";
 import { useColumnDragDrop } from "@/hooks/useColumnDragDrop";
+import { RepoRequiredEmptyState } from "@/components/RepoRequiredEmptyState";
 import { ColumnHeader } from "@/components/ColumnHeader";
 import { ColumnConfirmDelete } from "@/components/ColumnConfirmDelete";
 import { ColumnSettingsModal } from "@/components/ColumnSettingsModal";
 import { InlineEdit } from "@/components/ui/InlineEdit";
+import { Tooltip } from "@/components/ui/Tooltip";
+import { FilterHelpPopover } from "@/components/ui/FilterHelpPopover";
 import { ActivityCard } from "@/components/cards/ActivityCard";
 import { CICard } from "@/components/cards/CICard";
 import { DeploymentCard } from "@/components/cards/DeploymentCard";
@@ -108,6 +111,22 @@ export const DemoColumn = ({ col, onRemove }: DemoColumnProps) => {
             placeholder="Add filter…"
             aria-label="Filter query"
           />
+          <FilterHelpPopover columnType={col.type} />
+          {col.repos && col.repos.length > 0 && (
+            <Tooltip
+              text={
+                <ul className={columnStyles.repoList}>
+                  {col.repos.map((r) => (
+                    <li key={r}>{r}</li>
+                  ))}
+                </ul>
+              }
+              position="below"
+              align="end"
+            >
+              <span className={columnStyles.repoCount}>{col.repos.length}</span>
+            </Tooltip>
+          )}
         </div>
 
         {isConfirming && (
@@ -120,7 +139,12 @@ export const DemoColumn = ({ col, onRemove }: DemoColumnProps) => {
 
         <div className={columnStyles.colBody}>
           {data.length === 0 ? (
-            <p className={columnStyles.emptyState}>No results</p>
+            !col.repos?.length &&
+            (col.type === "ci" || col.type === "releases" || col.type === "deployments") ? (
+              <RepoRequiredEmptyState onOpenSettings={() => setSettingsOpen(true)} />
+            ) : (
+              <p className={columnStyles.emptyState}>No results</p>
+            )
           ) : (
             data.map((item) => renderCard(item))
           )}
