@@ -152,7 +152,7 @@ async function fetchPerRepo<T>(
   repos: string[],
   fetcher: (repo: string) => Promise<T[]>,
 ): Promise<{ raw: T[]; fetchErrors: string[] }> {
-  const settled = await Promise.allSettled(repos.slice(0, 5).map(fetcher));
+  const settled = await Promise.allSettled(repos.map(fetcher));
   const raw: T[] = [];
   const fetchErrors: string[] = [];
   for (const r of settled) {

@@ -190,17 +190,6 @@ describe("useGetCIRuns", () => {
     expect(capturedKey).toBeNull();
   });
 
-  it("slices repos to 5", async () => {
-    const repos = ["r1", "r2", "r3", "r4", "r5", "r6"];
-    mockFetch.mockResolvedValue(mockOk({ workflow_runs: [] }));
-
-    useGetCIRuns(repos, "tok", []);
-    await capturedFetcher!();
-
-    // 5 fetches (not 6)
-    expect(mockFetch).toHaveBeenCalledTimes(5);
-  });
-
   it("isolates fetch failure to fetchErrors", async () => {
     mockFetch
       .mockResolvedValueOnce(mockOk({ workflow_runs: [makeRun(1)] }))
@@ -314,13 +303,6 @@ describe("useGetReleases", () => {
       fetchErrors: string[];
     };
     expect(result.items).toHaveLength(2);
-  });
-
-  it("slices repos to 5", async () => {
-    mockFetch.mockResolvedValue(mockOk([]));
-    useGetReleases(["r1", "r2", "r3", "r4", "r5", "r6"], "tok");
-    await capturedFetcher!();
-    expect(mockFetch).toHaveBeenCalledTimes(5);
   });
 
   it("isolates fetch failure to fetchErrors", async () => {
