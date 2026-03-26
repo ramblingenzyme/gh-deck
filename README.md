@@ -74,6 +74,32 @@ npm test         # Run tests (Vitest)
 npm run preview  # Preview production build
 ```
 
+### Security
+
+**OAuth flow**
+
+Octodeck uses the GitHub OAuth 2.0 Authorization Code flow with PKCE, brokered through a Cloudflare Pages Functions backend so that the client secret never touches the browser.
+
+1. `/api/login` generates a random PKCE `code_verifier` and `state`, stores them encrypted in an `__Host-pkce` cookie (HttpOnly, 10-minute TTL), and redirects to `github.com/login/oauth/authorize`.
+2. GitHub redirects back to `/api/callback` with a `code` and `state`. The backend verifies the state matches, decrypts the PKCE cookie, and exchanges the code + `code_verifier` for a token pair directly with GitHub.
+3. The resulting access token and refresh token are encrypted with AES-GCM (using `SESSION_CRYPTO_KEY`) and stored in an `__Host-session` cookie (HttpOnly, Secure, SameSite=Strict). The browser never sees the raw tokens.
+4. The frontend calls `/api/session` to receive the access token for in-memory use. All session endpoints require a CSRF token passed as the `X-GitHub-App-CSRF` request header, read from a separate non-HttpOnly `__Host-csrf` cookie (a [cookie-to-header CSRF pattern](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#double-submit-cookie)).
+
+**OAuth scopes requested**
+
+| Scope             | Why it's needed                                                                               |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| `repo`            | Read PRs, issues, CI workflow runs, deployments, and releases across public and private repos |
+| `notifications`   | Read your GitHub notification feed                                                            |
+| `read:user`       | Read your GitHub username/avatar for the signed-in user display                               |
+| `security_events` | Read Dependabot/code-scanning alerts (used by the activity feed)                              |
+
+No write scopes are requested. Octodeck is read-only.
+
+**Token storage**
+
+Tokens are never written to `localStorage` or `sessionStorage`. The access token lives only in memory (Zustand store); the session cookie is HttpOnly so JavaScript cannot read it.
+
 ### Deployment
 
 The app deploys to Cloudflare Pages. The `functions/api/` directory is picked up automatically as Pages Functions. Set the production secrets in the Cloudflare dashboard.
