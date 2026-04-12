@@ -32,6 +32,24 @@
   gap: 6px;
 }
 
+.infoBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid var(--border-ghost);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-ghost);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1;
+  cursor: default;
+  flex-shrink: 0;
+}
+
 .typeBtn {
   display: flex;
   align-items: center;

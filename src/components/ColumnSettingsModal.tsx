@@ -7,6 +7,7 @@ import { MULTI_REPO_COLUMN_TYPES } from "@/constants";
 import { Modal, ModalBody, ModalFooter, modalStyles } from "./ui/Modal";
 import { RepoChipList } from "./ui/RepoChipList";
 import { FilterHelpPopover } from "./ui/FilterHelpPopover";
+import { Tooltip } from "./ui/Tooltip";
 import styles from "./ColumnSettingsModal.module.css";
 
 interface ColumnSettingsModalProps {
@@ -80,7 +81,21 @@ export const ColumnSettingsModal = ({ open, col, onClose }: ColumnSettingsModalP
           </div>
           {isMultiRepo && (
             <div className={styles.field}>
-              <label>Repositories</label>
+              <div className={styles.labelRow}>
+                <label>Repositories</label>
+                <Tooltip
+                  text="You can enter any public repo (owner/repo) — it doesn't need to appear in the dropdown."
+                  position="below"
+                >
+                  <button
+                    type="button"
+                    className={styles.infoBtn}
+                    aria-label="Repositories field info"
+                  >
+                    i
+                  </button>
+                </Tooltip>
+              </div>
               <RepoChipList
                 key={String(open)}
                 repos={repos}

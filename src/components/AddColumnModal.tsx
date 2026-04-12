@@ -22,6 +22,7 @@ import { SvgIcon } from "./ui/SvgIcon";
 import { Modal, ModalBody, ModalFooter, modalStyles } from "./ui/Modal";
 import { RepoChipList } from "./ui/RepoChipList";
 import { FilterHelpPopover } from "./ui/FilterHelpPopover";
+import { Tooltip } from "./ui/Tooltip";
 import styles from "./AddColumnModal.module.css";
 
 interface AddColumnModalProps {
@@ -115,7 +116,21 @@ export const AddColumnModal = ({ open, onAdd, onClose }: AddColumnModalProps) =>
               </div>
               {isMultiRepo && (
                 <div className={styles.modalField}>
-                  <label>Repositories</label>
+                  <div className={styles.labelRow}>
+                    <label>Repositories</label>
+                    <Tooltip
+                      text="You can enter any public repo (owner/repo) — it doesn't need to appear in the dropdown."
+                      position="below"
+                    >
+                      <button
+                        type="button"
+                        className={styles.infoBtn}
+                        aria-label="Repositories field info"
+                      >
+                        i
+                      </button>
+                    </Tooltip>
+                  </div>
                   <RepoChipList
                     repos={repos}
                     suggestions={repoSuggestions}
